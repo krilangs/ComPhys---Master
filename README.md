@@ -11,6 +11,6 @@ Python files are a bit messy at this point.
   - Edit *requirements.txt*, and set desired package-version or replace "==" with ">=" . Can also add other packages.
   - Upgrade the packages - $ pip install -r requirements.txt --upgrade
   
-* *Trilepton_read_root.py* reads the ROOT file, uses uproot to convert to Python readable, creates desired dataframes and saves those dataframes as .h5-files.
+* *Trilepton_read_root.py* reads the ROOT file with uproot, then creates desired dataframes and variables and saves those dataframes as .h5-files.
 
-* *Trilepton_classifier.py* reads the .h5-files with the dataframes and uses machine learning algorithms to do a multi-classification analysis to predict particles.
+* *Trilepton_classifier.py* reads the .h5-files with the dataframes, and uses machine learning algorithms to do a multi-classification analysis to predict particles.
