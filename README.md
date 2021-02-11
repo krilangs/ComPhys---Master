@@ -2,7 +2,7 @@ Python files are a bit messy at this point.
 
 * *Masteroppgave_tmp.pdf* is the master thesis (so far).
 
-* *myfile_allevents.root* is the Ntuple-file with all the events.
+* *myfile_allevents.root* is the file with all the events.
 
 * *environment.yml* is the anaconda environment file (Linux or Windows):
   - Create - $ conda env create -f environment.yml
