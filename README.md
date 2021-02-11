@@ -4,7 +4,7 @@ Python files are a bit messy at this point.
 
 * *myfile_allevents.root* is the file with all the events.
 
-* *environment.yml* is the anaconda environment file (Linux or Windows):
+* *environment.yml* is the environment file (Linux or Windows). Setup with anaconda:
   - Create - $ conda env create -f environment.yml
   - Activate - $ conda activate rootenv2
   - Update packages by first creating a .txt file with all present package-versions - $ pip freeze > requirements.txt (can skip this step if requirements.txt already exists). 
