@@ -3,9 +3,83 @@ import numpy as np
 import pandas as pd
 from ROOT import TLorentzVector
 from math import sqrt
+import awkward
+import matplotlib.pyplot as plt
+import uproot_methods.classes.TLorentzVector
+import sys
+
+# Method for flattening and adding additional variables
+def lepaugmentation(df,nlep):
+    
+    px  = awkward.fromiter(df['px'])
+    py  = awkward.fromiter(df['py'])
+    pz  = awkward.fromiter(df['pz'])
+    E   = awkward.fromiter(df['E'])
+    vtx = awkward.fromiter(df['vtxid'])
+    pid = awkward.fromiter(df['pdgid'])
 
 
-Folder = "/scratch2/Master_krilangs/Trilepton_Ntuples/"
+    # make tlv - handy when computing angular variables
+    tlv = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px, py, pz, E)
+
+    df["tlv"] = tlv[:]
+    
+    df["pt"]  = tlv[:].pt
+    pt  = awkward.fromiter(df['pt'])
+
+    df["phi"] = tlv[:].phi
+    phi = awkward.fromiter(df['phi'])
+    
+    df["theta"] = tlv.theta
+    theta  = awkward.fromiter(df['theta'])
+
+    df["eta"] = tlv.eta
+    eta  = awkward.fromiter(df['eta'])
+    
+    # Compute variables for all combinations of 2 leptons
+    pairs = px.argchoose(2)
+    left  = pairs.i0
+    right = pairs.i1
+    masses = np.sqrt(2*pt[left]*pt[right]*(np.cosh(eta[left]-eta[right])-np.cos(phi[left]-phi[right]))) # invariant mass
+    dphi   = tlv[left].delta_phi(tlv[right])
+    dR     = tlv[left].delta_r(tlv[right])
+    
+    for i in range(len(left[0])):
+        idx1 = left[0][i]
+        idx2 = right[0][i]
+        df['mll_%i%i'%(idx1+1,idx2+1)] = masses.regular()[:,i]
+        df['dphi_%i%i'%(idx1+1,idx2+1)] = dphi.regular()[:,i]
+        df['dR_%i%i'%(idx1+1,idx2+1)] = dR.regular()[:,i]
+        
+    px  = px.pad(nlep).fillna(-999)
+    py  = py.pad(nlep).fillna(-999)
+    pz  = pz.pad(nlep).fillna(-999)
+    E   = E.pad(nlep).fillna(-999)
+    pt   = pt.pad(nlep).fillna(-999)
+    vtx = vtx.pad(nlep).fillna(-999)
+    pid = pid.pad(nlep).fillna(-999)
+
+    phi  = phi.pad(nlep).fillna(-999)
+    eta  = eta.pad(nlep).fillna(-999)
+    theta  = theta.pad(nlep).fillna(-999)
+
+    # Make the lepton variables
+    for i in range(1,nlep+1):
+        df['lep%i_pt'%i]  = pt[:,(i-1)]
+        df['lep%i_phi'%i]  = phi[:,(i-1)]
+        df['lep%i_eta'%i]  = eta[:,(i-1)]
+        df['lep%i_theta'%i]  = theta[:,(i-1)]
+        df['lep%i_px'%i]  = px[:,(i-1)]
+        df['lep%i_py'%i]  = py[:,(i-1)]
+        df['lep%i_pz'%i]  = pz[:,(i-1)]
+        df['lep%i_E' %i]  = E[:,(i-1)]
+        df['lep%i_vtx'%i]   = vtx[:,(i-1)]
+        df['lep%i_pid'%i]   = pid[:,(i-1)]
+
+    df = df.drop(['px', 'py', 'pz', 'pt', 'E', 'vtxid', 'pdgid', 'evnum','tlv', 'phi', 'theta', 'eta'], axis=1)
+    return df
+
+Folder = "../"    # "/scratch2/Master_krilangs/Trilepton_Ntuples/"
 size = input("Choose Ntuple size (small/big):")  # May remove later
 if size == "small":
     file = "myfile"
@@ -28,17 +102,29 @@ for key, name in zip(tree.keys(), var):
 
 """Make a dataframe from the ROOT-file, make the targets and add them to the dataframe."""
 df1 = tree.pandas.df(branches=var)
+df3 = tree.pandas.df(branches=var, flatten = False)
+
 N1 = len(df1.nlep)
 N2 = int(N1/4)
 
 y = [1, 2, 3, 4]*(N2)
 y = np.array(y)
-    
-df1["target"] = y
-print(df1.keys())
 
+df1["target"] = y
+#print(df1.keys())
+
+
+#df3 = df1.copy(True)
+
+newdf = lepaugmentation(df3,4)
+
+print(newdf.info())
+print(newdf.head())
+
+#newdf.to_hdf("Trilepton_ML.h5", key="DF_flat")
 #df1.to_hdf("Trilepton_ML.h5", key = size+"_original")  # Save dataframe to file
 
+#sys.exit()
 
 """Make angular variables for each lepton. Very messy and long right now, as I am not sure which method to use yet."""
 angles = ["phi", "eta"] #"phi_1", "phi_2", "phi_3", "phi_MET", "eta_1", "eta_2", "eta_3", "eta_MET"]
@@ -213,9 +299,11 @@ for i in range(N2):
 print("Loop finished")
 
 
+
+
 """Add angular variables to dataframes and save the dataframes for later."""
 print("Add angular")
-
+"""
 # Test a variant with all angular variables
 df2 = pd.DataFrame()
 df2["pt"] = df1.pt
@@ -231,7 +319,7 @@ df2["target"] = df1.target
 print(df2.info())
 print(df2.head())
 df2.to_hdf("Trilepton_ML.h5", key = size+"_alt_angular")
-
+"""
 """
 # Full DF with all angular variables
 #leftindex = pd.MultiIndex.from_product([range(N2), [0,1,2,3]], names=["entry", "subentry"])
