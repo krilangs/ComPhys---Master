@@ -2,11 +2,65 @@ import uproot
 import numpy as np
 import pandas as pd
 from ROOT import TLorentzVector
-from math import sqrt
+from math import sqrt, cos
 import awkward
 import matplotlib.pyplot as plt
 import uproot_methods.classes.TLorentzVector
 import sys
+import itertools
+
+perm = list(itertools.permutations([1, 2, 3]))
+#print(perm)
+nupid = [-12,12,-14,14,-16, 16]
+
+def get_mt(x,y):
+    #print("Type of value is ",type(value))
+    try:
+        dphi = x.delta_phi(y)
+        print(dphi)
+        mtw = sqrt(2*x.pt()*y.pt()*(1-cos(dphi)))
+        print(mtw)
+        return(mtw)
+    except:
+        print("Could not return transverse mass for ",(x,y))
+        return -1
+
+def get_invmass(value):
+    #print("Type of value is ",type(value))
+    try:
+        return(value.mass)
+    except:
+        print("Could not return mass for ",value)
+        return -1
+
+
+def get_deltaPhi(x,y):
+    #print("Type of value is ",type(x))
+    try:
+        return(x.delta_phi(y))
+    except:
+        print("Could not return deltaPhi for ",(x,y))
+        return -1
+
+
+def get_deltaR(x,y):
+    #print(" of value is ",type(value))
+    try:
+        return(x.delta_r(y))
+    except:
+        print("Could not return deltaR for ",(x,y))
+        return -1
+
+
+def classify_event(l1,l2,l3,l4,p1,p2,p3,p4):
+    if p1 in nupid: tuplex = l2,l3,l4
+    elif p2 in nupid: tuplex = l1,l3,l4
+    elif p3 in nupid: tuplex = l1,l2,l4
+    elif p4 in nupid: tuplex = l1,l2,l3
+    if tuplex in perm:
+        return perm[perm.index(tuplex)]
+    else:
+        print("Could not find permutation for %s"%tuplex)
 
 # Method for flattening and adding additional variables
 def lepaugmentation(df,nlep):
@@ -23,10 +77,10 @@ def lepaugmentation(df,nlep):
     tlv = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px, py, pz, E)
 
     df["tlv"] = tlv[:]
-    
+
     df["pt"]  = tlv[:].pt
     pt  = awkward.fromiter(df['pt'])
-
+    pt_org  = awkward.fromiter(df['pt'])
     df["phi"] = tlv[:].phi
     phi = awkward.fromiter(df['phi'])
     
@@ -35,21 +89,6 @@ def lepaugmentation(df,nlep):
 
     df["eta"] = tlv.eta
     eta  = awkward.fromiter(df['eta'])
-    
-    # Compute variables for all combinations of 2 leptons
-    pairs = px.argchoose(2)
-    left  = pairs.i0
-    right = pairs.i1
-    masses = np.sqrt(2*pt[left]*pt[right]*(np.cosh(eta[left]-eta[right])-np.cos(phi[left]-phi[right]))) # invariant mass
-    dphi   = tlv[left].delta_phi(tlv[right])
-    dR     = tlv[left].delta_r(tlv[right])
-    
-    for i in range(len(left[0])):
-        idx1 = left[0][i]
-        idx2 = right[0][i]
-        df['mll_%i%i'%(idx1+1,idx2+1)] = masses.regular()[:,i]
-        df['dphi_%i%i'%(idx1+1,idx2+1)] = dphi.regular()[:,i]
-        df['dR_%i%i'%(idx1+1,idx2+1)] = dR.regular()[:,i]
         
     px  = px.pad(nlep).fillna(-999)
     py  = py.pad(nlep).fillna(-999)
@@ -65,21 +104,68 @@ def lepaugmentation(df,nlep):
 
     # Make the lepton variables
     for i in range(1,nlep+1):
-        df['lep%i_pt'%i]  = pt[:,(i-1)]
-        df['lep%i_phi'%i]  = phi[:,(i-1)]
-        df['lep%i_eta'%i]  = eta[:,(i-1)]
-        df['lep%i_theta'%i]  = theta[:,(i-1)]
-        df['lep%i_px'%i]  = px[:,(i-1)]
-        df['lep%i_py'%i]  = py[:,(i-1)]
-        df['lep%i_pz'%i]  = pz[:,(i-1)]
-        df['lep%i_E' %i]  = E[:,(i-1)]
-        df['lep%i_vtx'%i]   = vtx[:,(i-1)]
-        df['lep%i_pid'%i]   = pid[:,(i-1)]
+        df['lep%i_pt'%i]  = pt[pt.argmax()].flatten()
+        df['lep%i_phi'%i]  = phi[pt.argmax()].flatten()
+        df['lep%i_eta'%i]  = eta[pt.argmax()].flatten()
+        df['lep%i_theta'%i]  = theta[pt.argmax()].flatten()
+        df['lep%i_px'%i]  = px[pt.argmax()].flatten()
+        df['lep%i_py'%i]  = py[pt.argmax()].flatten()
+        df['lep%i_pz'%i]  = pz[pt.argmax()].flatten()
+        df['lep%i_E' %i]  = E[pt.argmax()].flatten()
+        df['lep%i_vtx'%i]   = vtx[pt.argmax()].flatten()
+        df['lep%i_pid'%i]   = pid[pt.argmax()].flatten()
+        df['lep%i_tlv'%i]   = tlv[pt.argmax()].flatten()
+
+        mask = np.logical_and(pt != pt.max(), pt.max != -999)
+        px    =   px[mask]   
+        py    =   py[mask]   
+        pz    =   pz[mask]   
+        E     =   E[mask]    
+        pt    =   pt[mask]   
+        vtx   =   vtx[mask]  
+        pid   =   pid[mask]  
+        phi   =   phi[mask]  
+        eta   =   eta[mask]  
+        theta =   theta[mask]
+        tlv   =   tlv[mask]
+
+    # Compute variables for all combinations of 2 leptons
+    pairs = pt_org.argchoose(2)
+    print("pairs:", pairs)
+    left  = pairs.i0
+    right = pairs.i1
+
+    print(df.head())
+    print(df["lep1_tlv"].head())
+
+    #f = lambda x,y : x.delta_phi(y)
+
+    print("left = ",left)
+    print("right = ",right)
+    
+    for ilep in range(len(left[0])):
+        i = left[0][ilep]
+        j = right[0][ilep]
+        #for j in right[0]:
+        print("i = %i, j = %i"%(i,j))
+        idx1 = left[0][i]
+        idx2 = right[0][i]
+        df['mll_%i%i'%(i+1,j+1)]   = (df["lep%i_tlv"%(i+1)]+df["lep%i_tlv"%(j+1)]).apply(get_invmass)
+        #df['mt_%i%i'%(i+1,j+1)]   = df.apply(lambda x : get_mt(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1) # not yet working
+        df['dphi_%i%i'%(i+1,j+1)] = df.apply(lambda x : get_deltaPhi(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1)
+        df['dR_%i%i'%(i+1,j+1)]   = df.apply(lambda x : get_deltaPhi(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1)
+
+    
+    df["target"] = df.apply(lambda x : classify_event(x['lep1_vtx'],x['lep2_vtx'],x['lep3_vtx'],x['lep4_vtx'],x['lep1_pid'],x['lep2_pid'],x['lep3_pid'],x['lep4_pid']), axis=1)
+
+    
 
     df = df.drop(['px', 'py', 'pz', 'pt', 'E', 'vtxid', 'pdgid', 'evnum','tlv', 'phi', 'theta', 'eta'], axis=1)
     return df
 
-Folder = "../"    # "/scratch2/Master_krilangs/Trilepton_Ntuples/"
+#Folder = "../ntuples/heavy_neutrinos/"    
+Folder = "/scratch2/Master_krilangs/Trilepton_Ntuples/"
+
 size = input("Choose Ntuple size (small/big):")  # May remove later
 if size == "small":
     file = "myfile"
@@ -121,10 +207,18 @@ newdf = lepaugmentation(df3,4)
 print(newdf.info())
 print(newdf.head())
 
-#newdf.to_hdf("Trilepton_ML.h5", key="DF_flat")
+x = np.linspace(0,500,250)
+for i in range(1,4):
+    for j in range(i+1,4):
+        if i == j: continue
+        ax = (newdf['mll_%i%i'%(i,j)]/1000.).hist(bins=x)
+        ax.legend()
+plt.show()
+
+#newdf.to_hdf("Trilepton_ML.h5", key="DF_flat2")
 #df1.to_hdf("Trilepton_ML.h5", key = size+"_original")  # Save dataframe to file
 
-#sys.exit()
+sys.exit()
 
 """Make angular variables for each lepton. Very messy and long right now, as I am not sure which method to use yet."""
 angles = ["phi", "eta"] #"phi_1", "phi_2", "phi_3", "phi_MET", "eta_1", "eta_2", "eta_3", "eta_MET"]
@@ -235,7 +329,6 @@ for i in range(N2):
     dEta[i+3+j][4] = abs(phi_eta[i+1+j][1]-phi_eta[i+3+j][1])  # dEta_2MET at 4
     dEta[i+2+j][5] = abs(phi_eta[i+2+j][1]-phi_eta[i+3+j][1])  # dEta_3MET at 3
     dEta[i+3+j][5] = abs(phi_eta[i+2+j][1]-phi_eta[i+3+j][1])  # dEta_3MET at 4
-
     dR[i+0+j][0] = abs(vec0.DeltaR(vec1))    # dR_12 at 1
     dR[i+1+j][0] = abs(vec0.DeltaR(vec1))    # dR_12 at 2
     dR[i+0+j][1] = abs(vec0.DeltaR(vec2))    # dR_13 at 1
@@ -258,14 +351,12 @@ for i in range(N2):
         dPhi[i+k+j][3] = vec0.DeltaPhi(vec3)  # dPhi_1MET
         dPhi[i+k+j][4] = vec1.DeltaPhi(vec3)  # dPhi_2MET
         dPhi[i+k+j][5] = vec2.DeltaPhi(vec3)  # dPhi_3MET
-
         dEta[i+k+j][0] = phi_eta[i+j][1]-phi_eta[i+1+j][1]    # dEta_12
         dEta[i+k+j][1] = phi_eta[i+j][1]-phi_eta[i+2+j][1]    # dEta_13
         dEta[i+k+j][2] = phi_eta[i+1+j][1]-phi_eta[i+2+j][1]  # dEta_23
         dEta[i+k+j][3] = phi_eta[i+j][1]-phi_eta[i+3+j][1]    # dEta_1MET
         dEta[i+k+j][4] = phi_eta[i+1+j][1]-phi_eta[i+3+j][1]  # dEta_2MET
         dEta[i+k+j][5] = phi_eta[i+2+j][1]-phi_eta[i+3+j][1]  # dEta_3MET
-
         dR[i+k+j][0] = vec0.DeltaR(vec1)    # dR_12
         dR[i+k+j][1] = vec0.DeltaR(vec2)    # dR_13
         dR[i+k+j][2] = vec1.DeltaR(vec2)    # dR_23
@@ -280,14 +371,12 @@ for i in range(N2):
         dPhi[i+k+j][3] = abs(vec0.DeltaPhi(vec3))  # dPhi_1MET
         dPhi[i+k+j][4] = abs(vec1.DeltaPhi(vec3))  # dPhi_2MET
         dPhi[i+k+j][5] = abs(vec2.DeltaPhi(vec3))  # dPhi_3MET
-
         dEta[i+k+j][0] = abs(phi_eta[i+j][1]-phi_eta[i+1+j][1])    # dEta_12
         dEta[i+k+j][1] = abs(phi_eta[i+j][1]-phi_eta[i+2+j][1])    # dEta_13
         dEta[i+k+j][2] = abs(phi_eta[i+1+j][1]-phi_eta[i+2+j][1])  # dEta_23
         dEta[i+k+j][3] = abs(phi_eta[i+j][1]-phi_eta[i+3+j][1])    # dEta_1MET
         dEta[i+k+j][4] = abs(phi_eta[i+1+j][1]-phi_eta[i+3+j][1])  # dEta_2MET
         dEta[i+k+j][5] = abs(phi_eta[i+2+j][1]-phi_eta[i+3+j][1])  # dEta_3MET
-
         dR[i+k+j][0] = abs(vec0.DeltaR(vec1))    # dR_12
         dR[i+k+j][1] = abs(vec0.DeltaR(vec2))    # dR_13
         dR[i+k+j][2] = abs(vec1.DeltaR(vec2))    # dR_23
@@ -336,7 +425,6 @@ for l in range(len(dR_list)):
 df2["target"] = df1.target.values
 print(len(df2))
 #print(df2)#.loc[:, "dPhi_12":"dPhi_3MET"])
-
 #df2.to_hdf("Trilepton_ML.h5", key = size+"_angular_fullevents")
 """
 
@@ -348,7 +436,6 @@ for i in range(len(angles)):
     new_df[angles[i]] = phi_eta[:,i]
 new_df["target"] = df1.target
 #print(new_df)
-
 #new_df.to_hdf("Trilepton_ML.h5", key = "pt_phi_eta")
 """
 
@@ -369,7 +456,6 @@ for i in range(N2):
     m_N[i] = sqrt((Energy_sum)**2 - Mom_norm)
     #m_pt[i] = sqrt((pt[i][1]+pt[i][2]+pt[i][3])**2)
     #W[i] = sqrt(Energy_sum**2 - (pt[i][1]+pt[i][2]+pt[i][3])**2 - (pz[i][1]+pz[i][2]+pz[i][3])**2)
-
     #M_N[i] = sqrt( 2*pt[i][2]*pt[i][3]*pt[i][1]*(np.cosh(eta[i][2]-eta[i][3]-eta[i][1])-np.cos(phi[i][2]-phi[i][3]-phi[i][1])) )
 #print(m_N[:6])
 print("Mean mass sum:", np.mean(m_N))
