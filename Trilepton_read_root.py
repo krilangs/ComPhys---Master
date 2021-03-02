@@ -153,7 +153,7 @@ def lepaugmentation(df,nlep):
         df['mll_%i%i'%(i+1,j+1)]   = (df["lep%i_tlv"%(i+1)]+df["lep%i_tlv"%(j+1)]).apply(get_invmass)
         #df['mt_%i%i'%(i+1,j+1)]   = df.apply(lambda x : get_mt(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1) # not yet working
         df['dphi_%i%i'%(i+1,j+1)] = df.apply(lambda x : get_deltaPhi(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1)
-        df['dR_%i%i'%(i+1,j+1)]   = df.apply(lambda x : get_deltaPhi(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1)
+        df['dR_%i%i'%(i+1,j+1)]   = df.apply(lambda x : get_deltaR(x['lep%i_tlv'%(i+1)],x['lep%i_tlv'%(j+1)]), axis=1)
 
     
     df["target"] = df.apply(lambda x : classify_event(x['lep1_vtx'],x['lep2_vtx'],x['lep3_vtx'],x['lep4_vtx'],x['lep1_pid'],x['lep2_pid'],x['lep3_pid'],x['lep4_pid']), axis=1)
@@ -215,7 +215,7 @@ for i in range(1,4):
         ax.legend()
 plt.show()
 
-#newdf.to_hdf("Trilepton_ML.h5", key="DF_flat2")
+newdf.to_hdf("Trilepton_ML.h5", key="DF_flat3")
 #df1.to_hdf("Trilepton_ML.h5", key = size+"_original")  # Save dataframe to file
 
 sys.exit()
