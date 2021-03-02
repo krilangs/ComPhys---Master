@@ -30,13 +30,15 @@ from sklearn.feature_selection import SelectFromModel
 """Read dataframe(s) from file."""
 #df_Truth = pd.read_hdf("Trilepton_ML.h5", key="big_original")
 #df_Angular = pd.read_hdf("Trilepton_ML.h5", key="big_angular")
-df_Angular_alt = pd.read_hdf("Trilepton_ML.h5", key="big_alt_angular")
+#df_Angular_alt = pd.read_hdf("Trilepton_ML.h5", key="big_alt_angular")
 #df_Angular_zeros = pd.read_hdf("Trilepton_ML.h5", key="big_angular_zeros")
 #new_df = pd.DataFrame([df_Truth.pt, df_Angular.phi, df_Angular.eta, df_Truth.target]).transpose()
 #df_short = pd.read_hdf("Trilepton_ML.h5", key="pt_phi_eta")
 #df_Angular_fullevents = pd.read_hdf("Trilepton_ML.h5", key="big_angular_fullevents")
 #print(df_Angular.head())
-df_new = pd.read_hdf("Trilepton_ML.h5", key="DF_flat2")
+
+#df_new = pd.read_hdf("Trilepton_ML.h5", key="DF_flat2")
+df_new = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
 df_new = df_new.select_dtypes(exclude=["int32"])
 #print(df_new.info())
 #print(df_new.head())
@@ -48,24 +50,25 @@ features_names = list(features.drop(columns=["target", "lep1_tlv", "lep2_tlv", "
 #print(features.loc[:1, "dPhi_12":"dPhi_3MET"])
 X = features.drop(columns=["target"], axis=1)
 X = X.select_dtypes(exclude=["object"])
-y = features.target
+Y = features.target
 
-Target = np.zeros(len(y))
-for i in range(len(y)):
-    if y[i] == (3,1,2):
+Target = np.zeros(len(Y))
+for i in range(len(Y)):
+    if Y[i] == (3,1,2):
         Target[i] = 312
-    elif y[i] == (1,3,2):
+    elif Y[i] == (1,3,2):
         Target[i] = 132
-    elif y[i] == (1,2,3):
+    elif Y[i] == (1,2,3):
         Target[i] = 123
-    elif y[i] == (3,2,1):
+    elif Y[i] == (3,2,1):
         Target[i] = 321
-    elif y[i] == (2,1,3):
+    elif Y[i] == (2,1,3):
         Target[i] = 213
-    elif y[i] == (2,3,1):
+    elif Y[i] == (2,3,1):
         Target[i] = 231
     else:
-        print(y[i])
+        print(Y[i])
+        raise ValueError
 y = pd.DataFrame({"target": Target}, dtype="int32")
 #print(y.target.value_counts())
 #y = pd.get_dummies(y)
@@ -76,11 +79,11 @@ y = pd.DataFrame({"target": Target}, dtype="int32")
 
 
 """Resample the data to make the datasets more balanced."""
-rus = RandomUnderSampler(sampling_strategy="majority", random_state=42)
-X, y = rus.fit_resample(X, y)
+#under = RandomUnderSampler(sampling_strategy="majority")#, random_state=42)
+#X, y = under.fit_resample(X, y)
 
-smote = ADASYN(sampling_strategy="not majority",random_state=42)
-X, y = smote.fit_resample(X, y)
+over = ADASYN(sampling_strategy="not majority")#,random_state=42)
+X, y = over.fit_resample(X, y)
 #print(y.target.value_counts())
 
 
@@ -90,7 +93,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 #smote = SMOTE(sampling_strategy="not majority",random_state=42)
 #X_train, y_train = smote.fit_resample(X_train, y_train)
 
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=42)
 
 #smote = SMOTE(sampling_strategy="not majority",random_state=42)
 #X_train, y_train = smote.fit_resample(X_train, y_train)
@@ -110,7 +113,7 @@ def getTrainScores(gs):
     return results, best
 
 warnings.filterwarnings("ignore")#, category=UserWarning)
-###Train models with training sets and parameters###
+###Train models with various hyperparameters###
 
 #param_grid = {"base_estimator__criterion": ["gini", "entropy"], "base_estimator__splitter": ["best", "random"], "n_estimators": [10, 100]}
 
@@ -119,7 +122,7 @@ model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=100, algor
 model_Bag = BaggingClassifier(model_DTC, n_estimators=200, max_samples=100, bootstrap=True, n_jobs=-1, random_state=42)
 
 #model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror","mlogloss"], num_class=4, n_jobs=-1, random_state=42, max_depth=8, reg_lambda=150, reg_alpha=20, n_estimators=150, importance_type="gain")
-model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=100)#, max_depth=20, reg_lambda=100, reg_alpha=20)
+model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=120, reg_alpha=10)#, reg_lambda=100) 0.9638 0.9793
 #steps = [("over", SMOTE(sampling_strategy="not majority")), ("under", RandomUnderSampler(sampling_strategy="majority")), ("model", model_XGB)]
 #model_XGB_Pipe =  Pipeline(steps=steps)
 
@@ -191,44 +194,47 @@ def eval_val(model, title):
 ###Select best model and assess results with test set###
 
 def eval_test(model, title):
-    print("Assess final best model evaluation with test set:")
-    model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)], verbose=False)
-    #model.fit(X_train, y_train)
+    print("Assess final best " +title+ " model evaluation with test set:")
+    if title == "XGBoost":
+        model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)], verbose=False)
+    else:
+        model.fit(X_train, y_train)
     pred = model.predict(X_test)
     pred_train = model.predict(X_train)
-    
-    # Plot mlogloss and merror as function of iterations for train and test:
-    print("Plot mlogloss and merror:")
-    predictions = [round(value) for value in pred]
-    new_acc = accuracy_score(y_test, predictions)
-    results = model.evals_result()
-    epochs = len(results["validation_0"]["merror"])
-    x_axis = range(0,epochs)
 
-    fig, ax = plt.subplots()
-    ax.plot(x_axis, results["validation_0"]["mlogloss"], label="Train")
-    ax.plot(x_axis, results["validation_1"]["mlogloss"], label="Test")
-    ax.legend()
-    plt.title("mlogloss plot")
-    plt.ylabel("log loss")
-    fig,ax = plt.subplots()
-    ax.plot(x_axis, results["validation_0"]["merror"], label="Train")
-    ax.plot(x_axis, results["validation_1"]["merror"], label="Test")
-    ax.legend()
-    plt.title("merror plot")
-    plt.ylabel("Error")
+    if title == "XGBoost":
+        # Plot mlogloss and merror as function of iterations for train and test:
+        print("Plot mlogloss and merror:")
+        predictions = [round(value) for value in pred]
+        new_acc = accuracy_score(y_test, predictions)
+        results = model.evals_result()
+        epochs = len(results["validation_0"]["merror"])
+        x_axis = range(0,epochs)
+
+        fig, ax = plt.subplots()
+        ax.plot(x_axis, results["validation_0"]["mlogloss"], label="Train")
+        ax.plot(x_axis, results["validation_1"]["mlogloss"], label="Test")
+        ax.legend()
+        plt.title("mlogloss plot")
+        plt.ylabel("log loss")
+        fig,ax = plt.subplots()
+        ax.plot(x_axis, results["validation_0"]["merror"], label="Train")
+        ax.plot(x_axis, results["validation_1"]["merror"], label="Test")
+        ax.legend()
+        plt.title("merror plot")
+        plt.ylabel("Error")
     
     
     accuracy_train = accuracy_score(y_train, pred_train)
     accuracy = accuracy_score(y_test, pred)
     mse = mean_squared_error(y_test, pred)
     mae = mean_absolute_error(y_test, pred)
-    #variance = np.mean(np.var(pred))
+    variance = np.mean(np.var(pred))
     #bias = np.mean((y_test - np.mean(pred))**2)
     #precision = precision_score(y_test, pred, average="macro")
     prob = model.predict_proba(X_test)
 
-    #cks = cohen_kappa_score(y_test, pred)
+    cks = cohen_kappa_score(y_test, pred)
     #cr = classification_report(y_test, pred)
     #cross_val = cross_val_score(model, X_test, y_test, cv=5)
     conf_mat = confusion_matrix(y_test, pred)
@@ -246,6 +252,7 @@ def eval_test(model, title):
     lep2_pred_prob = prob[:,1]
     lep3_pred_prob = prob[:,2]
     lep4_pred_prob = prob[:,3]
+
     plt.figure()
     _, bins, _ = plt.hist(lep1_pred_prob, bins=100, histtype="step", label="lep1", density=1)
     _, bins, _ = plt.hist(lep2_pred_prob, bins=bins, histtype="step", label="lep2", density=1)
@@ -259,33 +266,34 @@ def eval_test(model, title):
     """
     print("Conf matrix:")
     plot_confusion_matrix(model, X_test, y_test, normalize="true")
-    
+    """
     print("Importance as Series and sort:")
     plt.figure()
     importances = pd.Series(data=model.feature_importances_, index=features_names)#X_train.columns)
     importances_sorted = importances.sort_values()
-    importances_sorted.plot(kind="barh")
+    importances_sorted[-18:].plot(kind="barh")
     plt.tight_layout()
     
     print("Importance with skplt:")
     #plt.figure()
-    skplt.estimators.plot_feature_importances(model, feature_names=features_names, title="XGB", x_tick_rotation=90, max_num_features=15)#X_train.columns, title="XGB", x_tick_rotation=90)
+    skplt.estimators.plot_feature_importances(model, feature_names=features_names, title="XGB", x_tick_rotation=90, max_num_features=18)#feature=X_train.columns)
     plt.tight_layout()
-    
+    """
     print("ROC:")
     #plt.figure()
     skplt.metrics.plot_roc(y_test, prob)
 
     print("Precision-Recall:")
     #plt.figure()
-    skplt.metrics.plot_precision_recall( y_test, prob)
+    skplt.metrics.plot_precision_recall(y_test, prob)
     
-    print("XGB-importance:")
-    #label_names = list(features.drop(columns=["target"], axis=1).columns)
-    #model.get_booster().feature_names = features_names
-    #xgb.plot_importance(model.get_booster(), importance_type="gain", title="Feature Importance - gain", show_values=False)
-    xgb.plot_importance(model, importance_type="gain", title="Feature Importance - gain", show_values=False, max_num_features=15)
-    plt.tight_layout()
+    if title == "XGBoost":
+        print("XGB-importance:")
+        #label_names = list(features.drop(columns=["target"], axis=1).columns)
+        #model.get_booster().feature_names = features_names
+        #xgb.plot_importance(model.get_booster(), importance_type="gain", title="Feature Importance - gain", show_values=False)
+        xgb.plot_importance(model, importance_type="gain", title="Feature Importance - gain", show_values=False, max_num_features=18)
+        plt.tight_layout()
     """
     print("Elbow curve:")
     skplt.cluster.plot_elbow_curve(KMeans(random_state=42), X, cluster_ranges=range(2,20))
@@ -294,6 +302,7 @@ def eval_test(model, title):
     kmeans = KMeans(n_clusters=6, random_state=42)
     cluster_labels = kmeans.fit(X_train, y_train).predict(X_test)
     skplt.metrics.plot_silhouette(X_test, cluster_labels)
+
     silhouette_avg = silhouette_score(X_test, cluster_labels)
     sample_sil = silhouette_samples(X_test, cluster_labels)
     acc_kmean = accuracy_score(y_test, cluster_labels)
@@ -307,11 +316,11 @@ def eval_test(model, title):
     plt.scatter(centers[:,0], centers[:,1], marker="o", c="white", alpha=1, s=200, edgecolor="k")
     for i, c in enumerate(centers):
         plt.scatter(c[0], c[1], marker="$%d$" %i, alpha=1, s=50, edgecolor="k")
-    plt.title("Vis of clustered data")
+    plt.title("Visual of clustered data")
     """
     plt.show()
 
-    eval_test = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "MSE":[mse], "MAE":[mae]}#, "CKS":[cks], "MSE":[mse], "MAE":[mae], "Var":[variance], "Bias":[bias]}
+    eval_test = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "CKS":[cks], "MSE":[mse], "MAE":[mae], "Var":[variance]}#, "Bias":[bias]}
     #print(eval_test)
     
     return pd.DataFrame(eval_test)
@@ -319,6 +328,9 @@ def eval_test(model, title):
 #print("Learning curve")
 #skplt.estimators.plot_learning_curve(model_XGB, X, y, cv=5, shuffle=True, scoring="accuracy", n_jobs=-1, title="Learning curve")
 
+#ADC = eval_test(model_ADC, "AdaBoost")
 XGB_test_DF = eval_test(model_XGB, "XGBoost")
+#print(pd.concat([ADC, XGB_test_DF]))
 print(XGB_test_DF)
 #plt.show()
+
