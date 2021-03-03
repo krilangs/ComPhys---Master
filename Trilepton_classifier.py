@@ -13,6 +13,7 @@ from imblearn.over_sampling import SMOTE, ADASYN
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, VotingClassifier
+from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, mean_absolute_error, mean_squared_error, precision_score, cohen_kappa_score, confusion_matrix, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve, silhouette_score, silhouette_samples
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
@@ -24,8 +25,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
-from sklearn.feature_selection import SelectFromModel
 
+warnings.filterwarnings("ignore")#, category=UserWarning)
 
 """Read dataframe(s) from file."""
 #df_Truth = pd.read_hdf("Trilepton_ML.h5", key="big_original")
@@ -35,21 +36,24 @@ from sklearn.feature_selection import SelectFromModel
 #new_df = pd.DataFrame([df_Truth.pt, df_Angular.phi, df_Angular.eta, df_Truth.target]).transpose()
 #df_short = pd.read_hdf("Trilepton_ML.h5", key="pt_phi_eta")
 #df_Angular_fullevents = pd.read_hdf("Trilepton_ML.h5", key="big_angular_fullevents")
-#print(df_Angular.head())
 
-#df_new = pd.read_hdf("Trilepton_ML.h5", key="DF_flat2")
-df_new = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
-df_new = df_new.select_dtypes(exclude=["int32"])
-#print(df_new.info())
-#print(df_new.head())
+#df_flat = pd.read_hdf("Trilepton_ML.h5", key="DF_flat2")
+df_flat = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
+df_flat = df_flat.select_dtypes(exclude=["int32"])
+
+df_simple = df_flat.select_dtypes(exclude=["int32", "float64"])
+df_simple = df_simple.drop(["lep1_theta", "lep1_px", "lep1_py", "lep1_pz", "lep1_E", "lep2_theta", "lep2_px", "lep2_py", "lep2_pz", "lep2_E", "lep3_theta", "lep3_px", "lep3_py", "lep3_pz", "lep3_E", "lep4_theta", "lep4_px", "lep4_py", "lep4_pz", "lep4_E"], axis=1)
+
+#print(df_flat.info())
+#print(df_flat.head())
+#print(df_simple.info())
 
 
 """Make design matrix X and target y from dataframe."""
-features = df_new#df_Angular_alt
-features_names = list(features.drop(columns=["target", "lep1_tlv", "lep2_tlv", "lep3_tlv", "lep4_tlv"], axis=1).columns)
-#print(features.loc[:1, "dPhi_12":"dPhi_3MET"])
-X = features.drop(columns=["target"], axis=1)
-X = X.select_dtypes(exclude=["object"])
+features = df_flat
+
+X = features.select_dtypes(exclude=["object"])
+features_names = list(X.columns)
 Y = features.target
 
 Target = np.zeros(len(Y))
@@ -69,36 +73,42 @@ for i in range(len(Y)):
     else:
         print(Y[i])
         raise ValueError
+
 y = pd.DataFrame({"target": Target}, dtype="int32")
 #print(y.target.value_counts())
-#y = pd.get_dummies(y)
-#X = StandardScaler().fit_transform(X)
-#print(y)
-#print(Y)
-#sys.exit()
+
+
 
 
 """Resample the data to make the datasets more balanced."""
-#under = RandomUnderSampler(sampling_strategy="majority")#, random_state=42)
-#X, y = under.fit_resample(X, y)
+def Resample(X, y, scale=False, under=False, over=False):
+    if scale == True:
+        print("Scale")
+        X = StandardScaler().fit_transform(X)
 
-over = ADASYN(sampling_strategy="not majority")#,random_state=42)
-X, y = over.fit_resample(X, y)
-#print(y.target.value_counts())
+    if under == True:
+        print("Undersample")
+        undersample = RandomUnderSampler(sampling_strategy="majority")#, random_state=42)
+        X, y = undersample.fit_resample(X, y)
+
+    if over == True:
+        print("Oversample")
+        oversample = ADASYN(sampling_strategy="not majority")#,random_state=42)
+        X, y = oversample.fit_resample(X, y)
+    
+    print(y.target.value_counts())
+    
+    return X, y
+
+X, y = Resample(X, y, scale=False, under=False, over=True)
 
 
 """Split events into training, validation and test sets."""
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-#smote = SMOTE(sampling_strategy="not majority",random_state=42)
-#X_train, y_train = smote.fit_resample(X_train, y_train)
-
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=42)
 
-#smote = SMOTE(sampling_strategy="not majority",random_state=42)
-#X_train, y_train = smote.fit_resample(X_train, y_train)
 #print(len(X_train), len(X_val), len(X_test)) 
-
 
 
 """Multiclassification to identify leptons. Very messy right now with many different algorithms"""
@@ -112,7 +122,7 @@ def getTrainScores(gs):
     best = {'best_mean': gs.best_score_, "best_param":gs.best_params_}
     return results, best
 
-warnings.filterwarnings("ignore")#, category=UserWarning)
+
 ###Train models with various hyperparameters###
 
 #param_grid = {"base_estimator__criterion": ["gini", "entropy"], "base_estimator__splitter": ["best", "random"], "n_estimators": [10, 100]}
@@ -121,10 +131,10 @@ model_DTC = DecisionTreeClassifier(random_state=42, max_features="auto", class_w
 model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=100, algorithm="SAMME.R", random_state=42)
 model_Bag = BaggingClassifier(model_DTC, n_estimators=200, max_samples=100, bootstrap=True, n_jobs=-1, random_state=42)
 
-#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror","mlogloss"], num_class=4, n_jobs=-1, random_state=42, max_depth=8, reg_lambda=150, reg_alpha=20, n_estimators=150, importance_type="gain")
-model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=120, reg_alpha=10)#, reg_lambda=100) 0.9638 0.9793
-#steps = [("over", SMOTE(sampling_strategy="not majority")), ("under", RandomUnderSampler(sampling_strategy="majority")), ("model", model_XGB)]
-#model_XGB_Pipe =  Pipeline(steps=steps)
+#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror","mlogloss"], num_class=4, n_jobs=-1, random_state=42, max_depth=8, reg_lambda=150, reg_alpha=20, n_estimators=150, importance_type="gain")  # Full Angular DF
+model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=100, reg_alpha=10)  # 0.9638 0.9793 Full flat DF
+#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=300, reg_alpha=10)   # 0.9212 0.9408 Simple flat DF
+model_XGBPipe = make_pipeline(StandardScaler(), model_XGB)
 
 model_KNN = KNeighborsClassifier(n_neighbors=10, algorithm="ball_tree")
 model_MLP = MLPClassifier(alpha=0.001, max_iter=200, random_state=42)
@@ -201,7 +211,7 @@ def eval_test(model, title):
         model.fit(X_train, y_train)
     pred = model.predict(X_test)
     pred_train = model.predict(X_train)
-
+    """
     if title == "XGBoost":
         # Plot mlogloss and merror as function of iterations for train and test:
         print("Plot mlogloss and merror:")
@@ -223,7 +233,7 @@ def eval_test(model, title):
         ax.legend()
         plt.title("merror plot")
         plt.ylabel("Error")
-    
+    """
     
     accuracy_train = accuracy_score(y_train, pred_train)
     accuracy = accuracy_score(y_test, pred)
@@ -234,6 +244,10 @@ def eval_test(model, title):
     #precision = precision_score(y_test, pred, average="macro")
     prob = model.predict_proba(X_test)
 
+    print(pred[0:10])
+    print(prob[0:10])
+
+    sys.exit()
     cks = cohen_kappa_score(y_test, pred)
     #cr = classification_report(y_test, pred)
     #cross_val = cross_val_score(model, X_test, y_test, cv=5)
@@ -279,6 +293,7 @@ def eval_test(model, title):
     skplt.estimators.plot_feature_importances(model, feature_names=features_names, title="XGB", x_tick_rotation=90, max_num_features=18)#feature=X_train.columns)
     plt.tight_layout()
     """
+    """
     print("ROC:")
     #plt.figure()
     skplt.metrics.plot_roc(y_test, prob)
@@ -295,12 +310,14 @@ def eval_test(model, title):
         xgb.plot_importance(model, importance_type="gain", title="Feature Importance - gain", show_values=False, max_num_features=18)
         plt.tight_layout()
     """
+    """
     print("Elbow curve:")
     skplt.cluster.plot_elbow_curve(KMeans(random_state=42), X, cluster_ranges=range(2,20))
     
     print("Silhouette:")
     kmeans = KMeans(n_clusters=6, random_state=42)
     cluster_labels = kmeans.fit(X_train, y_train).predict(X_test)
+    #cluster_labels = pred
     skplt.metrics.plot_silhouette(X_test, cluster_labels)
 
     silhouette_avg = silhouette_score(X_test, cluster_labels)
@@ -309,6 +326,7 @@ def eval_test(model, title):
     print(acc_kmean)
     print(silhouette_avg)
     print(sample_sil)
+    
     plt.figure()
     colors = cm.nipy_spectral(cluster_labels.astype(float)/4)
     plt.scatter(X_test[:,0], X_test[:,1], marker=".", s=30, lw=0, alpha=0.7, c=colors, edgecolor="k")
@@ -333,4 +351,5 @@ XGB_test_DF = eval_test(model_XGB, "XGBoost")
 #print(pd.concat([ADC, XGB_test_DF]))
 print(XGB_test_DF)
 #plt.show()
+
 
