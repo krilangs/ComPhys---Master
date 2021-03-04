@@ -11,6 +11,7 @@ import matplotlib.cm as cm
 
 from imblearn.over_sampling import SMOTE, ADASYN
 from imblearn.under_sampling import RandomUnderSampler
+from scipy.stats import ks_2samp
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.feature_selection import SelectFromModel
@@ -28,6 +29,7 @@ from xgboost import XGBClassifier
 
 warnings.filterwarnings("ignore")#, category=UserWarning)
 
+
 """Read dataframe(s) from file."""
 #df_Truth = pd.read_hdf("Trilepton_ML.h5", key="big_original")
 #df_Angular = pd.read_hdf("Trilepton_ML.h5", key="big_angular")
@@ -41,12 +43,9 @@ warnings.filterwarnings("ignore")#, category=UserWarning)
 df_flat = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
 df_flat = df_flat.select_dtypes(exclude=["int32"])
 
+# Make a simplified dataframe with only pt, phi and eta for each lepton
 df_simple = df_flat.select_dtypes(exclude=["int32", "float64"])
 df_simple = df_simple.drop(["lep1_theta", "lep1_px", "lep1_py", "lep1_pz", "lep1_E", "lep2_theta", "lep2_px", "lep2_py", "lep2_pz", "lep2_E", "lep3_theta", "lep3_px", "lep3_py", "lep3_pz", "lep3_E", "lep4_theta", "lep4_px", "lep4_py", "lep4_pz", "lep4_E"], axis=1)
-
-#print(df_flat.info())
-#print(df_flat.head())
-#print(df_simple.info())
 
 
 """Make design matrix X and target y from dataframe."""
@@ -56,6 +55,7 @@ X = features.select_dtypes(exclude=["object"])
 features_names = list(X.columns)
 Y = features.target
 
+# Change the targets from tuples to integer values
 Target = np.zeros(len(Y))
 for i in range(len(Y)):
     if Y[i] == (3,1,2):
@@ -75,9 +75,7 @@ for i in range(len(Y)):
         raise ValueError
 
 y = pd.DataFrame({"target": Target}, dtype="int32")
-#print(y.target.value_counts())
-
-
+#print(y.target.value_counts())  # Print the counts of the different classes
 
 
 """Resample the data to make the datasets more balanced."""
@@ -97,7 +95,6 @@ def Resample(X, y, scale=False, under=False, over=False):
         X, y = oversample.fit_resample(X, y)
     
     print(y.target.value_counts())
-    
     return X, y
 
 X, y = Resample(X, y, scale=False, under=False, over=True)
@@ -105,13 +102,13 @@ X, y = Resample(X, y, scale=False, under=False, over=True)
 
 """Split events into training, validation and test sets."""
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
+    
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=42)
 
 #print(len(X_train), len(X_val), len(X_test)) 
 
 
-"""Multiclassification to identify leptons. Very messy right now with many different algorithms"""
+"""Multiclass classification to identify leptons. Very messy right now with many different algorithms"""
 def getTrainScores(gs):
     # Function that plots the GridSearchCV best parameters and mean scores
     results = {}
@@ -123,8 +120,7 @@ def getTrainScores(gs):
     return results, best
 
 
-###Train models with various hyperparameters###
-
+#Train models with various hyperparameters for optimization
 #param_grid = {"base_estimator__criterion": ["gini", "entropy"], "base_estimator__splitter": ["best", "random"], "n_estimators": [10, 100]}
 
 model_DTC = DecisionTreeClassifier(random_state=42, max_features="auto", class_weight="balanced", max_depth=None)
@@ -154,10 +150,9 @@ model_ONE_MLP = OneVsRestClassifier(model_MLP)
 #getTrainScores(clf_XGB)
 
 
-###Evaluate models with validation sets###
+#Evaluate models with validation set
 def eval_val(model, title):
-    print("Start eval of models:")
-    print(title)
+    print("Start eval of model "+title+":")
     model.fit(X_train, y_train)
     pred = model.predict(X_val)
     pred_train = model.predict(X_train)
@@ -201,8 +196,7 @@ def eval_val(model, title):
 
 
 
-###Select best model and assess results with test set###
-
+#Select best model and assess results with test set
 def eval_test(model, title):
     print("Assess final best " +title+ " model evaluation with test set:")
     if title == "XGBoost":
@@ -243,15 +237,38 @@ def eval_test(model, title):
     #bias = np.mean((y_test - np.mean(pred))**2)
     #precision = precision_score(y_test, pred, average="macro")
     prob = model.predict_proba(X_test)
+    prob_train = model.predict_proba(X_train)
 
-    print(pred[0:10])
-    print(prob[0:10])
-
-    sys.exit()
-    cks = cohen_kappa_score(y_test, pred)
+    """
+    print("Kolmogorov-Smirnoff statistics:")
+    i = 0
+    KS_stat = ks_2samp(prob[:,i], prob_train[:,i])
+    print(KS_stat)
+    def empirical_cdf(sample, plotting=True):
+        N = len(sample)
+        rng = max(sample) - min(sample)
+        if plotting:
+            xs = np.concatenate([np.array([min(sample)-rng/3]), np.sort(sample) , np.array([max(sample)+rng/3])])
+            ys = np.append(np.arange(N+1)/N, 1)
+        else:
+            xs = np.sort(sample)
+            ys = np.arange(1, N+1)/N
+        return (xs, ys)
+    xs_test, ys_test = empirical_cdf(prob[:,i])
+    xs_train, ys_train = empirical_cdf(prob_train[:,i])
+    plt.figure()
+    plt.plot(xs_test, ys_test, label="Test", linewidth=3,linestyle=":")
+    plt.plot(xs_train, ys_train, label="Train")
+    plt.title("Kolmogorov-Smirnoff statistics")
+    plt.xlabel("Score")
+    plt.ylabel("c.d.f.")
+    plt.legend()
+    """
+    
+    #cks = cohen_kappa_score(y_test, pred)
     #cr = classification_report(y_test, pred)
     #cross_val = cross_val_score(model, X_test, y_test, cv=5)
-    conf_mat = confusion_matrix(y_test, pred)
+    #conf_mat = confusion_matrix(y_test, pred)
 
     #print("Precision:", precision)
     #print("Classification report "+title+": \n", cr)
@@ -259,19 +276,38 @@ def eval_test(model, title):
     #print("Highest accuracy score from cross-val:\n", np.max(cross_val))
     #print("Mean accuracy score from cross-val:\n", np.mean(cross_val))
 
-    print(conf_mat)
-
     """
-    lep1_pred_prob = prob[:,0]
-    lep2_pred_prob = prob[:,1]
-    lep3_pred_prob = prob[:,2]
-    lep4_pred_prob = prob[:,3]
-
+    y1_pred_prob = prob[:,0]
+    y2_pred_prob = prob[:,1]
+    y3_pred_prob = prob[:,2]
+    y4_pred_prob = prob[:,3]
+    y5_pred_prob = prob[:,4]
+    y6_pred_prob = prob[:,5]
+    
     plt.figure()
-    _, bins, _ = plt.hist(lep1_pred_prob, bins=100, histtype="step", label="lep1", density=1)
-    _, bins, _ = plt.hist(lep2_pred_prob, bins=bins, histtype="step", label="lep2", density=1)
-    plt.legend(loc="best")
+    plt.hist(y1_pred_prob, bins=10)
+    plt.figure()
+    plt.hist(y2_pred_prob, bins=10)
+    plt.figure()
+    plt.hist(y3_pred_prob, bins=10)
+    plt.figure()
+    plt.hist(y4_pred_prob, bins=10)
+    plt.figure()
+    plt.hist(y5_pred_prob, bins=10)
+    plt.figure()
+    plt.hist(y6_pred_prob, bins=10)
     """
+    """
+    class_names = ["123", "132", "213", "231", "312", "321"]
+    for i in range(len(class_names)):
+        plt.figure()
+        plt.hist(model.predict_proba(X_test)[:,i], bins=100, label="Test %s" %class_names[i], alpha=0.5, density=1)
+        plt.hist(model.predict_proba(X_train)[:,i], bins=100, label="Train %s" %class_names[i], alpha=0.5, density=1, histtype="step")
+    #_, bins, _ = plt.hist(y2_pred_prob, bins=bins, histtype="step", label="lep2", density=1)
+    plt.legend(loc="best")
+    plt.show()
+    """
+    sys.exit()
     """
     print("Corr matrix:")
     plt.figure(figsize=(13,6))
@@ -279,6 +315,7 @@ def eval_test(model, title):
     heatmap.set_title("Correlation heatmap")
     """
     print("Conf matrix:")
+    print(conf_mat)
     plot_confusion_matrix(model, X_test, y_test, normalize="true")
     """
     print("Importance as Series and sort:")
@@ -309,6 +346,9 @@ def eval_test(model, title):
         #xgb.plot_importance(model.get_booster(), importance_type="gain", title="Feature Importance - gain", show_values=False)
         xgb.plot_importance(model, importance_type="gain", title="Feature Importance - gain", show_values=False, max_num_features=18)
         plt.tight_layout()
+
+        print("XGB-tree:")
+        xgb.plot_tree(model, rankdir="LR")
     """
     """
     print("Elbow curve:")
@@ -343,13 +383,11 @@ def eval_test(model, title):
     
     return pd.DataFrame(eval_test)
 
-#print("Learning curve")
-#skplt.estimators.plot_learning_curve(model_XGB, X, y, cv=5, shuffle=True, scoring="accuracy", n_jobs=-1, title="Learning curve")
 
-#ADC = eval_test(model_ADC, "AdaBoost")
 XGB_test_DF = eval_test(model_XGB, "XGBoost")
-#print(pd.concat([ADC, XGB_test_DF]))
 print(XGB_test_DF)
-#plt.show()
+
+
+
 
 
