@@ -91,10 +91,10 @@ def Resample(X, y, scale=False, under=False, over=False):
 
     if over == True:
         print("Oversample")
-        oversample = ADASYN(sampling_strategy="not majority")#,random_state=42)
+        oversample = ADASYN(sampling_strategy="not majority", random_state=42)
         X, y = oversample.fit_resample(X, y)
     
-    print(y.target.value_counts())
+    #print(y.target.value_counts())
     return X, y
 
 X, y = Resample(X, y, scale=False, under=False, over=True)
@@ -123,25 +123,25 @@ def getTrainScores(gs):
 #Train models with various hyperparameters for optimization
 #param_grid = {"base_estimator__criterion": ["gini", "entropy"], "base_estimator__splitter": ["best", "random"], "n_estimators": [10, 100]}
 
-model_DTC = DecisionTreeClassifier(random_state=42, max_features="auto", class_weight="balanced", max_depth=None)
-model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=100, algorithm="SAMME.R", random_state=42)
-model_Bag = BaggingClassifier(model_DTC, n_estimators=200, max_samples=100, bootstrap=True, n_jobs=-1, random_state=42)
+model_DTC = DecisionTreeClassifier(random_state=42, max_features="auto", class_weight="balanced", max_depth=18)
+model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=300, algorithm="SAMME.R", random_state=42)
+model_Bag = BaggingClassifier(model_DTC, n_estimators=300, max_samples=500, bootstrap=True, n_jobs=-1, random_state=42)
 
 #model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror","mlogloss"], num_class=4, n_jobs=-1, random_state=42, max_depth=8, reg_lambda=150, reg_alpha=20, n_estimators=150, importance_type="gain")  # Full Angular DF
 model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=100, reg_alpha=10)  # 0.9638 0.9793 Full flat DF
 #model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=300, reg_alpha=10)   # 0.9212 0.9408 Simple flat DF
 model_XGBPipe = make_pipeline(StandardScaler(), model_XGB)
 
-model_KNN = KNeighborsClassifier(n_neighbors=10, algorithm="ball_tree")
-model_MLP = MLPClassifier(alpha=0.001, max_iter=200, random_state=42)
+model_MLP = MLPClassifier(alpha=0.1, max_iter=300, activation="relu", hidden_layer_sizes=(200,100), random_state=42)
 model_SVC = SVC(probability=True, gamma="auto", random_state=42)
 model_SVC2 = SVC(decision_function_shape="ovr", random_state=42)
-model_RF = Pipeline([("classifier", RandomForestClassifier(n_estimators=200, min_samples_leaf=5, min_samples_split=8, max_depth=10, max_features="auto", random_state=42))])
-model_RF2 = RandomForestClassifier(n_estimators=400, min_samples_leaf=2, min_samples_split=5, max_depth=15, max_features="auto", random_state=42)
+model_RF_Pipe = Pipeline([("classifier", RandomForestClassifier(n_estimators=400, min_samples_leaf=2, min_samples_split=5, max_depth=20, max_features="auto", random_state=42))])
+model_RF = RandomForestClassifier(n_estimators=400, min_samples_leaf=2, min_samples_split=5, max_depth=15, max_features="auto", random_state=42)
 model_SGD = SGDClassifier()
-model_GBC = GradientBoostingClassifier(random_state=42, n_estimators=200, max_depth=None)
-model_ONE_XGB = OneVsRestClassifier(XGBClassifier(objective="multi:softprob", eval_metric="merror", num_class=4, n_jobs=-1, random_state=42))
+model_GBC = GradientBoostingClassifier(random_state=42, n_estimators=100, max_depth=8)
+model_ONE_XGB = OneVsRestClassifier(XGBClassifier(objective="multi:softprob", eval_metric="merror", num_class=6, n_jobs=-1, random_state=42))
 model_ONE_MLP = OneVsRestClassifier(model_MLP)
+model_VC = VotingClassifier(estimators=[("DTC", model_DTC), ("Ada", model_ADC),("RF", model_RF), ("XGB", model_XGB)], voting="soft", n_jobs=-1)
 
 #grid_ADC = GridSearchCV(model_ADC, param_grid=param_grid, scoring="roc_auc")
 #params={"reg_alpha":[1,20,80,120]}#,'reg_lambda':[1,50,100,150],"learning_rate":[1,0.1,0.01,5]}
@@ -160,7 +160,7 @@ def eval_val(model, title):
     accuracy = accuracy_score(y_val, pred)
     mse = mean_squared_error(y_val, pred)
     mae = mean_absolute_error(y_val, pred)
-    #variance = np.mean(np.var(pred))
+    variance = np.mean(np.var(pred))
     #bias = np.mean((y_val - np.mean(pred))**2)
     #print("iter:",model.n_iter_)
     #print("outputs:",model.n_outputs_)
@@ -168,31 +168,30 @@ def eval_val(model, title):
     #print("classes:",model.classes_)
     #model_plt = plot_confusion_matrix(model, X_val, y_val, normalize="true")
     #model_plt.ax_.set_title(title)
-    
+
     #skplt.estimators.plot_feature_importances(model, feature_names=features_names, title=title, x_tick_rotation=90)
 
-    eval_val = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "MSE":[mse], "MAE":[mae]}#, "Var":[variance], "Bias":[bias]}
+    eval_val = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "MSE":[mse], "MAE":[mae], "Var":[variance]}#, "Bias":[bias]}
     return pd.DataFrame(eval_val)
 
+DTC_DF = eval_val(model_DTC, "DecisionTree")
 #ADC_DF = eval_val(model_ADC, "AdaBoost")
-#DTC_DF = eval_val(model_DTC, "DecisionTree")
 #XGB_DF = eval_val(model_XGB, "XGBoost")
 #Bag_XGB_DF = eval_val(model_Bag_XGB, "Bagging-XGB")
 #Bag_DF = eval_val(model_Bag, "Bagging")
-#KNN_DF = eval_val(model_KNN, "KNeighbors")
-#MLP_DF = eval_val(model_MLP, "MLP")
-#RF_DF = eval_val(model_RF, "RandomForestPipe")
-##RF2_DF = eval_val(model_RF2, "RandomForest")
+MLP_DF = eval_val(model_MLP, "MLP")
+#RF_DF = eval_val(model_RF, "RandomForest")
+#RF2_DF = eval_val(model_RF_Pipe, "RandomForestPipe")
 ##SGD_DF = eval_val(model_SGD, "SGD")
 #GBC_DF = eval_val(model_GBC, "GradientBoost")
 #ONER_XGB_DF = eval_val(model_ONER_XGB, "OneVsRestXGB")
 #ONE_MLP_DF = eval_val(model_ONE_MLP, "OneVsRestMLP")
 #VC_DF = eval_val(model_VC, "Voting")
-#df_merge = pd.concat([ADC_DF, XGB_DF])
+df_merge = pd.concat([DTC_DF, MLP_DF])
 #df_merge = pd.concat([ADC_DF, DTC_DF, XGB_DF, KNN_DF, MLP_DF, RF_DF])
 #print(XGB_DF)
-#print(df_merge)
-#plt.show()
+print(df_merge)
+plt.show()
 
 
 
@@ -384,10 +383,7 @@ def eval_test(model, title):
     return pd.DataFrame(eval_test)
 
 
-XGB_test_DF = eval_test(model_XGB, "XGBoost")
-print(XGB_test_DF)
-
-
-
+#XGB_test_DF = eval_test(model_XGB, "XGBoost")
+#print(XGB_test_DF)
 
 
