@@ -4,20 +4,22 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.ticker as ticker
 
+# Choose destination of folder for saving plots:
 save_Folder = "/scratch2/Master_krilangs/Trilepton_Plots/Feature_plots/"
 
+# Read the dataframe from file.
 read_DF = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
 #print(read_DF.info())
 
 
 ### Functions for plotting various variables in the dataframe: ###
-def plotter(var, Nbins=80, save=False):
+def plotter(var, Nbins=80, save=False, sharex=False):
     """Plots histogram of chosen variable property for all the leptons in one plot. If a variable is not in the dataframe, an error is raised and the variables available in the dataframe are printed."""
     try:
         df = read_DF[["lep1_"+var, "lep2_"+var, "lep3_"+var, "lep4_"+var]]
 
         if var == "phi":
-            fig, axes = plt.subplots(4, 1, figsize=(10,6), constrained_layout=True)
+            fig, axes = plt.subplots(4, 1, figsize=(10,6), constrained_layout=True, sharex=sharex)
             ax0, ax1, ax2, ax3 = axes.flatten()
 
             fig.suptitle("Histogram of "+var+" for each lepton", fontsize=16)
@@ -41,17 +43,18 @@ def plotter(var, Nbins=80, save=False):
             plt.tight_layout()
             if save:
                 print("Save figure")
-                fig.savefig(save_Folder+var+".png")
+                plt.savefig(save_Folder+var+".png")
 
     except:
         print("If variable is not defined in dataframe, choose another:")
         print(read_DF.columns)
         raise
 
+
 #-----
-def sub_plotter(var, Nbins=80, save=False):
+def sub_plotter(var, Nbins=80, save=False, sharex=False):
     """Plots a set of chosen variables which are connected to two leptons at a time, where each subplot shows the connection of the i'th lepton to the other leptons."""
-    fig, axes = plt.subplots(4, 1, figsize=(12,8), constrained_layout=True)
+    fig, axes = plt.subplots(4, 1, figsize=(12,8), constrained_layout=True, sharex=sharex)
     ax0, ax1, ax2, ax3 = axes.flatten()
 
     if var == "mll":
@@ -81,31 +84,32 @@ def sub_plotter(var, Nbins=80, save=False):
 
 
 #-----
-def plot_all(Nbins=80, save=False):
+def plot_all(Nbins=80, save=False, sharex=False):
     """Plots all the variables, except vtx and pid since they are not as interesting."""
     singles = ["pt", "phi", "eta", "theta", "px", "py", "pz", "E"]
     multiples = ["mll", "dphi", "dR"]
 
     for i in range(len(singles)):
-        plotter(singles[i], Nbins, save)
+        plotter(singles[i], Nbins, save, sharex)
 
     for j in range(len(multiples)):
-        sub_plotter(multiples[j], Nbins, save)
+        sub_plotter(multiples[j], Nbins, save, sharex)
 
     
 """ 
 Available variables to plot:
     -plotter (10): pt, phi, eta, theta, px, py, pz, E, vtx, pid
     -sub_plotter (3): mll, dphi, dR
-Both functions takes the following inputs as arguments:
+All three functions take the following inputs as arguments (except plot_all() plots alle variables and does not take -var- as input):
     -var = str, The variable name.
     -Nbins = int, The number of bins.
     -save = bol, True; to save the plots to the folder at the start of the script.
+    -sharex = bol, True: make subplots share the same x-axis.
 """
 
 #plotter("pt", 80, False)
 #plotter("phi", 80,  False)
-#sub_plotter("mll", 80, False)
-plot_all(80, False)
+#sub_plotter("dphi", 80, False)
+plot_all(80, False, True)
 
 plt.show()
