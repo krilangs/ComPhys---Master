@@ -166,11 +166,11 @@ def lepaugmentation(df,nlep):
 #Folder = "../ntuples/heavy_neutrinos/"    
 Folder = "/scratch2/Master_krilangs/Trilepton_Ntuples/"
 
-size = input("Choose Ntuple size (small/big):")  # May remove later
-if size == "small":
-    file = "myfile"
-elif size == "big":
-    file = "myfile_allevents"
+#size = input("Choose Ntuple size (small/big):")  # May remove later
+#if size == "small":
+#    file = "myfile"
+#elif size == "big":
+file = "myfile_allevents"
 
 
 """Read from ROOT."""
