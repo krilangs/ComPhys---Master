@@ -1,4 +1,4 @@
-Python files are a bit messy at this point.
+Some python files are a bit messy at this point.
 
 * *Masteroppgave_tmp.pdf* is the master thesis (so far).
 
