@@ -6,24 +6,30 @@ import pandas as pd
 import seaborn as sns
 import xgboost as xgb
 import scikitplot as skplt
-import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import matplotlib.pyplot as plt
 
+# Tools
 from imblearn.over_sampling import SMOTE, ADASYN
 from imblearn.under_sampling import RandomUnderSampler
+from mlxtend.evaluate import bias_variance_decomp
 from scipy.stats import ks_2samp
-from sklearn.cluster import KMeans
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, VotingClassifier
-from sklearn.feature_selection import SelectFromModel
-from sklearn.linear_model import SGDClassifier
+from sklearn.decomposition import PCA
+from sklearn.experimental import enable_hist_gradient_boosting  # Needed when importing the HistGradientBoostingClassifier, experimental feature
+from sklearn.feature_selection import SelectFromModel, SelectKBest, f_classif, mutual_info_classif
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, mean_absolute_error, mean_squared_error, precision_score, cohen_kappa_score, confusion_matrix, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve, silhouette_score, silhouette_samples
-from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
-from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
-from sklearn.neighbors import NearestNeighbors, KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_val_score
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
+
+# Models
+from lightgbm import LGBMClassifier
+from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, VotingClassifier, HistGradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV, RidgeClassifier, RidgeClassifierCV
+from sklearn.multiclass import OneVsRestClassifier, OneVsOneClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC  # Very slow to run
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
@@ -31,15 +37,6 @@ warnings.filterwarnings("ignore")#, category=UserWarning)
 
 
 """Read dataframe(s) from file."""
-#df_Truth = pd.read_hdf("Trilepton_ML.h5", key="big_original")
-#df_Angular = pd.read_hdf("Trilepton_ML.h5", key="big_angular")
-#df_Angular_alt = pd.read_hdf("Trilepton_ML.h5", key="big_alt_angular")
-#df_Angular_zeros = pd.read_hdf("Trilepton_ML.h5", key="big_angular_zeros")
-#new_df = pd.DataFrame([df_Truth.pt, df_Angular.phi, df_Angular.eta, df_Truth.target]).transpose()
-#df_short = pd.read_hdf("Trilepton_ML.h5", key="pt_phi_eta")
-#df_Angular_fullevents = pd.read_hdf("Trilepton_ML.h5", key="big_angular_fullevents")
-
-#df_flat = pd.read_hdf("Trilepton_ML.h5", key="DF_flat2")
 df_flat = pd.read_hdf("Trilepton_ML.h5", key="DF_flat3")
 df_flat = df_flat.select_dtypes(exclude=["int32"])
 
@@ -48,8 +45,9 @@ df_simple = df_flat.select_dtypes(exclude=["int32", "float64"])
 df_simple = df_simple.drop(["lep1_theta", "lep1_px", "lep1_py", "lep1_pz", "lep1_E", "lep2_theta", "lep2_px", "lep2_py", "lep2_pz", "lep2_E", "lep3_theta", "lep3_px", "lep3_py", "lep3_pz", "lep3_E", "lep4_theta", "lep4_px", "lep4_py", "lep4_pz", "lep4_E"], axis=1)
 
 
-"""Make design matrix X and target y from dataframe."""
-features = df_flat
+"""Make design matrix X and target y from chosen dataframe."""
+features = df_simple
+#features = df_flat
 
 X = features.select_dtypes(exclude=["object"])
 features_names = list(X.columns)
@@ -75,18 +73,40 @@ for i in range(len(Y)):
         raise ValueError
 
 y = pd.DataFrame({"target": Target}, dtype="int32")
-#print(y.target.value_counts())  # Print the counts of the different classes
+
+# Inspect the data
+def data_info(df):
+    df.info()
+    print(df.head())
+    print(y.target.value_counts())  # Print the counts of the different classes
+    
+    # Look at the correlations between the features
+    print("Corr matrix:")
+    plt.figure(figsize=(13,6))
+    heatmap = sns.heatmap(df.corr(), annot=True, fmt=".2g", vmin=-1, vmax=1, center=0)
+    heatmap.set_title("Correlation heatmap")
+    
+    # Information gain of the features
+    cols = list(X.columns)
+    infos = mutual_info_classif(X.values, np.ravel(y), random_state=42)
+    info_gain = {}
+    for i in range(len(cols)):
+        info_gain[str(cols[i])] = infos[i]
+    
+    info_gain = pd.DataFrame(info_gain, index=[0])
+    print("Information gain of the features:")
+    print(info_gain)
+    
+    plt.show()
+    
+#data_info(features)
 
 
 """Resample the data to make the datasets more balanced."""
-def Resample(X, y, scale=False, under=False, over=False):
-    if scale == True:
-        print("Scale")
-        X = StandardScaler().fit_transform(X)
-
+def Resample(X, y, under=False, over=False):
     if under == True:
         print("Undersample")
-        undersample = RandomUnderSampler(sampling_strategy="majority")#, random_state=42)
+        undersample = RandomUnderSampler(sampling_strategy="majority", random_state=42)
         X, y = undersample.fit_resample(X, y)
 
     if over == True:
@@ -94,23 +114,44 @@ def Resample(X, y, scale=False, under=False, over=False):
         oversample = ADASYN(sampling_strategy="not majority", random_state=42)
         X, y = oversample.fit_resample(X, y)
     
-    #print(y.target.value_counts())
-    return X, y
+    #print(y.target.value_counts())  # Print the counts of the different classes after resampling
+    return X, y 
 
-X, y = Resample(X, y, scale=False, under=False, over=True)
+X, y = Resample(X, y, under=True, over=True)
+
+"""
+kbest=15
+selectK = SelectKBest(f_classif,k=kbest)
+selectK.fit(X,y)
+X_sel = selectK.transform(X)
+#features = X.columns[selectK.get_support()]
+print('Select {} best features using f_classif'.format(kbest))
+"""
 
 
 """Split events into training, validation and test sets."""
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=42)
+
+
+"""Scale the data when called."""
+def scaler(X_train, X_val, X_test):
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_val = sc.transform(X_val)
+    X_test = sc.transform(X_test)
+    return X_train, X_val, X_test
+
+X_train, X_val, X_test = scaler(X_train, X_val, X_test)
 
 #print(len(X_train), len(X_val), len(X_test)) 
 
 
-"""Multiclass classification to identify leptons. Very messy right now with many different algorithms"""
+"""Multiclass classification to identify leptons."""
 def getTrainScores(gs):
-    # Function that plots the GridSearchCV best parameters and mean scores
+    # Function that prints the RandomizedSearchCV best parameters and mean scores
+    gs.fit(X_train, y_train)
     results = {}
     runs = 0
     for x,y in zip(list(gs.cv_results_['mean_test_score']), gs.cv_results_['params']):
@@ -123,37 +164,53 @@ def getTrainScores(gs):
 #Train models with various hyperparameters for optimization
 #param_grid = {"base_estimator__criterion": ["gini", "entropy"], "base_estimator__splitter": ["best", "random"], "n_estimators": [10, 100]}
 
+model_LogReg = LogisticRegression(multi_class="multinomial", random_state=42, n_jobs=-1, max_iter=1000)
+model_LogRegCV = LogisticRegression(multi_class="multinomial", random_state=42, n_jobs=-1, max_iter=1000)
+model_Ridge = RidgeClassifier(random_state=42)
+model_RidgeCV = RidgeClassifierCV()
+
 model_DTC = DecisionTreeClassifier(random_state=42, max_features="auto", class_weight="balanced", max_depth=18)
-model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=300, algorithm="SAMME.R", random_state=42)
+model_ADC = AdaBoostClassifier(base_estimator=model_DTC, n_estimators=250, algorithm="SAMME.R", random_state=42)
 model_Bag = BaggingClassifier(model_DTC, n_estimators=300, max_samples=500, bootstrap=True, n_jobs=-1, random_state=42)
 
-#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror","mlogloss"], num_class=4, n_jobs=-1, random_state=42, max_depth=8, reg_lambda=150, reg_alpha=20, n_estimators=150, importance_type="gain")  # Full Angular DF
-model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=100, reg_alpha=10)  # 0.9638 0.9793 Full flat DF
-#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=300, reg_alpha=10)   # 0.9212 0.9408 Simple flat DF
-model_XGBPipe = make_pipeline(StandardScaler(), model_XGB)
+#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=100, reg_alpha=10, early_stopping_rounds=50)  # 0.9638 0.9793 Full flat DF
 
-model_MLP = MLPClassifier(alpha=0.1, max_iter=300, activation="relu", hidden_layer_sizes=(200,100), random_state=42)
+model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=500, reg_alpha=10, learning_rate=0.2, subsample=0.9, colsample_bytree=0.85, min_child_weight=3, max_depth=10)  # Test pruning Full flat DF 
+
+
+#model_XGB = XGBClassifier(objective="multi:softprob", eval_metric=["merror", "mlogloss"], num_class=6, n_jobs=-1, importance_type="gain", random_state=42, n_estimators=300, reg_alpha=10)   # 0.9212 0.9408 Simple flat DF
+model_XGBPipe = make_pipeline(PCA(), model_XGB)
+
+model_LGBM = LGBMClassifier(objective="multiclass", num_class=6, n_estimators=500, max_depth=8, learning_rate=0.1, random_state=42, metric=["multi_logloss", "multi_error"])
+
+model_MLP = MLPClassifier(alpha=0.1, max_iter=300, activation="relu", hidden_layer_sizes=(200,200,100,100,50), random_state=42) # better with scaling
 model_SVC = SVC(probability=True, gamma="auto", random_state=42)
 model_SVC2 = SVC(decision_function_shape="ovr", random_state=42)
 model_RF_Pipe = Pipeline([("classifier", RandomForestClassifier(n_estimators=400, min_samples_leaf=2, min_samples_split=5, max_depth=20, max_features="auto", random_state=42))])
 model_RF = RandomForestClassifier(n_estimators=400, min_samples_leaf=2, min_samples_split=5, max_depth=15, max_features="auto", random_state=42)
-model_SGD = SGDClassifier()
-model_GBC = GradientBoostingClassifier(random_state=42, n_estimators=100, max_depth=8)
+model_GBC = GradientBoostingClassifier(random_state=42, n_estimators=100, max_depth=5, loss="deviance")
+model_HistGBC = HistGradientBoostingClassifier(random_state=42, max_iter=200, max_depth=5, loss="categorical_crossentropy")
 model_ONE_XGB = OneVsRestClassifier(XGBClassifier(objective="multi:softprob", eval_metric="merror", num_class=6, n_jobs=-1, random_state=42))
 model_ONE_MLP = OneVsRestClassifier(model_MLP)
-model_VC = VotingClassifier(estimators=[("DTC", model_DTC), ("Ada", model_ADC),("RF", model_RF), ("XGB", model_XGB)], voting="soft", n_jobs=-1)
+model_VC = VotingClassifier(estimators=[("DTC", model_DTC), ("Ada", model_ADC),("RF", model_RF), ("HistGBC", model_HistGBC), ("XGB", model_XGB)], voting="soft", n_jobs=-1)
 
-#grid_ADC = GridSearchCV(model_ADC, param_grid=param_grid, scoring="roc_auc")
-#params={"reg_alpha":[1,20,80,120]}#,'reg_lambda':[1,50,100,150],"learning_rate":[1,0.1,0.01,5]}
-#clf_XGB = GridSearchCV(estimator=model_XGB, param_grid=params, cv=3, n_jobs=-1, #scoring="f1_micro", verbose=10)
-#clf_XGB.fit(X_train, y_train)
+#grid_ADC = RandomizedSearchCV(model_ADC, param_grid=param_grid, scoring="roc_auc")
+#params={"reg_alpha":[5,10,20,60]}#,'reg_lambda':[1,50,100,150],"learning_rate":[1,0.1,0.01,5]}
+#clf_XGB = RandomizedSearchCV(estimator=model_XGB, param_distributions=params, cv=3, n_jobs=-1, scoring="accuracy", random_state=42)
 #getTrainScores(clf_XGB)
+
+
+
 
 
 #Evaluate models with validation set
 def eval_val(model, title):
     print("Start eval of model "+title+":")
-    model.fit(X_train, y_train)
+    if title == "XGBoost":
+        model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)], early_stopping_rounds=50, verbose=False)
+    else:
+        model.fit(X_train, y_train)
+
     pred = model.predict(X_val)
     pred_train = model.predict(X_train)
     accuracy_train = accuracy_score(y_train, pred_train)
@@ -161,51 +218,12 @@ def eval_val(model, title):
     mse = mean_squared_error(y_val, pred)
     mae = mean_absolute_error(y_val, pred)
     variance = np.mean(np.var(pred))
-    #bias = np.mean((y_val - np.mean(pred))**2)
+    bias = np.mean((y_val.values - np.mean(pred))**2)
     #print("iter:",model.n_iter_)
     #print("outputs:",model.n_outputs_)
     #print("layers:",model.n_layers_)
     #print("classes:",model.classes_)
-    #model_plt = plot_confusion_matrix(model, X_val, y_val, normalize="true")
-    #model_plt.ax_.set_title(title)
-
-    #skplt.estimators.plot_feature_importances(model, feature_names=features_names, title=title, x_tick_rotation=90)
-
-    eval_val = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "MSE":[mse], "MAE":[mae], "Var":[variance]}#, "Bias":[bias]}
-    return pd.DataFrame(eval_val)
-
-DTC_DF = eval_val(model_DTC, "DecisionTree")
-#ADC_DF = eval_val(model_ADC, "AdaBoost")
-#XGB_DF = eval_val(model_XGB, "XGBoost")
-#Bag_XGB_DF = eval_val(model_Bag_XGB, "Bagging-XGB")
-#Bag_DF = eval_val(model_Bag, "Bagging")
-MLP_DF = eval_val(model_MLP, "MLP")
-#RF_DF = eval_val(model_RF, "RandomForest")
-#RF2_DF = eval_val(model_RF_Pipe, "RandomForestPipe")
-##SGD_DF = eval_val(model_SGD, "SGD")
-#GBC_DF = eval_val(model_GBC, "GradientBoost")
-#ONER_XGB_DF = eval_val(model_ONER_XGB, "OneVsRestXGB")
-#ONE_MLP_DF = eval_val(model_ONE_MLP, "OneVsRestMLP")
-#VC_DF = eval_val(model_VC, "Voting")
-df_merge = pd.concat([DTC_DF, MLP_DF])
-#df_merge = pd.concat([ADC_DF, DTC_DF, XGB_DF, KNN_DF, MLP_DF, RF_DF])
-#print(XGB_DF)
-print(df_merge)
-plt.show()
-
-
-
-#Select best model and assess results with test set
-def eval_test(model, title):
-    print("Assess final best " +title+ " model evaluation with test set:")
-    if title == "XGBoost":
-        model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)], verbose=False)
-    else:
-        model.fit(X_train, y_train)
-    pred = model.predict(X_test)
-    pred_train = model.predict(X_train)
-    """
-    if title == "XGBoost":
+    if title == "XGBoost" or title == "LGBM":
         # Plot mlogloss and merror as function of iterations for train and test:
         print("Plot mlogloss and merror:")
         predictions = [round(value) for value in pred]
@@ -226,19 +244,61 @@ def eval_test(model, title):
         ax.legend()
         plt.title("merror plot")
         plt.ylabel("Error")
-    """
-    
+
+    model_plt = plot_confusion_matrix(model, X_val, y_val, normalize="true")
+    model_plt.ax_.set_title(title)
+
+    #skplt.estimators.plot_feature_importances(model, feature_names=features_names, title=title, x_tick_rotation=90)
+
+    eval_val = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "MSE":[mse], "MAE":[mae], "Var":[variance], "Bias":[bias]}
+    return pd.DataFrame(eval_val)
+"""
+DTC_DF = eval_val(model_DTC, "DecisionTree")
+ADC_DF = eval_val(model_ADC, "AdaBoost")
+#XGB_DF = eval_val(model_XGB, "XGBoost")
+LGBM_DF = eval_val(model_LGBM, "LGBM")
+#Bag_XGB_DF = eval_val(model_Bag_XGB, "Bagging-XGB")
+#Bag_DF = eval_val(model_Bag, "Bagging")
+MLP_DF = eval_val(model_MLP, "MLP")
+#RF_DF = eval_val(model_RF, "RandomForest")
+#RF2_DF = eval_val(model_RF_Pipe, "RandomForestPipe")
+#GBC_DF = eval_val(model_GBC, "GradientBoost")
+#ONER_XGB_DF = eval_val(model_ONER_XGB, "OneVsRestXGB")
+#ONE_MLP_DF = eval_val(model_ONE_MLP, "OneVsRestMLP")
+#VC_DF = eval_val(model_VC, "Voting")
+#df_merge = pd.concat([DTC_DF, MLP_DF])
+#LogReg_DF = eval_val(model_LogReg, "LogReg")
+#LogRegCV_DF = eval_val(model_LogRegCV, "LogRegCV")
+#Ridge_DF = eval_val(model_Ridge, "Ridge")
+#Ridge_DF = eval_val(model_RidgeCV, "RidgeCV")
+df_merge = pd.concat([DTC_DF, MLP_DF, ADC_DF])
+#print(XGB_DF)
+print(df_merge)
+#plt.show()
+"""
+
+
+#Select best model and assess results with test set
+def eval_test(model, title):
+    print("Assess final best " +title+ " model evaluation with test set:")
+    if title == "XGBoost":
+        model.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_test, y_test)], early_stopping_rounds=50, verbose=False)
+    else:
+        model.fit(X_train, y_train)
+    pred = model.predict(X_test)
+    pred_train = model.predict(X_train)
+
     accuracy_train = accuracy_score(y_train, pred_train)
     accuracy = accuracy_score(y_test, pred)
     mse = mean_squared_error(y_test, pred)
     mae = mean_absolute_error(y_test, pred)
     variance = np.mean(np.var(pred))
-    #bias = np.mean((y_test - np.mean(pred))**2)
-    #precision = precision_score(y_test, pred, average="macro")
+    bias = np.mean((y_test.values - np.mean(pred))**2)
+    precision = precision_score(y_test, pred, average="macro")
     prob = model.predict_proba(X_test)
     prob_train = model.predict_proba(X_train)
 
-    """
+    
     print("Kolmogorov-Smirnoff statistics:")
     i = 0
     KS_stat = ks_2samp(prob[:,i], prob_train[:,i])
@@ -262,12 +322,12 @@ def eval_test(model, title):
     plt.xlabel("Score")
     plt.ylabel("c.d.f.")
     plt.legend()
-    """
     
-    #cks = cohen_kappa_score(y_test, pred)
-    #cr = classification_report(y_test, pred)
+    
+    cks = cohen_kappa_score(y_test, pred)
+    cr = classification_report(y_test, pred)
     #cross_val = cross_val_score(model, X_test, y_test, cv=5)
-    #conf_mat = confusion_matrix(y_test, pred)
+    conf_mat = confusion_matrix(y_test, pred)
 
     #print("Precision:", precision)
     #print("Classification report "+title+": \n", cr)
@@ -276,6 +336,7 @@ def eval_test(model, title):
     #print("Mean accuracy score from cross-val:\n", np.mean(cross_val))
 
     """
+    #Unsure?
     y1_pred_prob = prob[:,0]
     y2_pred_prob = prob[:,1]
     y3_pred_prob = prob[:,2]
@@ -306,15 +367,10 @@ def eval_test(model, title):
     plt.legend(loc="best")
     plt.show()
     """
-    sys.exit()
-    """
-    print("Corr matrix:")
-    plt.figure(figsize=(13,6))
-    heatmap = sns.heatmap(features.corr(), annot=True, fmt=".2g", vmin=-1, vmax=1, center=0)
-    heatmap.set_title("Correlation heatmap")
-    """
-    print("Conf matrix:")
-    print(conf_mat)
+    #sys.exit()
+    
+    #print("Conf matrix:")
+    #print(conf_mat)
     plot_confusion_matrix(model, X_test, y_test, normalize="true")
     """
     print("Importance as Series and sort:")
@@ -350,6 +406,7 @@ def eval_test(model, title):
         xgb.plot_tree(model, rankdir="LR")
     """
     """
+    Unsure?
     print("Elbow curve:")
     skplt.cluster.plot_elbow_curve(KMeans(random_state=42), X, cluster_ranges=range(2,20))
     
@@ -375,15 +432,27 @@ def eval_test(model, title):
         plt.scatter(c[0], c[1], marker="$%d$" %i, alpha=1, s=50, edgecolor="k")
     plt.title("Visual of clustered data")
     """
-    plt.show()
+    #plt.show()
 
-    eval_test = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "CKS":[cks], "MSE":[mse], "MAE":[mae], "Var":[variance]}#, "Bias":[bias]}
+    eval_test = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train],"CKS":[cks], "MSE":[mse], "MAE":[mae], "Var":[variance], "Bias":[bias]}
     #print(eval_test)
     
     return pd.DataFrame(eval_test)
 
+"""
+mse, bias, var = bias_variance_decomp(model_DTC, X_train, y_train.values, X_test, y_test.values, loss='mse', num_rounds=10, random_seed=42)
+# summarize results
+print('MSE: %.3f' % mse)
+print('Bias: %.3f' % bias)
+print('Variance: %.3f' % var)
+"""
 
 #XGB_test_DF = eval_test(model_XGB, "XGBoost")
+HistGBC_DF = eval_test(model_HistGBC, "HGBC")
+LGBM_DF = eval_test(model_LGBM, "LGBM")
+#VC_DF = eval_test(model_VC, "VC")
+#XGB_Pipe_DF = eval_test(model_XGBPipe, "XGBoostPipe")
+merge = pd.concat([HistGBC_DF, LGBM_DF])
 #print(XGB_test_DF)
-
+print(merge)
 
