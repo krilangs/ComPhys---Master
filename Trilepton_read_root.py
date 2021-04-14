@@ -73,7 +73,7 @@ def lepaugmentation(df,nlep):
     pid = awkward.fromiter(df['pdgid'])
 
 
-    # make tlv - handy when computing angular variables
+    # Make tlv - handy when computing angular variables
     tlv = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px, py, pz, E)
 
     df["tlv"] = tlv[:]
