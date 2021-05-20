@@ -1,4 +1,4 @@
-Computational Science: Physics - Masterthesis
+# Computational Science: Physics - Masterthesis
 
 Scripts: Contains all the scripts used in this thesis.
 
