@@ -1,6 +1,8 @@
 Some python files are a bit messy at this point.
 
-Plots: Contain all the plots made by the scripts used in this thesis.
+Scripts: Contains all the scripts used in this thesis.
+
+Plots: Contains all the plots made by the scripts used in this thesis.
 
 * *Masteroppgave_tmp.pdf* is the master thesis (so far).
 
@@ -13,8 +15,4 @@ Plots: Contain all the plots made by the scripts used in this thesis.
   - Edit *requirements.txt*, and set desired package-version or replace "==" with ">=" . Can also add other packages.
   - Upgrade the packages - $ pip install -r requirements.txt --upgrade
   
-* *Trilepton_read_root.py* reads the ROOT file with uproot, then creates desired dataframes and variables and saves those dataframes as .h5-files.
 
-* *Trilepton_classifier.py* reads the .h5-files with the dataframes, and uses machine learning algorithms to do a multi-classification analysis to predict particles.
-
-* *Trilepton_plotter.py* reads the flat dataframe, and plots manually chosen variables that are available in the dataframe.
