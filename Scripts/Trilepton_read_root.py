@@ -12,7 +12,7 @@ import uproot_methods.classes.TLorentzVector
 
 
 perm = list(itertools.permutations([1, 2, 3]))
-nupid = [-12, 12, -14, 14, -16, 16]
+nupid = [-12, 12, -14, 14, -16, 16]  # Neutrino identities: electron, muon, tau
 
 def get_invmass(value):
     #print("Type of value is ",type(value))
@@ -236,12 +236,81 @@ def Make_DF(File="N1_50",  Period="", Truth=False, Save=False):
     del(newdf)  # Free up memory
 #-----
 
+
+def m3l(File="", Signal=""):
+    """Make invariant mass of all three leptons."""
+    print(File+Signal)
+    Folder = "/scratch2/Master_krilangs/Trilepton_Ntuples/Ntuples_class_ROOT/"
+    Save_CSV = "/scratch2/Master_krilangs/Anaconda/Ntuples_CSV/"
+    suffix = "_classified"
+    file = File + "_" + Signal + suffix
+    tree = uproot.open(Folder + file + ".root")[File + "_NoSys"]
+    df = tree.pandas.df(flatten = False)
+    del(tree)  # Free up memory
+
+    px1  = awkward.fromiter(df['lep1_px'])
+    py1  = awkward.fromiter(df['lep1_py'])
+    pz1  = awkward.fromiter(df['lep1_pz'])
+    E1   = awkward.fromiter(df['lep1_E'])
+    px2  = awkward.fromiter(df['lep2_px'])
+    py2  = awkward.fromiter(df['lep2_py'])
+    pz2  = awkward.fromiter(df['lep2_pz'])
+    E2   = awkward.fromiter(df['lep2_E'])
+    px3  = awkward.fromiter(df['lep3_px'])
+    py3  = awkward.fromiter(df['lep3_py'])
+    pz3  = awkward.fromiter(df['lep3_pz'])
+    E3   = awkward.fromiter(df['lep3_E'])
+
+    tlv1 = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px1, py1, pz1, E1)
+    tlv2 = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px2, py2, pz2, E2)
+    tlv3 = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px3, py3, pz3, E3)
+
+    df["tlv1"] = tlv1[:]
+    df["tlv2"] = tlv2[:]
+    df["tlv3"] = tlv3[:]
+
+    
+    df["m_3l"] = (df["tlv1"]+df["tlv2"]+df["tlv3"]).apply(get_invmass)
+
+    df = df.drop(["tlv1", "tlv2", "tlv3"], axis=1)
+
+    cols = df.columns.to_numpy()
+    Dtypes = df.dtypes.to_numpy()
+
+    # Convert types to be convertable with ROOT later.
+    for i in range(len(Dtypes)):
+        if Dtypes[i] == "bool":
+            Dtypes[i] = "O"
+        if Dtypes[i] == "float64":
+            Dtypes[i] = "D"
+        if Dtypes[i] == "float32":
+            Dtypes[i] = "F"
+        if Dtypes[i] == "int64":
+            Dtypes[i] = "L"
+        if Dtypes[i] == "int32":
+            Dtypes[i] = "I"
+
+    for btype,key in zip(Dtypes,cols):
+        df = df.rename(columns={str(key):str(key)+"/"+str(btype)}, inplace=False)
+
+    # Save as .csv.
+    df.to_csv(Save_CSV + File + "_" + Signal + "_classif.csv", index=False)
+    del(df)
+#-----
+
+
 """
 Available variables to plot (number of parameters in total in parenthesis):
     -File (13): N1_50, N1_150, N1_450, diboson2L, diboson3L, diboson4L, higgs, singletop, topOther, triboson, ttbar, Zjets, LFCMN1150, LFCMN1450
     -Period (4): "", 1516, 17, 18
 """
 
+# Check keys in file.
+f = h5py.File("Trilepton_ML.h5", "r")
+print([key for key in f.keys()])
+
+
+# Make Dataframes and new variables from ROOT.
 #Make_DF(File="N1_50",  Period="", Truth=True, Save=False)
 #Make_DF(File="N1_150",  Period="", Truth=True, Save=True)
 #Make_DF(File="N1_450",  Period="", Truth=True, Save=True)
@@ -253,6 +322,11 @@ bkgs = ["ttbar", "Zjets"]
 for name in bkgs:
     Make_DF(File=name,  Period="18", Truth=False, Save=True)
 """
-f = h5py.File("Trilepton_ML.h5", "r")
-print([key for key in f.keys()])
 
+# Make m_3l variable and add to ROOT Ntuples
+signals = ["150", "450"]
+backgrounds = ["LFCMN1150", "LFCMN1450", "diboson2L", "diboson3L", "diboson4L", "higgs", "singletop", "topOther", "triboson", "ttbar", "Zjets"]
+
+for sig in signals:
+    for bkg in backgrounds:
+        m3l(bkg, sig)
