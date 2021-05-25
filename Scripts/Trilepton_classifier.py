@@ -16,7 +16,7 @@ from collections import OrderedDict
 from imblearn.over_sampling import ADASYN
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.experimental import enable_hist_gradient_boosting  # Needed when importing the HistGradientBoostingClassifier, experimental feature
-from sklearn.feature_selection import SelectFromModel, SelectKBest, f_classif, mutual_info_classif
+from sklearn.feature_selection import mutual_info_classif
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, log_loss, confusion_matrix, classification_report, precision_score, cohen_kappa_score, confusion_matrix, plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
@@ -47,7 +47,6 @@ def print_keys(HDF5):
 
 
 """Read dataframe(s) from file."""
-df_N1_50 = pd.read_hdf("Trilepton_ML.h5", key="N1_50")
 df_N1_150 = pd.read_hdf("Trilepton_ML.h5", key="N1_150")
 df_N1_450 = pd.read_hdf("Trilepton_ML.h5", key="N1_450")
 
@@ -69,9 +68,8 @@ def Select_DF(df, Simplify=False):
 
 
 """Make design matrix X and target y from chosen dataframe."""
-#features = Select_DF(df_N1_50, True)
-features = Select_DF(df_N1_150, True)
-#features = Select_DF(df_N1_450, True)
+#features = Select_DF(df_N1_150, True)
+features = Select_DF(df_N1_450, False)
 
 X = features.select_dtypes(exclude=["object"])
 features_names = list(X.columns)
@@ -160,7 +158,8 @@ def scaler(X_train, X_val, X_test):
     return X_train, X_val, X_test
 
 
-#data_info(features)  # Call to inspect data
+data_info(features)  # Call to inspect data
+sys.exit()
 X, y = Resample(X, y, under=False, over=True)  # Call to resample data
 
 
@@ -285,7 +284,8 @@ def eval_val(model, title):
         plt.xlabel("Iterations")
         plt.tight_layout()
         
-    model_plt = plot_confusion_matrix(model, X_val, y_val, normalize="true")
+    fig, ax = plt.subplots(figsize=(8,8))
+    model_plt = plot_confusion_matrix(model, X_val, y_val, normalize="true", ax=ax)
     model_plt.ax_.set_title("Confusion matrix: " + title)
 
     eval_val = {"Model":[title], "Score":[accuracy], "Score_train":[accuracy_train], "BAcc":[balanced_accuracy], "Var":[round(variance,4)], "Bias":[round(bias,4)]}
@@ -345,19 +345,19 @@ def eval_test(model, title):
     
     print("Conf matrix:")
     print(conf_mat)
-    fig, ax = plt.subplots(figsize=(10,10))
+    fig, ax = plt.subplots(figsize=(8,8))
     plt_conf = plot_confusion_matrix(model, X_test, y_test, normalize="true", ax=ax)
     plt_conf.ax_.set_title("Confusion matrix best " + title + "model")
 
     print("Importance as Series and sort:")
-    plt.figure()
+    plt.figure(figsize=(8,8))
     importances = pd.Series(data=model.feature_importances_, index=features_names)
     importances_sorted = importances.sort_values()
     importances_sorted.plot(kind="barh") #[-20:]
     plt.tight_layout()
     
     print("Importance with skplt:")
-    skplt.estimators.plot_feature_importances(model, feature_names=features_names, title="Feature importance " + title, x_tick_rotation=90)#, max_num_features=20)
+    skplt.estimators.plot_feature_importances(model, feature_names=features_names, title="Feature importance " + title, x_tick_rotation=90, figsize=(8,8))#, max_num_features=20)
     plt.tight_layout()
     
     
@@ -398,7 +398,7 @@ XGB_DF = eval_val(model_XGB, "XGBoost")
 LGBM_DF = eval_val(model_LGBM, "LGBM")
 
 #merge = pd.concat([LogRegCV_DF, DTC_DF, ADC_DF, RF_DF, OvR_DF, OvO_DF, MLP_DF, HistGBC_DF, XGB_DF, LGBM_DF])
-merge = pd.concat([LogRegCV_DF, XGB_DF, LGBM_DF])
+merge = pd.concat([XGB_DF, LGBM_DF])
 print(merge)
 #print(LGBM_DF)
 plt.show()
