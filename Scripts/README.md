@@ -1,4 +1,4 @@
-* *Trilepton_read_root.py* reads ROOT files with uproot, then creates desired dataframes and variables and saves those dataframes as .h5-files.
+* *Trilepton_read_root.py* reads ROOT files with uproot, then creates desired dataframes and variables, and saves those dataframes as .h5-files.
 
 * *Trilepton_classifier.py* reads the .h5-files with the dataframes, and uses machine learning algorithms to do a multi-classification analysis to predict particles. The best performing classifier is saved and imported by *Trilepton_classify_Ntuples.py* later.
 
