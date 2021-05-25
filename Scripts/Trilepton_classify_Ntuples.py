@@ -1,14 +1,11 @@
 import sys
 import h5py
 import uproot
-
+import awkward
 import numpy as np
 import pandas as pd
 import pickle as pkl
-
-# Check keys in file
-f = h5py.File("Trilepton_ML.h5", "r")
-print([key for key in f.keys()])
+import uproot_methods.classes.TLorentzVector
 
 
 def Classify_Ntuples(File="", Signal="", data18=False):
@@ -18,7 +15,7 @@ def Classify_Ntuples(File="", Signal="", data18=False):
     -Signal: str, Which signal to use, 150 or 450.
     -data18, bool, When True, load background ntuple from a folder. When False, load a signal ntuple.
     """
-    print("Ntuple %s and signal %s" %(File, Final))
+    print("Ntuple %s and signal %s" %(File, Signal))
     Folder = "/scratch2/Master_krilangs/Trilepton_Ntuples/Skimslim/"
     suffix = "_merged_processed"
     if data18:
@@ -81,22 +78,29 @@ def Classify_Ntuples(File="", Signal="", data18=False):
         #print(merged.info(verbose=True))
 
     # Save as .csv.
-    if data18:
-        merged.to_csv(File + "_" + Signal + "_classif.csv", index=False)
-    else:
-        merged.to_csv(File + "_classif.csv", index=False)
+    #if data18:
+    merged.to_csv(File + "_" + Signal + "_classif.csv", index=False)
+    #else:
+        #merged.to_csv(File + "_classif.csv", index=False)
 
     del(merged)# Free up memory
 #-----
 
 
+# Check keys in file.
+#f = h5py.File("Trilepton_ML.h5", "r")
+#print([key for key in f.keys()])
+
+
+"""
 signals = ["150", "450"]
 backgrounds = ["diboson2L", "diboson3L", "diboson4L", "higgs", "singletop", "topOther", "triboson", "ttbar", "Zjets"]
 
 for sig in signals:
     for bkg in backgrounds:
         Classify_Ntuples(bkg, sig, True)
+"""
 
-"""For LFCMN1150 use Signal=150. For LFCMN1450 use Signal=450."""
-#Classify_Ntuples("LFCMN1150", "150", False)
-#Classify_Ntuples("LFCMN1450", "450", False)
+""" For the signals located at another folder."""
+Classify_Ntuples("LFCMN1150", "450", False)
+Classify_Ntuples("LFCMN1450", "150", False)
