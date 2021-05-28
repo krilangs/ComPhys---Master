@@ -6,8 +6,9 @@
 * *Trilepton_classify_Ntuples.py* reads original ROOT files and the dataframes made by *Trilepton_read_root.py*, and merges them together as one dataframe. Then it loads the classification model to be used for predicting leptons, which then are added to the merged dataframe. The dataframe is the saved as .csv-file and is used to convert back into ROOT and used for plotting. 
 
 # Plotting:
+* This folder contains the Pyton scripts used to produce the Ntuple distributions of data+MC+signal be reading ROOT-files. See the folder for description on how to run the scripts.
 
-
+# 
 * *environment.yml* is the environment file (Linux or Windows). Setup with anaconda:
   - Create - $ conda env create -f environment.yml
   - Activate - $ conda activate rootenv2
