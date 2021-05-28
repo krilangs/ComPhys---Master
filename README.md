@@ -6,3 +6,7 @@ Plots: Contains all the plots made by the scripts in this thesis.
 
 docs: Contains the thesis documents.
   
+TO DO:
+-upload rest of plots
+-fix and upload scripts
+-upload latest thesis docs
