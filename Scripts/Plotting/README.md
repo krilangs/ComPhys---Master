@@ -43,6 +43,7 @@ Below is a summary of lines in the scripts you need to edit in order to run on y
 ### Configure cut selections/regions
 * In the `configure_cuts()` function in `cuts.py`:
   * See which cut regions have been defined, and define your own selections/regions.
+* In the `cuts_v2_3_lists.py` we specify the cuts to be applied.
 
 ### Configure histograms
 * In the `configure_vars()` function in `variables.py`:
