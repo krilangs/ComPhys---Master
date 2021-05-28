@@ -8,7 +8,7 @@ To plot a variable (as defined in `variables.py`) in a region (as defined in `cu
 ```
 e.g.
 ```
-./plot.py -v met_Et -s 3L -p data18 - 150 -N -Tri
+./plot.py -v met_Et -s 3L -p data18 -S 150 -N -Tri
 ```
 Use the `SR_` prefix on the <region> to plot Significance in the lower plot.
 
