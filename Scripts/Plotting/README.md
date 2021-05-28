@@ -4,12 +4,13 @@ Based on the plotting package developed by Jesse Liu in the Electroweak compress
 To plot a variable (as defined in `variables.py`) in a region (as defined in `cuts.py`), run the command
 
 ```
-./plot.py -v <variable> -s <region>
+./plot.py -v <variable> -s <region> -p <periode> -S <signal> -N -Tri
 ```
 e.g.
 ```
-./plot.py -v met_Et -s SRhigh_0Jb
+./plot.py -v met_Et -s 3L -p data18 - 150 -N -Tri
 ```
+Use the `SR_` prefix on the <region> to plot Significance in the lower plot.
 
 To list all available command line options, run
 
