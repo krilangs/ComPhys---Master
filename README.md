@@ -1,9 +1,8 @@
-# Computational Science: Physics - Masterthesis
+# Computational Science: Physics - Master's thesis
 
 Scripts: Contains all the scripts used in this thesis.
 
-Plots: Contains all the plots made by the scripts used in this thesis.
+Plots: Contains all the plots made by the scripts in this thesis.
 
-* *Masteroppgave_tmp.pdf* is the master thesis (so far).
+docs: Contains the thesis documents.
   
-
