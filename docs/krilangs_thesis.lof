@@ -1,0 +1,163 @@
+\babel@toc {american}{}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces The Standard Model.}}{15}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Particle interactions in the SM.}}{15}{figure.caption.7}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces \acrshort {qcd} vertex Feynman diagrams.}}{24}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces \acrshort {qed} vertex Feynman diagram.}}{25}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces EWT fermion vertex Feynman diagrams.}}{26}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces EWT gauge boson vertx Feynman diagram.}}{26}{figure.caption.20}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Higgs-bosons coupling Feynman diagrams.}}{27}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Higgs-fermions coupling diagram.}}{27}{figure.caption.22}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces The charged current Drell-Yan process.}}{35}{figure.caption.26}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Collider geometry.}}{39}{figure.caption.27}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {The transverse plane.}}}{39}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {The longitudinal plane.}}}{39}{subfigure.1.2}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Hard scattering.}}{41}{figure.caption.28}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces The CERN complex.}}{44}{figure.caption.29}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces The ATLAS detector components.}}{48}{figure.caption.34}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces The ATLAS detector tracking system.}}{49}{figure.caption.35}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces In-sample and out-of-sample error as function of training set size.}}{56}{figure.caption.36}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Bias-variance tradeoff and model complexity.}}{58}{figure.caption.37}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{58}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{58}{subfigure.2.2}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Multi-Layer Perceptron illustration.}}{63}{figure.caption.38}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Confusion matrix.}}{73}{figure.caption.45}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Precision-Recall Curve.}}{74}{figure.caption.46}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces ROC Curve.}}{75}{figure.caption.47}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Data flow for producing data and \acrshort {mc}.}}{79}{figure.caption.48}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Flavor and Charge plots for the three leptons.}}{82}{figure.caption.49}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Flavor lepton 1}}}{82}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Charge lepton 1}}}{82}{subfigure.2.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Flavor lepton 2}}}{82}{subfigure.2.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {Charge lepton 2}}}{82}{subfigure.2.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {Flavor lepton 3}}}{82}{subfigure.2.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {Charge lepton 3}}}{82}{subfigure.2.6}%
+\contentsline {figure}{\numberline {7.3}{\ignorespaces Eta and Phi plots for the three leptons.}}{83}{figure.caption.50}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Eta lepton 1}}}{83}{subfigure.3.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Phi lepton 1}}}{83}{subfigure.3.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Eta lepton 2}}}{83}{subfigure.3.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {Phi lepton 2}}}{83}{subfigure.3.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {Eta lepton 3}}}{83}{subfigure.3.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {Phi lepton 3}}}{83}{subfigure.3.6}%
+\contentsline {figure}{\numberline {7.4}{\ignorespaces Pt plots for the three leptons.}}{84}{figure.caption.51}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Pt lepton 1}}}{84}{subfigure.4.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Pt lepton 2}}}{84}{subfigure.4.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Pt lepton 3}}}{84}{subfigure.4.3}%
+\contentsline {figure}{\numberline {7.5}{\ignorespaces Phi and missing transverse momentum plots for the neutrino.}}{85}{figure.caption.52}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Phi neutrino}}}{85}{subfigure.5.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Missing transverse momentum}}}{85}{subfigure.5.2}%
+\contentsline {figure}{\numberline {7.6}{\ignorespaces The momentum for lepton 1 and 2.}}{90}{figure.caption.53}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$p_x$ lepton 1}}}{90}{subfigure.6.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$p_x$ lepton 2}}}{90}{subfigure.6.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$p_y$ lepton 1}}}{90}{subfigure.6.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$p_y$ lepton 2}}}{90}{subfigure.6.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$p_z$ lepton 1}}}{90}{subfigure.6.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$p_z$ lepton 2}}}{90}{subfigure.6.6}%
+\contentsline {figure}{\numberline {7.7}{\ignorespaces The momentum for lepton 3 and the neutrino.}}{91}{figure.caption.54}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$p_x$ lepton 3}}}{91}{subfigure.7.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$p_x$ lepton 4}}}{91}{subfigure.7.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$p_y$ lepton 3}}}{91}{subfigure.7.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$p_y$ lepton 4}}}{91}{subfigure.7.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$p_z$ lepton 3}}}{91}{subfigure.7.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$p_z$ lepton 4}}}{91}{subfigure.7.6}%
+\contentsline {figure}{\numberline {7.8}{\ignorespaces The angular features for lepton 1 and 2.}}{92}{figure.caption.55}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\theta $ lepton 1}}}{92}{subfigure.8.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\theta $ lepton 2}}}{92}{subfigure.8.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\eta $ lepton 1}}}{92}{subfigure.8.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\eta $ lepton 2}}}{92}{subfigure.8.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$\phi $ lepton 1}}}{92}{subfigure.8.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$\phi $ lepton 2}}}{92}{subfigure.8.6}%
+\contentsline {figure}{\numberline {7.9}{\ignorespaces The angular features for lepton 3 and the neutrino.}}{93}{figure.caption.56}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\theta $ lepton 3}}}{93}{subfigure.9.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\theta $ lepton 4}}}{93}{subfigure.9.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\eta $ lepton 3}}}{93}{subfigure.9.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\eta $ lepton 4}}}{93}{subfigure.9.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$\phi $ lepton 3}}}{93}{subfigure.9.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$\phi $ lepton 4}}}{93}{subfigure.9.6}%
+\contentsline {figure}{\numberline {7.10}{\ignorespaces $p_T$ for all three leptons and neutrino.}}{94}{figure.caption.57}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$p_T$ lepton 1}}}{94}{subfigure.10.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$p_T$ lepton 2}}}{94}{subfigure.10.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$p_T$ lepton 3}}}{94}{subfigure.10.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$p_T$ lepton 4}}}{94}{subfigure.10.4}%
+\contentsline {figure}{\numberline {7.11}{\ignorespaces $E$ for all particles and $m_{3l}$ for the three lepton system.}}{95}{figure.caption.58}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$E$ lepton 1}}}{95}{subfigure.11.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$E$ lepton 2}}}{95}{subfigure.11.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$E$ lepton 3}}}{95}{subfigure.11.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$E$ lepton 4}}}{95}{subfigure.11.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {Invariant mass of three lepton system}}}{95}{subfigure.11.5}%
+\contentsline {figure}{\numberline {7.12}{\ignorespaces Invariant masses between pairs of particles.}}{96}{figure.caption.59}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$m_{ll}$ lepton 1 and 2}}}{96}{subfigure.12.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$m_{ll}$ lepton 1 and 3}}}{96}{subfigure.12.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$m_{ll}$ lepton 1 and neutrino}}}{96}{subfigure.12.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$m_{ll}$ lepton 2 and 3}}}{96}{subfigure.12.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$m_{ll}$ lepton 2 and neutrino}}}{96}{subfigure.12.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$m_{ll}$ lepton 3 and neutrino}}}{96}{subfigure.12.6}%
+\contentsline {figure}{\numberline {7.13}{\ignorespaces The azimuthal angular difference features between pairs of particles.}}{97}{figure.caption.60}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\Delta \phi $ lepton 1 and 2}}}{97}{subfigure.13.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\Delta \phi $ lepton 1 and 3}}}{97}{subfigure.13.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\Delta \phi $ lepton 1 and neutrino}}}{97}{subfigure.13.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\Delta \phi $ lepton 2 and 3}}}{97}{subfigure.13.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$\Delta \phi $ lepton 2 and neutrino}}}{97}{subfigure.13.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$\Delta \phi $ lepton 3 and neutrino}}}{97}{subfigure.13.6}%
+\contentsline {figure}{\numberline {7.14}{\ignorespaces The angular distance features between pairs of particles.}}{98}{figure.caption.61}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {$\Delta $R lepton 1 and 2}}}{98}{subfigure.14.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {$\Delta $R lepton 1 and 3}}}{98}{subfigure.14.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {$\Delta $R lepton 1 and neutrino}}}{98}{subfigure.14.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {$\Delta $R lepton 2 and 3}}}{98}{subfigure.14.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {$\Delta $R lepton 2 and neutrino}}}{98}{subfigure.14.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {$\Delta $R lepton 3 and neutrino}}}{98}{subfigure.14.6}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Validation set confusion matrix for the \acrshort {lgbm} model trained on the 150 GeV signal.}}{110}{figure.caption.68}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces Validation set confusion matrix for the \acrshort {lgbm} model trained on the 450 GeV signal.}}{111}{figure.caption.69}%
+\contentsline {figure}{\numberline {8.3}{\ignorespaces Test set confusion matrix for the \acrshort {lgbm} model trained on the 150 GeV signal.}}{114}{figure.caption.73}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces Test set most important features of the \acrshort {lgbm} model trained on the 150 GeV signal.}}{115}{figure.caption.74}%
+\contentsline {figure}{\numberline {8.5}{\ignorespaces Test set confusion matrix for the \acrshort {lgbm} model trained on the 150 GeV signal.}}{117}{figure.caption.78}%
+\contentsline {figure}{\numberline {8.6}{\ignorespaces Test set most important features of the \acrshort {lgbm} model trained on the 450 GeV signal.}}{118}{figure.caption.79}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {10.1}{\ignorespaces Invariant mass of the three lepton system with DF cuts.}}{126}{figure.caption.86}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},123}}}{126}{subfigure.1.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},123}}}{126}{subfigure.1.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},132}}}{126}{subfigure.1.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},132}}}{126}{subfigure.1.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},213}}}{126}{subfigure.1.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},213}}}{126}{subfigure.1.6}%
+\contentsline {figure}{\numberline {10.2}{\ignorespaces Invariant mass of the three lepton system with SF cuts.}}{127}{figure.caption.87}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},123}}}{127}{subfigure.2.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},123}}}{127}{subfigure.2.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},132}}}{127}{subfigure.2.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},132}}}{127}{subfigure.2.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},213}}}{127}{subfigure.2.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},213}}}{127}{subfigure.2.6}%
+\contentsline {figure}{\numberline {10.3}{\ignorespaces Invariant mass of the three lepton system with benchmark cuts.}}{128}{figure.caption.88}%
+\contentsline {figure}{\numberline {10.4}{\ignorespaces \acrshort {met} with DF cuts.}}{129}{figure.caption.89}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},123}}}{129}{subfigure.4.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},123}}}{129}{subfigure.4.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},132}}}{129}{subfigure.4.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},132}}}{129}{subfigure.4.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {150 GeV signal: \acrshort {df},\acrshort {os},213}}}{129}{subfigure.4.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {450 GeV signal: \acrshort {df},\acrshort {os},213}}}{129}{subfigure.4.6}%
+\contentsline {figure}{\numberline {10.5}{\ignorespaces \acrshort {met} with SF cuts.}}{130}{figure.caption.90}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},123}}}{130}{subfigure.5.1}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},123}}}{130}{subfigure.5.2}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},132}}}{130}{subfigure.5.3}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},132}}}{130}{subfigure.5.4}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {150 GeV signal: \acrshort {sf},\acrshort {os},213}}}{130}{subfigure.5.5}%
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {450 GeV signal: \acrshort {sf},\acrshort {os},213}}}{130}{subfigure.5.6}%
+\contentsline {figure}{\numberline {10.6}{\ignorespaces \acrfull {met} with benchmark cuts.}}{131}{figure.caption.91}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Test set \acrshort {roc} plot for the \acrshort {lgbm} model trained on the 150 GeV signal.}}{144}{figure.caption.92}%
+\contentsline {figure}{\numberline {D.2}{\ignorespaces Test set precision-recall plot for the \acrshort {lgbm} model trained on the 150 GeV signal.}}{145}{figure.caption.93}%
+\contentsline {figure}{\numberline {D.3}{\ignorespaces Test set \acrshort {roc} plot for the \acrshort {lgbm} model trained on the 450 GeV signal.}}{146}{figure.caption.94}%
+\contentsline {figure}{\numberline {D.4}{\ignorespaces Test set precision-recall plot for the \acrshort {lgbm} model trained on the 450 GeV signal.}}{147}{figure.caption.95}%

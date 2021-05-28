@@ -1,0 +1,137 @@
+\babel@toc {american}{}
+\contentsline {chapter}{List of Figures}{4}{chapter*.1}%
+\contentsline {chapter}{List of Tables}{6}{chapter*.2}%
+\contentsline {chapter}{List of Listings}{7}{chapter*.3}%
+\contentsline {chapter}{\numberline {1}Introduction}{9}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivation for Machine Learning}{10}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Structure of Thesis}{10}{section.1.2}%
+\contentsline {chapter}{Notation and Conventions}{12}{section.1.2}%
+\contentsline {part}{I\hspace {1em}Theory}{13}{part.1}%
+\contentsline {chapter}{\numberline {2}The Standard Model of Particle Physics}{14}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Particle and Force Contents}{14}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Gauge Bosons}{14}{subsection.2.1.1}%
+\contentsline {subsubsection}{Strong nuclear force}{16}{section*.8}%
+\contentsline {subsubsection}{Electromagnetic force}{16}{section*.9}%
+\contentsline {subsubsection}{Weak nuclear force}{16}{section*.10}%
+\contentsline {subsubsection}{Gravitational force}{17}{section*.11}%
+\contentsline {subsection}{\numberline {2.1.2}Higgs Boson}{17}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Fermions}{17}{subsection.2.1.3}%
+\contentsline {subsubsection}{Quarks}{18}{section*.12}%
+\contentsline {subsubsection}{Leptons}{18}{section*.13}%
+\contentsline {section}{\numberline {2.2}Neutrinos}{18}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Neutrino Oscillations}{19}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Symmetries}{20}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Quantum Field Theory}{21}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}The Lagrangian}{22}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Qauge Theories}{23}{subsection.2.4.2}%
+\contentsline {subsubsection}{Quantum chromodynamics (QCD)}{23}{section*.14}%
+\contentsline {subsubsection}{Quantum electrodynamics (QED)}{24}{section*.16}%
+\contentsline {subsubsection}{Electroweak theory (EWT)}{24}{section*.18}%
+\contentsline {subsubsection}{Full EWT Lagrangian}{27}{section*.23}%
+\contentsline {chapter}{\numberline {3}Neutrinos Beyond the Standard Model}{29}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Neutrino Masses}{30}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Dirac Neutrinos}{30}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Majorana Neutrinos}{31}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Pseudo-Dirac Neutrinos}{31}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}The Seesaw Mechanism}{32}{subsection.3.1.4}%
+\contentsline {subsubsection}{Type-I seesaw mechanism}{32}{section*.24}%
+\contentsline {subsubsection}{Inverse seesaw mechanism}{33}{section*.25}%
+\contentsline {section}{\numberline {3.2}The Charge Current Drell-Yan Process}{34}{section.3.2}%
+\contentsline {chapter}{\numberline {4}Proton-Proton Collisions}{36}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Particle Kinematics}{36}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Colliding Particles}{37}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Products of Particle Collisions}{38}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Proton-Proton Interactions}{40}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Hard Scattering Events}{40}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Parton Distribution Function}{41}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Hadronization}{42}{subsection.4.2.3}%
+\contentsline {chapter}{\numberline {5}Particle Accelerators and Collider Experiments}{43}{chapter.5}%
+\contentsline {section}{\numberline {5.1}CERN}{43}{section.5.1}%
+\contentsline {section}{\numberline {5.2}The LHC and Accelerator Experiments}{45}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Important Parameters}{46}{subsection.5.2.1}%
+\contentsline {subsubsection}{Luminosity}{46}{section*.30}%
+\contentsline {subsubsection}{Rate}{47}{section*.31}%
+\contentsline {subsubsection}{Number of interactions}{47}{section*.32}%
+\contentsline {subsubsection}{Pile-up}{47}{section*.33}%
+\contentsline {section}{\numberline {5.3}The ATLAS Experiment and Particle Detection}{48}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Inner Detector}{50}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Calorimeters}{50}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Muon Spectrometer}{50}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Magnet System}{51}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}Trigger System}{51}{subsection.5.3.5}%
+\contentsline {chapter}{\numberline {6}Machine Learning}{52}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Introduction}{52}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Supervised Learning}{54}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Basics of Statistical Learning}{54}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Bias-Variance Decomposition}{55}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Bias-Variance Tradeoff}{57}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}Regularization}{59}{subsection.6.2.4}%
+\contentsline {subsection}{\numberline {6.2.5}Hyperparameters}{60}{subsection.6.2.5}%
+\contentsline {section}{\numberline {6.3}Classification}{60}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Classification Models}{61}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Logistic Regression}{61}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Multi-Layer Perceptron}{62}{subsection.6.4.2}%
+\contentsline {subsection}{\numberline {6.4.3}Decision Tree}{64}{subsection.6.4.3}%
+\contentsline {subsection}{\numberline {6.4.4}Random Forest}{64}{subsection.6.4.4}%
+\contentsline {subsection}{\numberline {6.4.5}AdaBoost}{65}{subsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.4.6}Gradient Boosting}{65}{subsection.6.4.6}%
+\contentsline {subsection}{\numberline {6.4.7}Extreme Gradient Boosting}{66}{subsection.6.4.7}%
+\contentsline {subsection}{\numberline {6.4.8}Light Gradient Boosting Machine}{67}{subsection.6.4.8}%
+\contentsline {subsection}{\numberline {6.4.9}Multiclass Classification Models}{67}{subsection.6.4.9}%
+\contentsline {subsubsection}{One-Vs-Rest Classifier}{68}{section*.39}%
+\contentsline {subsubsection}{One-Vs-One Classifier}{68}{section*.40}%
+\contentsline {section}{\numberline {6.5}Evaluation Metrics}{68}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Mutual Information}{68}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Accuracy Score}{69}{subsection.6.5.2}%
+\contentsline {subsection}{\numberline {6.5.3}Cohen Kappa Score}{70}{subsection.6.5.3}%
+\contentsline {subsection}{\numberline {6.5.4}Error Evaluation}{70}{subsection.6.5.4}%
+\contentsline {subsubsection}{Error Rate}{70}{section*.41}%
+\contentsline {subsubsection}{Log Loss}{70}{section*.42}%
+\contentsline {subsubsection}{Variance}{71}{section*.43}%
+\contentsline {subsubsection}{Bias}{71}{section*.44}%
+\contentsline {subsection}{\numberline {6.5.5}Classification Report}{71}{subsection.6.5.5}%
+\contentsline {subsection}{\numberline {6.5.6}Confusion Matrix}{72}{subsection.6.5.6}%
+\contentsline {subsection}{\numberline {6.5.7}Precision-Recall Curve}{73}{subsection.6.5.7}%
+\contentsline {subsection}{\numberline {6.5.8}Balanced Accuracy}{73}{subsection.6.5.8}%
+\contentsline {subsection}{\numberline {6.5.9}ROC Curve}{74}{subsection.6.5.9}%
+\contentsline {part}{II\hspace {1em}Implementation}{76}{part.2}%
+\contentsline {chapter}{\numberline {7}Preparing for Machine Learning}{77}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Python Libraries}{77}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Data}{78}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Feature Validation}{80}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Making New Variables}{86}{section.7.4}%
+\contentsline {subsection}{\numberline {7.4.1}Plotting New Variables}{88}{subsection.7.4.1}%
+\contentsline {chapter}{\numberline {8}Evaluation of ML Models}{99}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Preprocessing of the Data}{99}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Inspect Data}{99}{subsection.8.1.1}%
+\contentsline {subsubsection}{Correlations}{101}{section*.63}%
+\contentsline {subsection}{\numberline {8.1.2}Resampling}{104}{subsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.1.3}Train, validation and test sets}{105}{subsection.8.1.3}%
+\contentsline {subsection}{\numberline {8.1.4}Scaling}{106}{subsection.8.1.4}%
+\contentsline {section}{\numberline {8.2}Training the Classification Models}{106}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Choosing the Best Performing Models}{107}{subsection.8.2.1}%
+\contentsline {section}{\numberline {8.3}Classification with Test Set}{112}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Evaluation of the Best Models}{112}{subsection.8.3.1}%
+\contentsline {subsubsection}{150 GeV signal}{112}{section*.70}%
+\contentsline {subsubsection}{450 GeV signal}{114}{section*.75}%
+\contentsline {part}{III\hspace {1em}Results}{119}{part.3}%
+\contentsline {chapter}{\numberline {9}Classification Results}{120}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Ntuple Classification}{120}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Signal Region Distributions}{123}{section.9.2}%
+\contentsline {chapter}{\numberline {10}Distribution Analysis of Classified Ntuples*}{124}{chapter.10}%
+\contentsline {part}{IV\hspace {1em}Discussion, Conclusion and Future Prospects}{132}{part.4}%
+\contentsline {chapter}{\numberline {11}Discussion}{133}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Performance of the Classification Models}{133}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Comparing Ntuple Distributions}{134}{section.11.2}%
+\contentsline {chapter}{\numberline {12}Conclusion and Future Work}{136}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Conclusion}{136}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Future Work}{137}{section.12.2}%
+\contentsline {part}{V\hspace {1em}Appendices}{138}{part.5}%
+\contentsline {chapter}{\numberline {A}Bias-Variance Decomposition}{139}{appendix.A}%
+\contentsline {chapter}{\numberline {B}450 GeV Signal Data Summary}{140}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Correlations}{142}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Test Set Evaluation Plots}{144}{appendix.D}%
+\contentsline {section}{\numberline {D.1}\underline {150 GeV Signal Plots}}{144}{section.D.1}%
+\contentsline {section}{\numberline {D.2}\underline {450 GeV Signal Plots}}{145}{section.D.2}%
+\contentsline {chapter}{Acronyms}{148}{section*.96}%
+\contentsline {chapter}{Bibliography}{150}{appendix*.97}%

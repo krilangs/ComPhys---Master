@@ -1,0 +1,32 @@
+\babel@toc {american}{}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {8.1}{\ignorespaces Target counts of the classes.}}{102}{table.caption.62}%
+\contentsline {table}{\numberline {8.2}{\ignorespaces Mutual information for eta-values.}}{104}{table.caption.64}%
+\contentsline {table}{\numberline {8.3}{\ignorespaces Target counts after resampling.}}{105}{table.caption.65}%
+\contentsline {table}{\numberline {8.4}{\ignorespaces Evaluation with 150 Gev signal validation set.}}{108}{table.caption.66}%
+\contentsline {table}{\numberline {8.5}{\ignorespaces Evaluation with 450 Gev signal validation set.}}{108}{table.caption.67}%
+\contentsline {table}{\numberline {8.6}{\ignorespaces Classification report of the \acrshort {lgbm} model trained on the 150 GeV signal.}}{113}{table.caption.71}%
+\contentsline {table}{\numberline {8.7}{\ignorespaces Evaluation with 150 Gev signal test set.}}{113}{table.caption.72}%
+\contentsline {table}{\numberline {8.8}{\ignorespaces Classification report of the \acrshort {lgbm} model trained on the 450 GeV signal.}}{116}{table.caption.76}%
+\contentsline {table}{\numberline {8.9}{\ignorespaces Evaluation with 450 Gev signal test set.}}{116}{table.caption.77}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {9.1}{\ignorespaces Target counts of predicted signal Ntuples with the 150 GeV trained model.}}{121}{table.caption.80}%
+\contentsline {table}{\numberline {9.2}{\ignorespaces Target counts of predicted signal Ntuples with the 450 GeV trained model.}}{121}{table.caption.81}%
+\contentsline {table}{\numberline {9.3}{\ignorespaces Target counts of backgrounds for 150 GeV trained classifier.}}{122}{table.caption.82}%
+\contentsline {table}{\numberline {9.4}{\ignorespaces Target counts of backgrounds for 450 GeV trained classifier.}}{122}{table.caption.83}%
+\contentsline {table}{\numberline {9.5}{\ignorespaces Signal region cuts for Ntuples.}}{123}{table.caption.84}%
+\contentsline {table}{\numberline {9.6}{\ignorespaces Benchmark analysis cuts.}}{123}{table.caption.85}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

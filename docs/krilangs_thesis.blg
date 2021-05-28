@@ -1,0 +1,72 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: krilangs_thesis.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: unsrtnat.bst
+Reallocating 'name_of_file' (item size: 1) to 5 items.
+Database file #1: Refs.bib
+I was expecting a `,' or a `}'---line 455 of file Refs.bib
+ :  volume={1}
+ :            .
+I'm skipping whatever remains of this entry
+Warning--empty author and editor in SM
+Warning--empty booktitle in Bellac1991QuantumAS
+Warning--empty author and editor in NobelPrizeEWT
+Warning--empty journal in gramstad2013searches
+Warning--empty author in AboutCERN
+Warning--empty booktitle in AboutCERN
+Warning--empty journal in MobsCERNLayout
+Warning--empty author in LHCatCERN
+Warning--empty booktitle in LHCatCERN
+Warning--empty author in AccatCERN
+Warning--empty booktitle in AccatCERN
+Warning--empty author in DetectorsatCERN
+Warning--empty booktitle in DetectorsatCERN
+Warning--can't use both volume and number fields in atlasLuminosity
+Warning--empty publisher in atlasLuminosity
+Warning--empty booktitle in ATLASdetector
+Warning--empty author in ATLAStracking
+Warning--empty booktitle in ATLAStracking
+Warning--empty institution in MLHiggs
+You've used 61 entries,
+            2481 wiz_defined-function locations,
+            925 strings with 14340 characters,
+and the built_in function-call counts, 23002 in all, are:
+= -- 1841
+> -- 1238
+< -- 42
++ -- 496
+- -- 374
+* -- 1751
+:= -- 3671
+add.period$ -- 197
+call.type$ -- 61
+change.case$ -- 114
+chr.to.int$ -- 61
+cite$ -- 87
+duplicate$ -- 1241
+empty$ -- 2152
+format.name$ -- 447
+if$ -- 4881
+int.to.chr$ -- 1
+int.to.str$ -- 62
+missing$ -- 65
+newline$ -- 324
+num.names$ -- 162
+pop$ -- 569
+preamble$ -- 1
+purify$ -- 61
+quote$ -- 0
+skip$ -- 717
+stack$ -- 0
+substring$ -- 810
+swap$ -- 179
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 400
+warning$ -- 19
+while$ -- 173
+width$ -- 0
+write$ -- 796
+(There was 1 error message)

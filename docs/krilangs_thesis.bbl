@@ -1,0 +1,387 @@
+\begin{thebibliography}{61}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aad et~al.(2012)Aad, Abajyan, Abbott, Abdallah, Khalek, Abdelalim,
+  Aben, Abi, Abolins, AbouZeid, et~al.]{HiggsATLAS}
+Georges Aad, Tatevik Abajyan, B~Abbott, J~Abdallah, S~Abdel Khalek, Ahmed~Ali
+  Abdelalim, R~Aben, B~Abi, M~Abolins, OS~AbouZeid, et~al.
+\newblock Observation of a new particle in the search for the standard model
+  higgs boson with the atlas detector at the lhc.
+\newblock \emph{Physics Letters B}, 716\penalty0 (1):\penalty0 1--29, 2012.
+
+\bibitem[Chatrchyan et~al.(2012)Chatrchyan, Khachatryan, Sirunyan, Tumasyan,
+  Adam, Aguilo, Bergauer, Dragicevic, Er{\"o}, Fabjan, et~al.]{HiggsCMS}
+Serguei Chatrchyan, Vardan Khachatryan, Albert~M Sirunyan, Armen Tumasyan,
+  Wolfgang Adam, Ernest Aguilo, Thomas Bergauer, M~Dragicevic, J~Er{\"o},
+  C~Fabjan, et~al.
+\newblock Observation of a new boson at a mass of 125 gev with the cms
+  experiment at the lhc.
+\newblock \emph{Physics Letters B}, 716\penalty0 (1):\penalty0 30--61, 2012.
+
+\bibitem[Pascoli et~al.(2019)Pascoli, Ruiz, and Weiland]{inverseseesaw}
+Silvia Pascoli, Richard Ruiz, and Cedric Weiland.
+\newblock {Heavy neutrinos with dynamic jet vetoes: multilepton searches at
+  $\ensuremath{\sqrt{s}}$= 14, 27, and 100 TeV}.
+\newblock \emph{Journal of High Energy Physics}, 2019\penalty0 (6):\penalty0
+  49, 2019.
+
+\bibitem[Thomson(2013)]{thomson2013modern}
+Mark Thomson.
+\newblock \emph{"Modern particle physics}.
+\newblock Cambridge University Press, 2013.
+
+\bibitem[Elert(1998-2020)]{PhysicsHypertextbook}
+Glenn Elert.
+\newblock The physics hypertextbook, 1998-2020.
+\newblock URL \url{https://physics.info/standard/}.
+
+\bibitem[SM(2017)]{SM}
+\emph{Why is the Higgs discovery so significant?}
+\newblock Science and Technology Facilities Council, 2017.
+\newblock URL
+  \url{https://stfc.ukri.org/research/particle-physics-and-particle-astrophysics/peter-higgs-a-truly-british-scientist/why-is-the-higgs-discovery-so-significant/}.
+
+\bibitem[Abbott et~al.(2016)Abbott, Abbott, Abbott, Abernathy, Acernese,
+  Ackley, Adams, Adams, Addesso, Adhikari, et~al.]{GravitationalwaveDiscovery}
+Benjamin~P Abbott, Richard Abbott, TD~Abbott, MR~Abernathy, Fausto Acernese,
+  Kendall Ackley, Carl Adams, Thomas Adams, Paolo Addesso, RX~Adhikari, et~al.
+\newblock Observation of gravitational waves from a binary black hole merger.
+\newblock \emph{Physical review letters}, 116\penalty0 (6):\penalty0 061102,
+  2016.
+
+\bibitem[Fukuda et~al.(1998)Fukuda, Hayakawa, Ichihara, Inoue, Ishihara,
+  Ishino, Itow, Kajita, Kameda, Kasuga, et~al.]{NeutrionOscillation}
+Y~Fukuda, T~Hayakawa, E~Ichihara, K~Inoue, K~Ishihara, Hirokazu Ishino, Y~Itow,
+  T~Kajita, J~Kameda, S~Kasuga, et~al.
+\newblock Evidence for oscillation of atmospheric neutrinos.
+\newblock \emph{Physical Review Letters}, 81\penalty0 (8):\penalty0 1562, 1998.
+
+\bibitem[Walter and collaboration(2008)]{superkamiokande}
+Christopher~W Walter and Super-Kamiokande collaboration.
+\newblock The super-kamiokande experiment.
+\newblock In \emph{Neutrino Oscillations: Present Status and Future Plans},
+  pages 19--43. World Scientific, 2008.
+
+\bibitem[Bellerive et~al.(2016)Bellerive, Klein, McDonald, Noble, Poon,
+  Collaboration, et~al.]{SNO}
+Alain Bellerive, JR~Klein, AB~McDonald, AJ~Noble, AWP Poon, SNO Collaboration,
+  et~al.
+\newblock The sudbury neutrino observatory.
+\newblock \emph{Nuclear Physics B}, 908:\penalty0 30--51, 2016.
+
+\bibitem[Gibney and Castelvecchi(2015)]{gibney2015neutrino}
+Elizabeth Gibney and Davide Castelvecchi.
+\newblock Neutrino flip wins physics prize, 2015.
+
+\bibitem[Aker et~al.(2019)Aker, Altenm{\"u}ller, Arenz, Babutzka, Barrett,
+  Bauer, Beck, Beglarian, Behrens, Bergmann, et~al.]{KATRIN}
+Max Aker, K~Altenm{\"u}ller, M~Arenz, M~Babutzka, J~Barrett, S~Bauer, M~Beck,
+  A~Beglarian, J~Behrens, T~Bergmann, et~al.
+\newblock Improved upper limit on the neutrino mass from a direct kinematic
+  method by katrin.
+\newblock \emph{Physical review letters}, 123\penalty0 (22):\penalty0 221802,
+  2019.
+
+\bibitem[Kostelecky(1998)]{CPT}
+Alan Kostelecky.
+\newblock The status of cpt.
+\newblock \emph{arXiv preprint hep-ph/9810365}, 1998.
+
+\bibitem[Mandl and Shaw(2010)]{mandl2010quantum}
+Franz Mandl and Graham Shaw.
+\newblock \emph{Quantum field theory}.
+\newblock John Wiley \& Sons, 2010.
+
+\bibitem[Bellac(1991)]{Bellac1991QuantumAS}
+M.~Bellac.
+\newblock Quantum and statistical field theory.
+\newblock 1991.
+
+\bibitem[Feynman(2005)]{least_action}
+Richard~P Feynman.
+\newblock The principle of least action in quantum mechanics.
+\newblock In \emph{Feynman's Thesis—A New Approach To Quantum Theory}, pages
+  1--69. World Scientific, 2005.
+\newblock \doi{https://doi.org/10.1142/9789812567635_0001}.
+
+\bibitem[Ecker(2006)]{QCD}
+Gerhard Ecker.
+\newblock Quantum chromodynamics.
+\newblock \emph{arXiv preprint hep-ph/0604165}, 2006.
+
+\bibitem[Yang and Mills(1954)]{Yang-Mills}
+C.~N. Yang and R.~L. Mills.
+\newblock Conservation of isotopic spin and isotopic gauge invariance.
+\newblock \emph{Phys. Rev.}, 96:\penalty0 191--195, Oct 1954.
+\newblock \doi{10.1103/PhysRev.96.191}.
+\newblock URL \url{https://link.aps.org/doi/10.1103/PhysRev.96.191}.
+
+\bibitem[Feynman(2006)]{QED}
+Richard~Phillips Feynman.
+\newblock \emph{QED: The strange theory of light and matter}.
+\newblock Princeton University Press, 2006.
+
+\bibitem[Altarelli(2000)]{EWT}
+Guido Altarelli.
+\newblock The standard electroweak theory and beyond.
+\newblock \emph{arXiv preprint hep-ph/9811456}, pages 27--93, 2000.
+
+\bibitem[Glashow(1961)]{glashow1961partial}
+Sheldon~L Glashow.
+\newblock Partial-symmetries of weak interactions.
+\newblock \emph{Nuclear physics}, 22\penalty0 (4):\penalty0 579--588, 1961.
+\newblock \doi{https://doi.org/10.1016/0029-5582(61)90469-2}.
+
+\bibitem[Weinberg(1967)]{weinberg1967model}
+Steven Weinberg.
+\newblock A model of leptons.
+\newblock \emph{Physical review letters}, 19\penalty0 (21):\penalty0 1264,
+  1967.
+\newblock \doi{https://doi.org/10.1103/PhysRevLett.19.1264}.
+
+\bibitem[Salam(1968)]{salam1968n}
+A~Salam.
+\newblock N. svartholm, ed. elementary particle physics: Relativistic groups
+  and analyticity.
+\newblock In \emph{Eighth Nobel Symposium. Stockholm: Almquvist and Wiksell},
+  page 367, 1968.
+
+\bibitem[Nob(1979)]{NobelPrizeEWT}
+\emph{{Press release: The Nobel Prize in Physics 1979}}.
+\newblock Nobel Media AB 2020, 1979.
+\newblock URL
+  \url{https://www.nobelprize.org/prizes/physics/1979/press-release/}.
+
+\bibitem[Salam and Weinberg(1979)]{salam1979nobel}
+Abdus Salam and Steven Weinberg.
+\newblock {Nobel Prize for Physics, 1979}.
+\newblock \emph{CERN Courier}, page 395, 1979.
+
+\bibitem[Chang and Kong(2000)]{chang2000pseudo}
+Darwin Chang and Otto~CW Kong.
+\newblock Pseudo-dirac neutrinos.
+\newblock \emph{Physics Letters B}, 477\penalty0 (4):\penalty0 416--423, 2000.
+
+\bibitem[Balaji et~al.(2002)Balaji, Kalliom{\"a}ki, and
+  Maalampi]{balaji2002revisiting}
+KRS Balaji, Anna Kalliom{\"a}ki, and Jukka Maalampi.
+\newblock Revisiting pseudo-dirac neutrinos.
+\newblock \emph{Physics Letters B}, 524\penalty0 (1-2):\penalty0 153--160,
+  2002.
+
+\bibitem[Mohapatra(2005)]{mohapatra2005seesaw}
+Rabindra~N Mohapatra.
+\newblock Seesaw mechanism and its implications.
+\newblock In \emph{SEESAW 25}, pages 29--44. World Scientific, 2005.
+
+\bibitem[Das et~al.(2016)Das, Nagata, and Okada]{mymodel}
+Arindam Das, Natsumi Nagata, and Nobuchika Okada.
+\newblock {Testing the 2-TeV resonance with trileptons}.
+\newblock \emph{Journal of High Energy Physics}, 2016\penalty0 (3):\penalty0
+  49, 2016.
+
+\bibitem[Gramstad(2013)]{gramstad2013searches}
+Eirik Gramstad.
+\newblock {Searches for Supersymmetry in di-Lepton Final States with the ATLAS
+  Detector at $\ensuremath{\sqrt{s}}$= 7 TeV}.
+\newblock 2013.
+
+\bibitem[Field(2002)]{field2002hardscattering}
+Richard~D Field.
+\newblock The underlying event in hard scattering processes.
+\newblock \emph{arXiv preprint hep-ph/0201192}, 2002.
+
+\bibitem[Abo((10.12.20))]{AboutCERN}
+{About CERN}.
+\newblock CERN, (10.12.20).
+\newblock URL \url{https://home.cern/about}.
+
+\bibitem[McPherson(2009)]{mcpherson2009WWW}
+Stephanie~Sammartino McPherson.
+\newblock \emph{Tim Berners-Lee: Inventor of the World Wide Web}.
+\newblock Twenty-First Century Books, 2009.
+
+\bibitem[Mobs(2019)]{MobsCERNLayout}
+Esma Mobs.
+\newblock {The CERN accelerator complex - 2019. Complexe des accélérateurs du
+  CERN - 2019}.
+\newblock Jul 2019.
+\newblock URL \url{https://cds.cern.ch/record/2684277}.
+\newblock General Photo.
+
+\bibitem[LHC((11.12.20))]{LHCatCERN}
+{The Large Hadron Collider}.
+\newblock CERN, (11.12.20).
+\newblock URL
+  \url{https://home.cern/science/accelerators/large-hadron-collider}.
+
+\bibitem[Acc((11.12.20))]{AccatCERN}
+{Accelerators}.
+\newblock CERN, (11.12.20).
+\newblock URL \url{https://home.cern/science/accelerators}.
+
+\bibitem[Det((11.12.20))]{DetectorsatCERN}
+{Experiments: LHC experiments}.
+\newblock CERN, (11.12.20).
+\newblock URL \url{https://home.cern/science/experiments}.
+
+\bibitem[Airapetian et~al.(1999)Airapetian, Dodonov, Micu, Axen, Vinogradov,
+  Akerman, Szeless, Chochula, Geich-Gimbel, Schacht, et~al.]{atlasLuminosity}
+A~Airapetian, V~Dodonov, L~Micu, D~Axen, V~Vinogradov, D~Akerman, B~Szeless,
+  P~Chochula, C~Geich-Gimbel, P~Schacht, et~al.
+\newblock \emph{ATLAS detector and physics performance: Technical Design
+  Report, 1}, volume~1.
+\newblock 1999.
+
+\bibitem[{CERN}((01.01.21))]{ATLASdetector}
+{CERN}.
+\newblock {Computer generated image of the whole ATLAS detector}.
+\newblock CERN Document Server, (01.01.21).
+\newblock URL \url{https://cds.cern.ch/record/1095924?ln=en}.
+
+\bibitem[ATL((01.01.21))]{ATLAStracking}
+{How ATLAS detects particles: diagram of particle paths in the detector }.
+\newblock CERN Document Server, (01.01.21).
+\newblock URL \url{https://cds.cern.ch/record/1505342?ln=en}.
+
+\bibitem[{CERN}(1994)]{ATLAS_Muon_spec}
+{CERN}.
+\newblock Overall detector concept.
+\newblock \emph{ATLAS Technical Proposal}, 1994.
+
+\bibitem[Scannicchio(2010)]{scannicchio2010atlas}
+DA~Scannicchio.
+\newblock Atlas trigger and data acquisition: Capabilities and commissioning.
+\newblock \emph{Nuclear Instruments and Methods in Physics Research Section A:
+  Accelerators, Spectrometers, Detectors and Associated Equipment},
+  617\penalty0 (1-3):\penalty0 306--309, 2010.
+
+\bibitem[Goodfellow et~al.(2016)Goodfellow, Bengio, and
+  Courville]{Goodfellow-et-al-2016}
+Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
+\newblock \emph{Deep Learning}.
+\newblock MIT Press, 2016.
+\newblock \url{http://www.deeplearningbook.org}.
+
+\bibitem[Hastie et~al.(2009)Hastie, Tibshirani, and
+  Friedman]{hastie2009elements}
+Trevor Hastie, Robert Tibshirani, and Jerome Friedman.
+\newblock \emph{The elements of statistical learning: data mining, inference,
+  and prediction}.
+\newblock Springer Science \& Business Media, 2009.
+
+\bibitem[Mehta et~al.(2019)Mehta, Bukov, Wang, Day, Richardson, Fisher, and
+  Schwab]{mehta2019high}
+Pankaj Mehta, Marin Bukov, Ching-Hao Wang, Alexandre~GR Day, Clint Richardson,
+  Charles~K Fisher, and David~J Schwab.
+\newblock A high-bias, low-variance introduction to machine learning for
+  physicists.
+\newblock \emph{Physics reports}, 810:\penalty0 1--124, 2019.
+
+\bibitem[Ruck et~al.(1990)Ruck, Rogers, and Kabrisky]{MLP}
+Dennis~W Ruck, Steven~K Rogers, and Matthew Kabrisky.
+\newblock Feature selection using a multilayer perceptron.
+\newblock \emph{Journal of Neural Network Computing}, 2\penalty0 (2):\penalty0
+  40--48, 1990.
+
+\bibitem[Vieira et~al.(2017)Vieira, Pinaya, and Mechelli]{MLP_network}
+Sandra Vieira, Walter~HL Pinaya, and Andrea Mechelli.
+\newblock Using deep learning to investigate the neuroimaging correlates of
+  psychiatric and neurological disorders: Methods and applications.
+\newblock \emph{Neuroscience \& Biobehavioral Reviews}, 74:\penalty0 58--75,
+  2017.
+
+\bibitem[Kingma and Ba(2014)]{adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[Safavian and Landgrebe(1991)]{DecisionTree}
+S~Rasoul Safavian and David Landgrebe.
+\newblock A survey of decision tree classifier methodology.
+\newblock \emph{IEEE transactions on systems, man, and cybernetics},
+  21\penalty0 (3):\penalty0 660--674, 1991.
+
+\bibitem[Wold et~al.(1987)Wold, Esbensen, and Geladi]{PCA}
+Svante Wold, Kim Esbensen, and Paul Geladi.
+\newblock Principal component analysis.
+\newblock \emph{Chemometrics and intelligent laboratory systems}, 2\penalty0
+  (1-3):\penalty0 37--52, 1987.
+
+\bibitem[Breiman(2001)]{randomforest}
+Leo Breiman.
+\newblock Random forests.
+\newblock \emph{Machine learning}, 45\penalty0 (1):\penalty0 5--32, 2001.
+
+\bibitem[Quinlan et~al.(1996)]{bagging}
+J~Ross Quinlan et~al.
+\newblock Bagging, boosting, and c4. 5.
+\newblock In \emph{Aaai/iaai, Vol. 1}, pages 725--730, 1996.
+
+\bibitem[R{\"a}tsch et~al.(2001)R{\"a}tsch, Onoda, and M{\"u}ller]{AdaBoost}
+Gunnar R{\"a}tsch, Takashi Onoda, and K-R M{\"u}ller.
+\newblock Soft margins for adaboost.
+\newblock \emph{Machine learning}, 42\penalty0 (3):\penalty0 287--320, 2001.
+
+\bibitem[Friedman(2002)]{GradientBoost}
+Jerome~H Friedman.
+\newblock Stochastic gradient boosting.
+\newblock \emph{Computational statistics \& data analysis}, 38\penalty0
+  (4):\penalty0 367--378, 2002.
+
+\bibitem[Ke et~al.(2017)Ke, Meng, Finley, Wang, Chen, Ma, Ye, and
+  Liu]{lightgbm}
+Guolin Ke, Qi~Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei
+  Ye, and Tie-Yan Liu.
+\newblock Lightgbm: A highly efficient gradient boosting decision tree.
+\newblock \emph{Advances in neural information processing systems},
+  30:\penalty0 3146--3154, 2017.
+
+\bibitem[Chen and Guestrin(2016)]{xgboost}
+Tianqi Chen and Carlos Guestrin.
+\newblock Xgboost: A scalable tree boosting system.
+\newblock In \emph{Proceedings of the 22nd acm sigkdd international conference
+  on knowledge discovery and data mining}, pages 785--794, 2016.
+
+\bibitem[Phoboo(2014)]{MLHiggs}
+Abha~Eli Phoboo.
+\newblock Machine learning wins the higgs challenge.
+\newblock Technical report, 2014.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+
+\bibitem[McHugh(2012)]{cks}
+Mary~L McHugh.
+\newblock Interrater reliability: the kappa statistic.
+\newblock \emph{Biochemia medica}, 22\penalty0 (3):\penalty0 276--282, 2012.
+
+\bibitem[Alwall et~al.(2014)Alwall, Frederix, Frixione, Hirschi, Maltoni,
+  Mattelaer, Shao, Stelzer, Torrielli, and Zaro]{MadGraph}
+J.~Alwall, R.~Frederix, S.~Frixione, V.~Hirschi, F.~Maltoni, O.~Mattelaer,
+  H.-S. Shao, T.~Stelzer, P.~Torrielli, and M.~Zaro.
+\newblock The automated computation of tree-level and next-to-leading order
+  differential cross sections, and their matching to parton shower simulations.
+\newblock \emph{Journal of High Energy Physics}, 2014\penalty0 (7), Jul 2014.
+\newblock ISSN 1029-8479.
+\newblock \doi{10.1007/jhep07(2014)079}.
+\newblock URL \url{http://dx.doi.org/10.1007/JHEP07(2014)079}.
+
+\bibitem[Sj{\"o}strand et~al.(2006)Sj{\"o}strand, Mrenna, and Skands]{pythia}
+Torbj{\"o}rn Sj{\"o}strand, Stephen Mrenna, and Peter Skands.
+\newblock Pythia 6.4 physics and manual.
+\newblock \emph{Journal of High Energy Physics}, 2006\penalty0 (05):\penalty0
+  026, 2006.
+
+\end{thebibliography}
