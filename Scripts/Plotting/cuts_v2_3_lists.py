@@ -80,19 +80,19 @@ vtx213 = ['pred_class == 213']
 cutsDict['3LClass_SF_OS'] =  cuts_TriL + SF_12 + OS_12
 cutsDict['3LClass_DF_OS'] =  cuts_TriL + DF_12 + OS_12
 cutsDict['SR_3LClass_SF_OS_vtx123'] = cuts_TriL + SF_12 + OS_12 + vtx123
-cutsDict['SR_3LClass_SF_OS_vtx132'] = cuts_TriL + SF_12 + OS_12 + vtx132
+cutsDict['SR_3LClass_SF_OS_vtx132'] = cuts_TriL + SF_13 + OS_13 + vtx132
 cutsDict['SR_3LClass_SF_OS_vtx213'] = cuts_TriL + SF_12 + OS_12 + vtx213
 
 cutsDict['SR_3LClass_DF_OS_vtx123'] = cuts_TriL + DF_12 + OS_12 + vtx123
-cutsDict['SR_3LClass_DF_OS_vtx132'] = cuts_TriL + DF_12 + OS_12 + vtx132
+cutsDict['SR_3LClass_DF_OS_vtx132'] = cuts_TriL + DF_13 + OS_13 + vtx132
 cutsDict['SR_3LClass_DF_OS_vtx213'] = cuts_TriL + DF_12 + OS_12 + vtx213
 
 cutsDict['3LClass_SF_OS_vtx123'] = cuts_TriL + SF_12 + OS_12 + vtx123
-cutsDict['3LClass_SF_OS_vtx132'] = cuts_TriL + SF_12 + OS_12 + vtx132
+cutsDict['3LClass_SF_OS_vtx132'] = cuts_TriL + SF_13 + OS_13 + vtx132
 cutsDict['3LClass_SF_OS_vtx213'] = cuts_TriL + SF_12 + OS_12 + vtx213
 
 cutsDict['3LClass_DF_OS_vtx123'] = cuts_TriL + DF_12 + OS_12 + vtx123
-cutsDict['3LClass_DF_OS_vtx132'] = cuts_TriL + DF_12 + OS_12 + vtx132
+cutsDict['3LClass_DF_OS_vtx132'] = cuts_TriL + DF_13 + OS_13 + vtx132
 cutsDict['3LClass_DF_OS_vtx213'] = cuts_TriL + DF_12 + OS_12 + vtx213
 
 
