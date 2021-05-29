@@ -12,7 +12,7 @@ cutsDict = {}
 ####################
 
 #Simple nLep_base=3
-cuts_TriL = ['nLep_base==3']
+cuts_TriL = ['nLep_base==3', 'nLep_signal==3']
 
 cuts_3L = ['nLep_base==3', 'nLep_signal==3']#, 'L3_SFOS', 'nLep_base_comb==3']
 PLT_cut = ['lep1Signal', 'lep2Signal', 'lep3Signal', 'lep3IsoPLVTight']
