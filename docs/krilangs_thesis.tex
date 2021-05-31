@@ -43,19 +43,19 @@
 % Change the page layout
 %\usepackage[showframe]{geometry}
 \usepackage{layout}
-%\setlength{\hoffset}{-0.6in}  % Length left
+\setlength{\hoffset}{-0.4in}  % Length left
 %\setlength{\voffset}{-0.8in}  % Length on top
-%\setlength{\textwidth}{480pt}  % Width
+\setlength{\textwidth}{460pt}  % Width  (418pt)
 \setlength{\textheight}{625pt}  % Height (591pt)
 %\setlength{\footskip}{25pt}
 
 
 %-----
-\title{Lepton Identification In Proton-Proton Collisions With Trilepton Final State Model Using Machine Learning}
+\title{Multiclass Classification Of Leptons In Proton-Proton Collisions At \textsurd s=13 TeV Using Machine Learning}
 %\subtitle{}
 \author{Kristoffer Langstad}
 
-\begin{document}%\layout% 
+\begin{document}%\layout
 	\duoforside[program={Computational Science: Physics}, dept={Department of Physics}, long]
 
 
@@ -63,19 +63,19 @@
 	\begin{abstract}
 		The Standard Model (\acrshort{sm}) of particle physics has been used to explain many observed phenomena in the nature with great precision. But not everything that is observed has been explained by the \acrshort{sm}, like the non-zero mass of the neutrino. A mechanism that tries to explain the mass of the neutrino is the Inverse Seesaw mechanism (\acrshort{iss}) yielding heavy neutrino masses and the existence of right-handed neutrinos. This can lead to heavy pseudo-Dirac neutrinos with trilepton final states and a neutrino from the decay of a $W$-boson. This thesis uses two types of such neutrino signals with neutrino masses, $N_1$, of 150 GeV and 450 GeV with data from proton-proton collisions collected by the ATLAS detector at $\sqrt{s}=13$ TeV.
 		
-		In this thesis we use the two simulated signal samples containing particles properties with Machine Learning to train classification models on these signals. This is a supervised learning case where we use multiclass classification to classify the vertex perturbations of the leptons. The leptons in each event in the original Ntuples are ordered after $p_T$ where lepton 1 is the lepton with highest $p_T$. With the multiclass classification we want to find from which vertex these leptons really originate from in each event. We train several different classification models to find the best performing model to use on unseen data.
+		In this thesis we use the two simulated signal samples containing particles properties with Machine Learning to train classification models on these signals. This is a supervised learning case where we use multiclass classification to classify the vertex permutations of the leptons. The leptons in each event in the original Ntuples are ordered after $p_T$ where lepton 1 is the lepton with highest $p_T$. With the multiclass classification we want to find from which vertex these leptons really originate from in each event. We train several different classification models to find the best performing model to use on unseen data.
 		 
 		For these simulated signals we find that the Light Gradient Boosting Machine (\acrshort{lgbm}) is the best for classifying both simulated signals with accuracy scores of 0.88 for the 150 GeV signal and 0.96 for the 450 GeV signal when evaluating with the test set. 
 		
-		With the \acrshort{lgbm} model we classify simulated background and signal data containing proton-proton collision events to find the particle vertex perturbations for the three leptons in the final states. The outcome is to compare features for these backgrounds and signals with different signal regions, and compare with a more standard analysis as benchmark. 
+		With the \acrshort{lgbm} model we classify simulated background and signal data containing proton-proton collision events to find the particle vertex permutations for the three leptons in the final states. The outcome is to compare features for these backgrounds and signals with different signal regions, and compare with a more standard analysis as benchmark. 
 		
-		For the two simulated signals we only get predictions for the 123 and 132 vertices of the leptons, while the simulated backgrounds have predicted vertex perturbations for 123, 132 and 213. The 213 vertex predicted much less than the other two vertex perturbations. The 213 vertex er predicted a maximum 10871 number of times, while 123 and 132 are predicted between 22337 and 5821865.
+		For the two simulated signals we only get predictions for the 123 and 132 vertices of the leptons, while the simulated backgrounds have predicted vertex permutations for 123, 132 and 213. The 213 vertex predicted much less than the other two vertex permutations. The 213 vertex er predicted a maximum 10871 number of times, while 123 and 132 are predicted between 22337 and 5821865.
 		
 		We find that the same flavor and opposite sign state of lepton 1 and 2 are more dominant with much more events than the different flavor and opposite sign for lepton 1 and 2 case. For the invariant mass of the three lepton system we find that it is easier to differentiate between background and the 450 GeV neutrino signal for masses higher than 450-500 GeV. For the missing transverse energy (\acrshort{met}) backgrounds and signals have similar number of events and are difficult to differentiate.
 
-		For the standard analysis we get the same number of events for the invariant mass of the three lepton system and the \acrshort{met} for the simulated background and signal events compared to the cases with cuts for flavor, sign and vertices of leptons. The cuts used for the standard analysis shows results as good as the cuts with the lepton vertex perturbations applied.
+		For the standard analysis we get the same number of events for the invariant mass of the three lepton system and the \acrshort{met} for the simulated background and signal events compared to the cases with cuts for flavor, sign and vertices of leptons. The cuts used for the standard analysis shows results as good as the cuts with the lepton vertex permutations applied.
 		
-		The multiclass classification of the lepton vertex perturbations with the \acrshort{lgbm} model have successfully predicted the lepton vertices, yielding results comparable to a standard analysis.
+		The multiclass classification of the lepton vertex permutations with the \acrshort{lgbm} model have successfully predicted the lepton vertices, yielding results comparable to a standard analysis.
 	\end{abstract}
 
 
@@ -110,29 +110,44 @@
 	%\addcontentsline{toc}{chapter}{Introduction}
 	\chapter{Introduction}
 	\label{chap:Intro}
-	The goal of this thesis is to use machine learning algorithms to automatically classify the origin vertices of final state particles from proton-proton collisions. We will study two simulated neutrino signal scenarios with masses of 150 GeV and 450 GeV. These signals go beyond the particle physics Standard Model (\acrshort{sm}) with three final state leptons and a neutrino. We will compare the two signals with each other and compare particle features with some chosen cuts with a standard analysis by \citet{inverseseesaw}.
+	The goal of this thesis is to use Machine Learning (\acrshort{ml}) algorithms to classify the origin vertices of final state particles from proton-proton collisions. We will study two simulated neutrino signal scenarios with a heavy neutrino mass of 150 and 450 GeV, respectively. These signals go beyond the particle physics Standard Model (\acrshort{sm}) with three final state leptons and a neutrino. We will compare the two signals with each other and compare particle features with some chosen cuts with a simpler analysis using more standard cuts as used in \citet{inverseseesaw}.
 	
-	Particle physicists focuses a lot on colliding particles at high energies is to produce known and possibly unknown particles. When two particles collide, they will produce new particles that move through detectors built around the collision points. At the Large Hadron Collider (\acrfull{lhc}), $\sim 10^4$ protons collide every 25 ns and produces huge amount of data each second which is captured by detectors and stored for further analysis. Many particles are produced in each such particle collision, and it is not always trivial to identify all these particles. There are also cases where some particles are not directly detected at all, like neutrinos. By using machine learning (\acrshort{ml}) algorithms, which is a study in computer science and mathematics involving, among others, pattern recognition, we can try to computationally identify the vertices of the produced particles from the collision decays. 
+	Particle physicists focuses a lot on colliding particles at high energies is to produce known and possibly unknown particles. When two particles collide, they will produce new particles that move through detectors built around the collision points. At the Large Hadron Collider (\acrshort{lhc}), huge amount of data are produced each second which is captured by detectors and stored for further analysis. Many particles are produced in each such particle collision, and it is not always trivial to identify all these particles. There are also cases where some particles are not directly detected at all, like neutrinos. By using \acrshort{ml} algorithms, which is a study in computer science and mathematics involving, among others, pattern recognition, we can try to computationally identify the vertices of the produced particles from the collision decays. 
 	
-	Particle physics takes a closer look at the building blocks of the universe, the fundamental particles in the Standard Model (\acrshort{sm}). This is a theory that fits well with most observations. However there are several observations in the universe that cannot fully be explained by the \acrshort{sm}, like dark matter and dark energy, meaning that the \acrshort{sm} is incomplete and have to be extended. One of the methods to complete or expand the \acrshort{sm} is to find new particles. This is done at large laboratories like \acrshort{cern}, where one of the things they do is to collide particles at high energies to produce new particles. After colliding particles, the new particles are detected using big detectors like A Toroidal LHC ApparatuS (\acrshort{atlas}). One of the major discoveries at \acrshort{cern} is the discovery of the Higgs boson\cite{HiggsATLAS}\cite{HiggsCMS}, which was the last missing piece of the \acrshort{sm}. In this thesis, we will analyze both "\textit{truth}" and more realistic simulations after taking into account hadronization, showers and detector inefficiency of particle collisions. With "\textit{truth}" we mean simulated data or the particle collisions where we know exactly which particles have been produced and their origins.
+	Particle physics takes a closer look at the building blocks of the universe, the fundamental particles in the \acrshort{sm}. This is a theory that fits well with most observations. However there are several observations in the universe that cannot fully be explained by the \acrshort{sm}, like dark matter and dark energy, meaning that the \acrshort{sm} is incomplete and have to be extended. One of the methods to complete or expand the \acrshort{sm} is to find new particles. This is done at large laboratories like \acrshort{cern}, where one of the things they do is to collide particles at high energies to produce new particles. After colliding particles, the new particles are detected using big detectors like A Toroidal LHC ApparatuS (\acrshort{atlas}). One of the major discoveries at \acrshort{cern} is the discovery of the Higgs boson\cite{HiggsATLAS}\cite{HiggsCMS}, which was the last missing piece of the \acrshort{sm}. In this thesis, we will analyze both "\textit{truth}" and more realistic simulations after taking into account hadronization, showers and detector inefficiency of particle collisions. With "\textit{truth}" we mean simulated data or the particle collisions where we know exactly which particles have been produced and their origins.
+	
+	
+	\section{Motivation for Thesis}
+	\label{sect:Intro-MotivThesis}
+	The Compact Muon Solenoid (\acrshort{cms}) collaboration published in 2014 an article "Search for heavy neutrinos and W bosons with
+	right-handed couplings in proton-proton collisions at $\sqrt{s}$=8 TeV"\cite{mymodel2} using an integrated luminosity of 19.7 fb$^{-1}$ of $\sqrt{s} = 8$ TeV p-p collision data produced by the \acrshort{cms} experiment at \acrshort{cern}. They searched for 2 leptons and 2 jet final states in signal regions with only same flavor (\acrshort{sf}) and no lepton flavor violation (\acrshort{lfv}). They observed a 2.8 local significance in the 2 electron and 2 jet (eejj) channel with no excess in the 2 muon and 2 jet (mmjj) channel. The ratio in the eejj channel had a \acrshort{ss}/\acrshort{os} event ratio of 1/14. This is not consistent with left-right symmetry model (\acrshort{lrsm}) theory.
+	
+	When more data was included, this excess disappeared. Nevertheless, the results gave motivation for new neutrino mass mechanism theories to study this lack of \acrshort{ss} and \acrshort{lfv}, e.g. the Inverse seesaw (\acrshort{iss}) mechanism\cite{inverseseesaw}. There has not been discovered any significant excess in the heavy neutrino searches at the \acrshort{lhc} since. 
+	
+	This thesis looks at the same neutrino models as \citet{inverseseesaw} to produce the final trilepton plus missing transverse energy (\acrshort{met}) states, seen in the Born diagram in Figure \ref{fig:ModelProcessIntro}. By applying \acrshort{ml} techniques on simulated data of this type of trilepton final state, we want to see if we can identify the final state lepton's production vertices origins in events seen in Fig. \ref{fig:ModelProcessIntro}. If we can classify the vertex origins of the leptons, we can study the charge and flavor of the leptons in the production and decay of the heavy neutrino ($N_m$). Different neutrino mass models gives different expectation on the \acrshort{lfv} and Majorana component of the $N_m$. This gives rise to different amount of \acrshort{ss}/\acrshort{os} lepton pairs as well as the ratio between \acrshort{sf}, for lepton flavor conservation (\acrshort{lfc}), and \acrshort{df} (\acrshort{lfv}) lepton pairs. If an excess is observed some time in the future, we would like to study which models of neutrino mass mechanism the excess is compatible with by efficiently identify and study the properties of the leptons involved in the neutrino production and decay.
+	\begin{figure}[htbp!]
+		\hspace*{-1.0cm}
+		\centering\includegraphics[width=0.8\linewidth]{ModelProcess.png}
+		\caption[The charged current Drell-Yan process.]{The Born diagram for the charged current Drell-Yan process of the proton-proton collision (on the left) producing a heavy pseudo-Dirac neutrino $N$ in the inverse seesaw mechanism model, leading to a trilepton plus missing transverse energy (a light neutrino) final state. Figure is taken from ref. \cite{inverseseesaw}. \label{fig:ModelProcessIntro}}
+	\end{figure} 
 
 	
 	\section{Motivation for Machine Learning}
 	\label{sect:Intro-Motivation}
-	Machine learning and data science has had a huge growth in the past years. There are now a bigger variety of algorithms and approaches better suited for data analysis and different types of analyses depending on both the datasets and the desired goals. The datasets are as well a lot bigger than before, with samples ranging up to billions. This is both good and bad, since most machine learning models need a lot of training data to perform and predict on a good level. But with larger datasets, more time is needed to do the analyses since there are more data, obviously. This means that the models have to be fast and good.
+	Machine learning and data science has had a huge growth since 2014. There are now a bigger variety of algorithms and approaches better suited for data analysis and different types of analyses depending on both the datasets and the desired goals. The datasets are as well a lot bigger than before, with samples ranging up to billions. This is both good and bad, since most machine learning models need a lot of training data to perform and predict on a good level. But with larger datasets, more time is needed to do the analyses since there are more data, obviously. This means that the models have to be fast and good.
 	
 	Machine learning models have pattern recognition as one of the main focuses. The idea is to automatize and learn what normally is complex and difficult for humans to do. This can include image analysis or to learn the rules of a game. The more data the learning models have, the better they can do their tasks. Even though the algorithms can do quite complex tasks, the fundamental methods in these algorithms include normally simple methods. Many of the most used algorithms have several hyperparameters that are used to optimize the models. After a machine learning algorithm have been trained on some data, it can be exported and used on other types of similar data. This skips the step of training the algorithms with the data each time, and we can do straight to the predictions of the new data. 
 	
-	This thesis looks at the same models as \citet{inverseseesaw} to produce the final trilepton plus missing transverse energy (\acrshort{met}) states. By applying machine learning techniques on simulated data that force this type of trilepton final state, we want to see if we can automatically identify the final state lepton vertices for the events. We will test several different classification model algorithms, and the best performing models for each signal sample will be chosen. If successful, then we can export the best models to other similar scenarios later.
+	We will test several different classification model algorithms, and the best performing models for each signal sample will be chosen. If successful, then we can export the best models to other similar scenarios later. 
 	
 
 	\section{Structure of Thesis}
 	\label{sect:Intro-Structure}
 	In the first chapters of part \ref{part:Theory}, we take a look at an introduction to particle physics and further theories connected with the model we study. The next chapters involve the particle kinematics of particle collisions, and how they are collided and detected by instruments. Then follows theory of machine learning, the classification models and evaluation metrics to be used in this thesis.
 	
-	Part \ref{part:Implementation} starts by looking at the most important libraries we use, the data and the features of the data prior to classification. Then we look at more detailed implementation and evaluation of the machine learning aspect. The \acrshort{ml} analysis is chosen to be done in the programming language \textbf{Python}, which has many useful libraries for doing machine learning.
+	Part \ref{part:Implementation} starts by looking at the most important libraries we use, the data and the features of the data prior to classification. Then we look at more detailed implementation and evaluation of the machine learning aspect leading to the best performing multiclass classification model. The \acrshort{ml} analysis is chosen to be done in the programming language \textbf{Python}, which has many useful libraries for doing machine learning.
 	
-	In part \ref{part:Results} we first present the results of the classification of simulated data with the trained classification models. Then the analysis of the features of the data and a comparison with a more standard analysis.
+	In part \ref{part:Results} we first present the results of the classification of simulated data with the trained classification models. Then follows the analysis of some chosen features of the data in defined signal regions, and a comparison with a more standard analysis.
 	
 	Part \ref{part:Conclusion} consists of discussions of the results, concluding remarks of the thesis and a short look into future research based on this thesis.
 	
@@ -188,7 +203,7 @@
 	\begin{figure}[ht!]
 		\vspace{-1.0cm}
 		\hspace*{-2.2cm}
-		\centering\includegraphics[width=1.3\linewidth]{SM.png}
+		\centering\includegraphics[width=1.0\linewidth]{SM.png}
 		\caption[The Standard Model.]{The Standard Model contents, source \cite{SM}.\label{fig:SM}}
 	\end{figure} 
 
@@ -262,7 +277,7 @@
 	The discovery of neutrino oscillations was done by two experiments. Namely the Super-Kamiokande Observatory\cite{superkamiokande} and the Sudbury Neutrino Observatories (\acrshort{sno})\cite{SNO} experiments. They got the Nobel Prize in physics in 2015 for their contributions by detecting solar neutrinos from the Sun \cite{gibney2015neutrino}. The Super-Kamiokande detected electron neutrinos using a big water \v{C}erenkov detector, but they got a too low electron neutrino flux than what was expected to be produced in the Sun. The \acrshort{sno} experiment showed that the atmospheric neutrinos and the neutrino flux from $\beta$-decay in the Sun had strong muon and tau components by using heavy water. Since only electron neutrinos are produced by nuclear fusion in the Sun, the neutrinos must have the ability to change their flavor when moving over large distances.
 	
 	The neutrino oscillation is a quantum-mechanical phenomenon, where the neutrino flavor (weak) eigenstates ($\nu_e, \nu_{\mu}, \nu_{\tau}$) can be related to the mass eigenstates ($\nu_1, \nu_{2}, \nu_{3}$) by an unitary transformation matrix $U$ as 
-	\begin{equation*}
+	\begin{equation}
 	\label{eq:Flavor_states}
 		\begin{pmatrix}
 		\nu_e \\ \nu_{\mu} \\ \nu_{\tau}
@@ -275,7 +290,7 @@
 		\begin{pmatrix}
 		\nu_1 \\ \nu_{2} \\ \nu_{3}
 		\end{pmatrix}.
-	\end{equation*} 
+	\end{equation} 
 	The flavor eigenstates are linear combinations of the mass eigenstates. The $3\times3$ unitary matrix is the Pontecorvo-Maki-Nakagawa-Sakata (\acrshort{pmns}) matrix, and  it's expressed with three mixing (rotation) angles and a complex Dirac CP violation phase if the neutrinos are Dirac particles. The unitary of the \acrshort{pmns} matrix implies that $U^{-1}=U^{\dagger}\equiv(U^*)^T$ and $UU^{\dagger}=I$.
 	
 	If the neutrino mass eigenstates are not the same, we get neutrino oscillations from the phase differences in components of the wavefunction. Since we already know that the neutrinos change flavor from the discovery of neutrino oscillations, we know that the neutrinos need some mass, differing by flavor, to being able to change flavor. That is why the neutrinos need non-zero masses and not equal to each other for neutrino oscillations to be true. From experimental measurements, like long baseline accelerators, for the neutrino masses there is only found upper limits to the masses. The best upper limits on the neutrino masses was found to be
@@ -607,7 +622,7 @@
 	The final state is then three charged leptons (trilepton) plus a neutrino which goes undetected through the detector, and is observed indirectly through large missing transverse energy in the event (like \acrshort{atlas}). This decay process can be seen in Figure \ref{fig:ModelProcess}, and is produced through the charged current Drell-Yan (\acrshort{ccdy}) process \cite{inverseseesaw}. In this model, the lepton number is almost conserved. This is set by the mixing parameter $\mu$. For the mixing of N1's couplings to electrons and muons, the mixings are set to $\mu=|V_eN|=|V_{\mu}N|=\frac{1}{\sqrt{2}\cdot 10^{-2}}$ and $|V_{\tau}|=0$\footnote{Equation 3.18 in \citet{inverseseesaw}.} for no mixing to tau in the simulation models for charged lepton flavor violation (\acrshort{lfv}). This means that the amount of opposite-sign and same-sign events for the first two leptons may differ from e.g. the normal seesaw model. The mixings allow \acrshort{lfv} between vertex 1 and 2, i.e. an electron at vertex 1 and a muon at vertex 2 or vice versa, while the $W$ boson decays according to the \acrshort{sm}. As seen in equation \ref{eq:Particle_Model}, the leptons in the lepton pairs 1 and 2 and 2 and 3 must always have opposite sign (\acrshort{os}) while 1 and 3 always have same sign (\acrshort{ss}).
 	\begin{figure}[htbp!]
 		\hspace*{-1.0cm}
-		\centering\includegraphics[width=0.9\linewidth]{ModelProcess.png}
+		\centering\includegraphics[width=0.8\linewidth]{ModelProcess.png}
 		\caption[The charged current Drell-Yan process.]{The Born diagram for the charged current Drell-Yan process of the proton-proton collision (on the left) producing a heavy pseudo-Dirac neutrino $N$ in the inverse seesaw mechanism model, leading to a trilepton plus missing transverse energy (a light neutrino) final state. Figure is taken from ref. \cite{inverseseesaw}. \label{fig:ModelProcess}}
 	\end{figure} 
 
@@ -720,9 +735,9 @@
 	\end{equation}
 	This new variable $\eta$ is called the \textit{pseudorapidity}. The pseudorapidity also has the following relation with the polar angle: $\eta(\theta)=-\eta(180\text{\textdegree}-\theta)$. We now have the most used set of variables ($p_t, \phi, \theta$) for describing the kinematics of particles in a detector. In Figure \ref{fig:Planes} we see the illustration of the transverse and longitudinal planes. The cylindrical shape shows how particle accelerators will be situated around the collision point.
 	\begin{figure}[htbp!]
-		\hspace*{-1.6cm}
-		\subfloat[The transverse plane.]{\includegraphics[width=0.6\linewidth]{Transverse.png}}
-		\subfloat[The longitudinal plane.]{\includegraphics[width=0.6\linewidth]{Longitudinal.png}}
+		%\hspace*{-1.cm}
+		\subfloat[The transverse plane.]{\includegraphics[width=0.5\linewidth]{Transverse.png}}
+		\subfloat[The longitudinal plane.]{\includegraphics[width=0.5\linewidth]{Longitudinal.png}}
 		\caption[Collider geometry.]{Illustrations of the (a) transverse plane and the (b) longitudinal plane. The collision point is at the origin. Figures are both from ref. \cite{gramstad2013searches}. \label{fig:Planes}}
 	\end{figure} 
 
@@ -767,8 +782,8 @@
 	
 	In Figure \ref{fig:HardScattering} we see how a hard scattering p-p collision may look like, with outgoing partons, underlying events, initial- and final-state radiation. The initial-state radiation is mean radiation of gluons or photons from partons before the hard scattering. Final-state radiation is the mean radiation from the produced partons after the hard interaction. The underlying events are the further interactions between partons beyond the hard scattering. These interactions will often go out of reach of the detector, and is another reason why we look at the transverse plane.
 	\begin{figure}[htbp!]
-		\hspace*{-1.0cm}
-		\centering\includegraphics[width=0.9\linewidth]{HardScattering.png}
+		\hspace*{-0.8cm}
+		\centering\includegraphics[width=0.8\linewidth]{HardScattering.png}
 		\caption[Hard scattering.]{Illustration of a hard scattering proton-proton collision. Figure is taken from ref. \cite{field2002hardscattering}. \label{fig:HardScattering}}
 	\end{figure} 
 	
@@ -809,7 +824,7 @@
 	
 	\acrshort{cern} consists of several particle accelerators, experiments and facilities in different shapes and sizes. The two main types of accelerators are linear and circular. They are located at various sites, and they accelerate particles to high energies before they send the particles to be collided with other accelerated particles or particles with stationary targets, or are sent to more powerful accelerators. They are built differently to accelerate different kinds of particles with different masses. In Figure \ref{fig:CERN_Layout} we see the \acrshort{cern} accelerator complex. Some of the accelerators are mostly used to pre-accelerate the particles before they are sent to another accelerator where they are accelerated even more. This repeats until the particles reach the desired energy to collide with at one of the detectors.
 	\begin{figure}[htbp!]
-		\centering\includegraphics[width=1.1\linewidth]{CERN_layout.png}
+		\centering\includegraphics[width=1.0\linewidth]{CERN_layout.png}
 		\caption[The CERN complex.]{The CERN accelerator complex as of 2019. Credit: CERN\cite{MobsCERNLayout}.\label{fig:CERN_Layout}}
 	\end{figure} 
 
@@ -889,14 +904,14 @@
 	
 	%The detector can be divided into three parts; the central part is called the \textit{barrel}, and the two end parts are called \textit{end-caps}. 
 	\begin{figure}[h!]
-		\hspace*{-1.2cm}
-		\centering\includegraphics[width=1.2\linewidth]{ATLAS.jpg}
+		\hspace*{-1.1cm}
+		\centering\includegraphics[width=1.\linewidth]{ATLAS.jpg}
 		\caption[The ATLAS detector components.]{The ATLAS detector and its components. Credit: \citet{ATLASdetector}.\label{fig:ATLASdetector}}
 	\end{figure}  
 	
 	The \acrshort{atlas} detector is designed to be a general-purpose detector, covering a wide range of signals. The particle properties the \acrshort{atlas} detector can detect is the mass, momentum and energies of the particles. For \acrshort{atlas} to detect these properties, it has a layered design of detectors that is optimized in observing specific properties of the various particles. The \acrshort{atlas} detector consists of several main systems; the inner detector (\acrshort{id}), calorimeters, a muon spectrometer (\acrshort{ms}), a magnet system and a trigger and data acquisition system. The main systems consists of smaller sub-systems, which we will take a brief look at next. In Figure \ref{fig:ATLAStracking}, we see a sketch of the detector layout systems and how some particles behave in these different systems. Only the neutrinos should now go undetected through the detectors, in principle, and they are normally identified as missing momentum, or \acrshort{met}. This comes from the energy conservation law, where the sum of the measured transverse momenta of the all particles produced should be zero. 
-	\begin{figure}[htbp!]
-		\centering\includegraphics[width=1.0\linewidth]{ATLAS_tracks.jpg}
+	\begin{figure}[ht!]
+		\centering\includegraphics[width=0.9\linewidth]{ATLAS_tracks.jpg}
 		\caption[The ATLAS detector tracking system.]{An illustration of the main tracking systems in the ATLAS detector, including how some particles behave in the various systems. Credit: ref. \cite{ATLAStracking}.\label{fig:ATLAStracking}}
 	\end{figure} 
 	
@@ -1000,8 +1015,8 @@
 	
 	In Figure \ref{fig:Bias-variance} we see how the errors in general behave when the training set size, or number of data points, increases. We have assumed here that the number of data points is large and that the true function $f(x)$ can't be exactly fit. As the number of data points increase, we see that the in-sample error increases while the out-of-sample error decreases. The sampling noise decreases since the error difference between the two errors decreases. The out-of-sample error we get from this sampling noise is called the \textit{variance}, which goes towards zero in the infinite data limit. As the training dataset approaches the infinity limit, we can conclude that the two errors must go to the same value. This is called the model \textit{bias}. The bias is a representation of the best our model can do with infinite data size.
 	\begin{figure}[ht!]
-		\hspace*{-1.0cm}
-		\centering\includegraphics[width=0.7\linewidth]{bias-variance2.png}
+		%\hspace*{-1.0cm}
+		\centering\includegraphics[width=0.6\linewidth]{bias-variance2.png}
 		\caption[In-sample and out-of-sample error as function of training set size.]{Illustration of the in-sample error, $E_{\text{in}}$, out-of-sample error, $E_{\text{out}}$, variance, bias and difference of errors as function of the training set size. It is assumed that the number of data points is not small, and that we cannot exactly fit the true function $f(x)$. The training error increases while the test error decreases as the training set size increases. Figure is taken from ref. \citet{mehta2019high}. \label{fig:Bias-variance}}
 	\end{figure} 
 	
@@ -1359,7 +1374,7 @@
 	With the four outcomes in the classification report (3-6), we compute a \textit{confusion matrix}. For a binary case, the confusion matrix looks like Figure \ref{fig:ConfusionMatrix}. Here we see the predictions versus the true values. It gives a better understanding of the accuracy of a classification model. The accuracy score shows the overall accuracy, whereas the confusion matrix shows the predictions and accuracy of each class. It is easily extended for multiclass classification as a matrix with dimension $k\times k$ for $k$ classes. When the confusion matrix is normalized the total values of the rows are equal to 1. In the optimal case with all predictions correctly guessed, we should have 1's along the diagonal and 0 elsewhere.
 	\begin{figure}[htb!]
 		\hspace*{-1.0cm}
-		\centering\includegraphics[width=0.6\linewidth]{Conf_mat.png}
+		\centering\includegraphics[width=0.5\linewidth]{Conf_mat.png}
 		\caption[Confusion matrix.]{The confusion matrix is used to evaluate the accuracy of a classification model by using the four true and false observation and prediction outcomes (TP, TN, FP, FN. See sect. \ref{subsect:Theory-ClassReport}.). \label{fig:ConfusionMatrix}}
 	\end{figure}
 
@@ -1369,7 +1384,7 @@
 	Scikit-Learn provides a useful function for plotting precision versus recall. In Figure \ref{fig:PrecisionRecall} we see an example of how a precision-recall curve can look like in a multiclass case with 10 classes. This lets us see how the precision and recall behaves for different thresholds. A large \acrshort{auc} is the result of both high precision and high recall, which is preferable. The range of values will be between 0 and 1, as for accuracy. When the area under the curve (\acrshort{auc}) of a class is close to 1, the classification model can predict this class with a good accuracy. For a multiclass-case, the precision and recall are computed for each class as binary cases. A large area for each class is the optimal case here as well.
 	\begin{figure}[htb!]
 		\hspace*{-1.0cm}
-		\centering\includegraphics[width=1.0\linewidth]{precision_recall_curve.png}
+		\centering\includegraphics[width=0.9\linewidth]{precision_recall_curve.png}
 		\caption[Precision-Recall Curve.]{Example of a precision-recall curve for a multiclass classification case with 10 classes and a micro-average curve plotted. Most of the classes have a large \acrshort{auc}, showing that the classifier can predict these classes with good accuracy. Credits Scikit-Learn \cite{scikit-learn}. \label{fig:PrecisionRecall}}
 	\end{figure}
 	
@@ -1389,7 +1404,7 @@
 	The Receiver Operating Characteristic (\acrshort{roc}) curve utilizes the \acrshort{auc} to summarize the overall performance of classification models. An example of a \acrshort{roc} curve plot can be seen in Figure \ref{fig:ROC} with a multiclass case with 10 classes. This results in 10 \acrshort{roc} curves, a random model curve and two different average curves, as seen in the figure. The \acrshort{roc} curve function in Scikit-Learn plots the sensitivity versus the specificity for a model. A totally random model would result in an \acrshort{auc} of 0.5, showing as the straight dashed line from the left bottom corner to the right top corner in the figure. The optimal model would show an infinitely quick incline in the \acrshort{roc} curve at the beginning, before flattening out with \acrshort{auc} close to 1. A good classifier would typically have an \acrshort{auc} larger than 0.8.
 	\begin{figure}[htb!]
 		\hspace*{-1.0cm}
-		\centering\includegraphics[width=1.0\linewidth]{roc_curve.png}
+		\centering\includegraphics[width=0.9\linewidth]{roc_curve.png}
 		\caption[ROC Curve.]{Example of a \acrshort{roc} curve for a multiclass classification case with 10 classes, a micro-average curve, a macro-average curve and a random model (black dashed line) plotted. All classes and averages have large areas under the curves, showing that the classifier can predict the classes with good accuracy. Credits Scikit-Learn \cite{scikit-learn}. \label{fig:ROC}}
 	\end{figure}
 	
@@ -1429,23 +1444,23 @@
 	
 	\section{Data}
 	\label{sect:Method-Data}
-	The inputs we are using in this thesis consists of Monte Carlo (\acrshort{mc}) simulated background data and neutrino signals as well as data from p-p collisions at $\sqrt{s}=13$ TeV. The \acrshort{mc} and data go through the same chain of Reconstruction, Derivation and Analysis, shown in Figure \ref{fig:DataFlow}. For the \acrshort{mc} simulations (right side of fig. \ref{fig:DataFlow}) we have an additional step of Generation, Simulation and Digitization before Reconstruction. The (event) Generation step is a simulation of the interaction between quarks and gluons in proton-proton collisions, parton showering and hadronization and subsequent decays into stable particles. Next step is detector Simulation which simulate how the particles interact with the detector. The Digitization step turns simulated energy deposits into detector responses looking like real raw data. The \acrshort{mc} are from here on treated similarly as real data. In the Reconstruction step histograms of the raw data are made. The Derivation step reduces the size of the datasets from PB to TB, before the datasets will be even further reduced to MB-GB sized ROOT Ntuples.
+	The inputs we are using in this thesis consists of Monte Carlo (\acrshort{mc}) simulated background data and neutrino signals as well as data from p-p collisions at $\sqrt{s}=13$ TeV. The \acrshort{mc} and data go through the same chain of Reconstruction, Derivation and Analysis, shown in Figure \ref{fig:DataFlow}. For the \acrshort{mc} simulations (right side of Fig. \ref{fig:DataFlow}) we have an additional step of Generation, Simulation and Digitization before Reconstruction. The (event) Generation step is a simulation of the interaction between quarks and gluons in proton-proton collisions, parton showering and hadronization and subsequent decays into stable particles. Next step is detector Simulation which simulate how the particles interact with the detector. The Digitization step turns simulated energy deposits into detector responses looking like real raw data. The \acrshort{mc} are from here on treated similarly as real data. In the Reconstruction step histograms of the raw data are made. The Derivation step reduces the size of the datasets from PB to TB, before the datasets will be even further reduced to MB-GB sized ROOT Ntuples.
 	 
 	In this thesis the background data are made to best represent all possible production-mechanisms that may give a three lepton final state with a given transverse momentum plus \acrshort{met}.
 	\begin{figure}[htb!]
-		\hspace*{-0.8cm}
-		\centering\includegraphics[width=0.9\linewidth]{dataFlow.png}
+		\hspace*{-0.6cm}
+		\centering\includegraphics[width=0.8\linewidth]{dataFlow.png}
 		\caption[Data flow for producing data and \acrshort{mc}.]{The data flow for producing data and \acrshort{mc}/background simulation. \acrshort{mc} start with Generation (right side) going through all the steps ending up with Analysis. Data start with a Trigger (left side) that picks out interesting events and information from a detector, e.g. the \acrshort{atlas} detector. \label{fig:DataFlow}}
 	\end{figure}
 
-	The data (left side of fig. \ref{fig:DataFlow}) we use is proton-proton collisions at $\sqrt{13}=13$ TeV from the \acrshort{lhc} from 2018. For the data we have a Trigger step that picks out interesting events. What is regarded as interesting is defined by the physicists and the collaboration depending on the analysis they want to perform. In our case we trigger on three leptons with a given transverse momentum. This reduces the rate of writing data to disk. 
+	The data (left side of Fig. \ref{fig:DataFlow}) we use is proton-proton collisions at $\sqrt{13}=13$ TeV from the \acrshort{lhc} from 2018. For the data we have a Trigger step that picks out interesting events. What is regarded as interesting is defined by the physicists and the collaboration depending on the analysis they want to perform. In our case we trigger on three leptons with a given transverse momentum. This reduces the rate of writing data to disk. 
 	
 	The files we use for the \acrshort{mc} training in this thesis have only gone through the Generation step. We are then in full control over the truth origin, type (electron, muon, tau, quark etc.), $p_T$ etc. of the particles. The simulation is done using MadGraph\cite{MadGraph} with Pythia\cite{pythia} for showering/hadronization. The features we plot with \acrshort{mc} and data are after the Analysis step in Figure \ref{fig:DataFlow} with three leptons of good quality. For the \acrshort{ml} we want to use the \acrshort{ml} models on simulated backgrounds\footnote{Following the \acrshort{sm} processes.} and (neutrino) signal after the Analysis step. Now we no longer have the "truth" information about the particle types, the vertex it comes from etc. E.g. instead of a "true" electron we now have an electron object classified as an electron after it has passed a set of detector cuts. In some cases we get an electron is classified as a muon or a jet, causing some inefficiency with respect to the "true" distributions. Moreover, the energy and momentum resolution of the detector will smear the measurement of these quantities. In the case of the neutrino we know the full 4-vector at the truth level, while after the Reconstruction step we only see it as missing transverse energy (\acrshort{met}) with no information of its longitudinal component. We will just say we have three leptons and a neutrino/\acrshort{met} in each event to distinguish easier in this thesis, even though the neutrino is a lepton.
 
 
 	\section{Feature Validation}
 	\label{sect:Method-Features}
-	We will now take a look at the features in the \acrshort{mc} and signal Ntuples we will be using in this thesis. The Ntuples all contain the same features with separate variables for the three leptons, e.g. Charge, Flavor, Pt, Eta and Phi. We also use a feature to define twp cuts on the events that only contain 3 leptons, \textit{nLep\_base}==3 and \textit{nLep\_signal}==3. Since we do not know the truth information of the leptons in these Ntuples, the leptons in each event are arranged such that lepton 1 of an event has the highest momentum, lepton 2 has the second highest and so on. This does not mean that lepton 1 actually comes from vertex 1. For the neutrino we only have the met\_Et and met\_Phi features.
+	We will now take a look at the features in the \acrshort{mc} and signal Ntuples we will be using in this thesis. The Ntuples all contain the same features with separate variables for the three leptons, e.g. Charge, Flavor, Pt, Eta and Phi. We also use a feature to define tw0 cuts on the events that only contain 3 leptons, \textit{nLep\_base}==3 and \textit{nLep\_signal}==3. Since we do not know the truth information of the leptons in these Ntuples, the leptons in each event are arranged such that lepton 1 of an event has the highest momentum, lepton 2 has the second highest and so on. This does not mean that lepton 1 actually comes from vertex 1. For the neutrino we only have the met\_Et and met\_Phi features. In the Ntuple distributions we merge the \textit{higgs} and \textit{topOther} backgrounds into \textit{ttbar+X}, \textit{diboson3L} is named \textit{WZ} and \textit{diboson4L} is named \textit{ZZ}.
 	
 	In Figure \ref{fig:Flavor_Charge} we see the data, \acrshort{mc} and signal plots for the Flavor and Charge of the three leptons. The Flavor figures show either 1 or 2 as lepton flavor values corresponding to electron and muon, respectively. The Charge figures show that the leptons can either have -1 or 1 as values.
 	
@@ -1459,60 +1474,62 @@
 	
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[Flavor lepton 1\label{subfig:Flavor1}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep1Flavor_3L.pdf}}
-		\subfloat[Charge lepton 1\label{subfig:Charge1}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep1Charge_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[Flavor lepton 2\label{subfig:Flavor2}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep2Flavor_3L.pdf}}
-		\subfloat[Charge lepton 2\label{subfig:Charge2}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep2Charge_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[Flavor lepton 3\label{subfig:Flavor3}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep3Flavor_3L.pdf}}
-		\subfloat[Charge lepton 3\label{subfig:Charge3}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep3Charge_3L.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[Flavor lepton 1\label{subfig:Flavor1}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep1Flavor_3L.pdf}}
+		\subfloat[Charge lepton 1\label{subfig:Charge1}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep1Charge_3L.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[Flavor lepton 2\label{subfig:Flavor2}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep2Flavor_3L.pdf}}
+		\subfloat[Charge lepton 2\label{subfig:Charge2}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep2Charge_3L.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[Flavor lepton 3\label{subfig:Flavor3}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep3Flavor_3L.pdf}}
+		\subfloat[Charge lepton 3\label{subfig:Charge3}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep3Charge_3L.pdf}}
 		\caption[Flavor and Charge plots for the three leptons.]{Plot of the Flavor and Charge features for the three leptons with data, \acrshort{mc} and two neutrino signals. The flavor of the leptons can either be 1 (an electron) or 2 (a muon), while the charge of the leptons can be either -1 or 1. \label{fig:Flavor_Charge}}
 	\end{figure}
 	
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[Eta lepton 1\label{subfig:Eta1}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep1Eta_3L.pdf}}
-		\subfloat[Phi lepton 1\label{subfig:Phi1}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep1Phi_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[Eta lepton 2\label{subfig:Eta2}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep2Eta_3L.pdf}}
-		\subfloat[Phi lepton 2\label{subfig:Phi2}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep2Phi_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[Eta lepton 3\label{subfig:Eta3}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep3Eta_3L.pdf}}
-		\subfloat[Phi lepton 3\label{subfig:Phi3}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep3Phi_3L.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[Eta lepton 1\label{subfig:Eta1}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep1Eta_3L.pdf}}
+		\subfloat[Phi lepton 1\label{subfig:Phi1}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep1Phi_3L.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[Eta lepton 2\label{subfig:Eta2}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep2Eta_3L.pdf}}
+		\subfloat[Phi lepton 2\label{subfig:Phi2}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep2Phi_3L.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[Eta lepton 3\label{subfig:Eta3}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep3Eta_3L.pdf}}
+		\subfloat[Phi lepton 3\label{subfig:Phi3}]{\centering\includegraphics[width=0.45\linewidth]{ROOT_plots/hist1d_lep3Phi_3L.pdf}}
 		\caption[Eta and Phi plots for the three leptons.]{Plot of the Eta and Phi for the three leptons with data, \acrshort{mc} and two neutrino signals. All distributions show very little dependence on phi/eta. \label{fig:Eta_Phi}}
 	\end{figure}
 
 	\begin{figure}[htb!]
-		\hspace*{-1.cm}
-		\subfloat[Pt lepton 1\label{subfig:Pt1}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep1Pt_3L.pdf}}
-		\subfloat[Pt lepton 2\label{subfig:P2}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep2Pt_3L.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[Pt lepton 1\label{subfig:Pt1}]{\centering\includegraphics[width=0.5\linewidth]{ROOT_plots/hist1d_lep1Pt_3L.pdf}}
+		\subfloat[Pt lepton 2\label{subfig:P2}]{\centering\includegraphics[width=0.5\linewidth]{ROOT_plots/hist1d_lep2Pt_3L.pdf}}\\
 		\hspace*{3.cm}
-		\subfloat[Pt lepton 3\label{subfig:Pt3}]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_lep3Pt_3L.pdf}}
+		\subfloat[Pt lepton 3\label{subfig:Pt3}]{\centering\includegraphics[width=0.5\linewidth]{ROOT_plots/hist1d_lep3Pt_3L.pdf}}
 		\caption[Pt plots for the three leptons.]{Plot of the Pt of the three leptons with data, \acrshort{mc} and two neutrino signals. The number of events with higher transverse momentum decreases for each lepton, where lepton 1 has most events reaching above 800 GeV. \label{fig:Pt_orig}}
 	\end{figure}
 
 	\begin{figure}[htb!]
-		\hspace*{-0.8cm}
-		\subfloat[Phi neutrino]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_met_Phi_3L.pdf}}
-		\subfloat[Missing transverse momentum]{\centering\includegraphics[width=0.55\linewidth]{ROOT_plots/hist1d_met_Et_3L.pdf}}
+		%\hspace*{-0.8cm}
+		\subfloat[Phi neutrino]{\centering\includegraphics[width=0.5\linewidth]{ROOT_plots/hist1d_met_Phi_3L.pdf}}
+		\subfloat[Missing transverse momentum]{\centering\includegraphics[width=0.5\linewidth]{ROOT_plots/hist1d_met_Et_3L.pdf}}
 		\caption[Phi and missing transverse momentum plots for the neutrino.]{The figure shows the Phi and $E_t$ of the missing transverse momentum for data, \acrshort{mc} and two neutrino signals. The Phi feature is similar to the three lepton Phi features, and the \acrshort{met} is similar to the Pt feature for the leptons. \label{fig:MET_orig}}
 	\end{figure}
 
 
-	\section{*Making New Variables}  % kommentarer fra Eirik herfra!
+	\section{Making New Variables}
 	\label{sect:Method-MakingVariables}
-	We start by converting the desired datasets with proton-proton collision events from ROOT to Python syntax with the Uproot library. The files are then stored as dataframes with Pandas. This is done in the script called \textit{Trilepton\_read\_root.py}. By using the momentum and energy of the leptons in each event we compute new useful variables, which are added to a new dataframe. The new variables we make are the angular variables for each particle (three leptons and a neutrino) ($\theta$, $\phi$, $\eta$), angular variables between pairs of particles ($d\phi$, $dR$) and the invariant masses of pairs of leptons ($m_{ll}$). We also have $p_x$, $p_y$, $p_z$, $p_t$ and $E$ for all four particles. For benchmark cuts we will use later (sect. \ref{sect:Result-SRDist}), we also make a $m_{3l}$ variable for the invariant mass of the three lepton system. The new dataframes can now be imported by other scripts using Pandas to be used further with \acrshort{ml}. 
+	We start by converting the desired datasets with proton-proton collision events from ROOT to Python using the Uproot library. The files are then stored as dataframes with Pandas. This is done in the script called \textit{Trilepton\_read\_root.py}. By using the momentum and energy of the leptons in each event we compute new useful variables, which are added to a new dataframe. The new variables we make are the angular variables for each particle (three leptons and a neutrino) ($\theta$, $\phi$, $\eta$), angular variables between pairs of particles ($d\phi$, $dR$) and the invariant masses of pairs of leptons ($m_{ll}$). We also have $p_x$, $p_y$, $p_z$, $p_t$ and $E$ for all four particles. For benchmark cuts we will use later (sect. \ref{sect:Result-SRDist}), we also make a $m_{3l}$ variable for the invariant mass of the three lepton system. The new dataframes can now be imported by other scripts to be used further with \acrshort{ml}. 
 	
-	The reason we make new variables for eta, phi and $p_t$ that already exists is that during the making of the invariant masses, we get some errors for some events where the $p>E$. From the Einstein energy-momentum relation in equation \ref{eq:Kinetics_Einstein}, the invariant masses becomes negative. This is not (physically) correct, and since this does not happen too often we simply drop these events in all features. This could be a simulation error, but is not known or explored in this thesis.
+	The reason we make new variables for eta, phi and $p_t$ that already exists is that during the making of the invariant masses, we get some errors for some events where the $p>E$. From the Einstein energy-momentum relation in equation \ref{eq:Kinetics_Einstein}, the invariant masses becomes negative. This is not (physically) correct, and since this does not happen too often we simply drop these events in all features. This could be a simulation error, but is not known or explored further in this thesis.
 	
 	In the Born diagram in Figure \ref{fig:ModelProcess}, the first lepton ($l_1^{\pm}$) and the pseudo-Dirac neutrino ($N$) comes from the first vertex. The second lepton ($l_2^{\mp}$) and the $W$-boson comes from the second vertex, while the third lepton ($l_3^{\pm}$) and the neutrino ($\nu$) comes from the third vertex. By using the identity traits, the particle vertex and particle ID, we classify the events by constructing a \textit{target} variable as permutations of the vertexes the leptons come from for the two signals samples we will use to train the classification models. The leptons are ordered by decreasing $p_T$, for both signals and backgrounds. The neutrino will always come from the fourth vertex in the decay chain and is not considered in the targets. This leads to the following vertex permutations for the leptons: 
 	\begin{equation}
 		\label{eq:Permutations}
 		[123, 132, 213, 231, 312, 321]
 	\end{equation}
+	This means that e.g. the 132 vertex has the highest $p_T$ lepton coming from vertex 1, second lepton from vertex 3 and thrid lepton from vertex 2.
+	
 	The function for making the new variables can be seen in Listing \ref{Lst:Making_variables}. The new dataframe is then exported as a .h5-file. 
 	\begin{lstlisting}[caption=Making new variables., label=Lst:Making_variables]
 		# Method for flattening and adding additional variables
@@ -1589,8 +1606,8 @@
 	
 	
 	\subsection{Plotting New Variables}
-	\label{subsect:Method-PlottingVariables} % Rewrite
-	To plot the newly produced variables, we will convert the dataframes back into ROOT to easier make similar plots like the plots we already have made in section \ref{sect:Method-Features}. First is to convert the dataframes into comma separated values files, .csv (\acrshort{csv}), before they are converted into ROOT. In Listing \ref{Lst:CSVtoROOT} we see how we convert from \acrshort{csv} to ROOT. We only look at the \acrshort{mc} and signal data, which contain the samples of interest to us in this thesis. With the new background and signal Ntuples, we can use the same plotting scripts as earlier (sect. \ref{sect:Method-Features}) to make plots of the newly produced features. 
+	\label{subsect:Method-PlottingVariables}
+	To plot the newly produced variables, we will convert the dataframes back into ROOT to make similar plots as shown in section \ref{sect:Method-Features}. First is to convert the dataframes into comma separated values files, .csv (\acrshort{csv}), before converting them into ROOT. In Listing \ref{Lst:CSVtoROOT} we see how we convert from \acrshort{csv} to ROOT. We only look at the \acrshort{mc} and signal data, which contain the samples of interest to us in this thesis. With the new background and signal Ntuples, we can use the same plotting scripts as earlier (sect. \ref{sect:Method-Features}) to make plots of the newly produced features. 
 	\begin{lstlisting}[caption=Convert from CSV to ROOT., label=Lst:CSVtoROOT]
 		TFile *f = new TFile(Filename_ROOT, "RECREATE")  # Create file
 		TTree *tree = new TTree(Name_of_Tree, Title_of_Tree)  # Create tree
@@ -1599,9 +1616,9 @@
 		tree->Write()
 	\end{lstlisting}
 	
-	The momentum features ($p_x$, $p_y$, $p_z$) for all four particles are seen in Figures \ref{fig:P_12} and \ref{fig:P_34}. They all have number of event peaks around 0 GeV and decreases as the absolute value of the momenta increases. $p_x$ and $p_y$ are very similar for each particle, and have events with about the same highest momentum. $p_z$ have more spiked peaks around 0 GeV and have more events with higher momentum than the other two momentum coordinates. The $z$-direction is the direction the particles travel initially, which makes sense for $p_z$ to have higher momentum. The only differences between these particle momentum plots are more or less the width of the event peaks and how much momentum the events reach. Like before, lepton 1 reaches higher GeVs and the maximum GeV decrease more and more for the other particles. Lepton 1 also has the broadest peak around 0 GeV which gets more narrow for each lepton.
+	The momentum features ($p_x$, $p_y$, $p_z$) for all four particles are seen in Figures \ref{fig:P_12} and \ref{fig:P_34}. They all peak around 0 GeV and decreases as the absolute value of the momenta increases. $p_x$ and $p_y$ are very similar, while $p_z$ have more spiked peaks around 0 GeV and have more events with higher momentum than the other two momentum coordinates. The $z$-direction is the direction the particles travel initially, thus it makes sense to have somewhat higher momentum along the $z$-direction. The only differences between these particle momentum plots are more or less the width of the event peaks and how much momentum the events reach. Like before, lepton 1 reaches higher momentum and decrease for the other particles. Lepton 1 also has the broadest peak around 0 GeV which gets more narrow for each lepton.
 	
-	The individual angle features, $\eta$, $\theta$ and $\phi$, of the four particles are seen in Figures \ref{fig:Angular12_vars} and \ref{fig:Angular34_vars}. The $\eta$ and $\phi$ features are similar to the ones in the original Ntuples with more or less an equal amount of events for each eta and phi value, except now a peak in events around $\eta=0$ appears. $\theta$ shows similar traits like $\eta$ with equal amount of events except for a peak now around $\theta=\pi/2$.
+	The individual angle features, $\eta$, $\theta$ and $\phi$, of the four particles are seen in Figures \ref{fig:Angular12_vars} and \ref{fig:Angular34_vars}. The $\eta$ and $\phi$ features are similar to the ones in the original Ntuples with more or less an equal amount of events for each eta and phi value, except now a peak in events around $\eta=0$ appears. $\theta$ shows similar traits like $\eta$ with equal amount of events except for a peak around $\theta=\pi/2$.
 
 	The transverse momentum features are seen in Figure \ref{fig:pt_all} for all four particles. They all have most events below $p_T=100$ GeV, decreasing as $p_T$ increases. Lepton 1 has most events reaching higher $p_T$ values around 800 GeV, while the neutrino with smallest $p_T$s has only most events reaching $p_T$ around 400 GeV. The $E$ features in Figure \ref{fig:E_m3l} show the same type of behavior like the $p_T$ features, where lepton 1 has much higher energy than the other particles and it decreases more and more for each particle. Lepton 1 has events reaching around 1 TeV, while the neutrino only has events reaching around 200 GeV. The invariant mass of the three lepton system is similar to the lepton 1 energy, reaching around 1 TeV for all backgrounds. The 450 GeV signal has more events for higher mass $>450$ GeV, while the 150 GeV signal has more events for lower masses.
 	
@@ -1615,127 +1632,127 @@
 	% px,py,pz
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$p_x$ lepton 1\label{subfig:Px1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_px_SR_3L.pdf}}
-		\subfloat[$p_x$ lepton 2\label{subfig:Px2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_px_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$p_y$ lepton 1\label{subfig:Py1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_py_SR_3L.pdf}}
-		\subfloat[$p_y$ lepton 2\label{subfig:Py2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_py_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$p_z$ lepton 1\label{subfig:Pz1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_pz_SR_3L.pdf}}
-		\subfloat[$p_z$ lepton 2\label{subfig:Pz2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_pz_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$p_x$ lepton 1\label{subfig:Px1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_px_3L.png}}
+		\subfloat[$p_x$ lepton 2\label{subfig:Px2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_px_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_y$ lepton 1\label{subfig:Py1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_py_3L.png}}
+		\subfloat[$p_y$ lepton 2\label{subfig:Py2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_py_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_z$ lepton 1\label{subfig:Pz1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_pz_3L.png}}
+		\subfloat[$p_z$ lepton 2\label{subfig:Pz2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_pz_3L.png}}
 		\caption[The momentum for lepton 1 and 2.]{The momentum features of lepton 1 and 2. They both have number of event peaks around 0 GeV, but lepton 1 has a broader peak reach higher (absolute) energies. \label{fig:P_12}}
 	\end{figure}
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$p_x$ lepton 3\label{subfig:Px3}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_px_SR_3L.pdf}}
-		\subfloat[$p_x$ neutrino\label{subfig:Px4}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_px_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$p_y$ lepton 3\label{subfig:Py3}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_py_SR_3L.pdf}}
-		\subfloat[$p_y$ neutrino\label{subfig:Py4}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_py_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$p_z$ lepton 3\label{subfig:Pz3}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_pz_SR_3L.pdf}}
-		\subfloat[$p_z$ neutrino\label{subfig:Pz4}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_pz_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$p_x$ lepton 3\label{subfig:Px3}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_px_3L.png}}
+		\subfloat[$p_x$ neutrino\label{subfig:Px4}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_px_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_y$ lepton 3\label{subfig:Py3}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_py_3L.png}}
+		\subfloat[$p_y$ neutrino\label{subfig:Py4}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_py_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_z$ lepton 3\label{subfig:Pz3}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_pz_3L.png}}
+		\subfloat[$p_z$ neutrino\label{subfig:Pz4}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_pz_3L.png}}
 		\caption[The momentum for lepton 3 and the neutrino.]{The momentum features of lepton 3 and the neutrino. These plots are similar to lepton 1 and 2, except for the lower highest momentum for the events. \label{fig:P_34}}
 	\end{figure}
 
 	%theta,eta,phi
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$\theta$ lepton 1\label{subfig:Theta1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_theta_SR_3L.pdf}}
-		\subfloat[$\theta$ lepton 2\label{subfig:Theta2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_theta_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\eta$ lepton 1\label{subfig:Eta11}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_eta_SR_3L.pdf}}
-		\subfloat[$\eta$ lepton 2\label{subfig:Eta22}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_eta_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\phi$ lepton 1\label{subfig:Phi11}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_phi_SR_3L.pdf}}
-		\subfloat[$\phi$ lepton 2\label{subfig:Phi22}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_phi_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$\theta$ lepton 1\label{subfig:Theta1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_theta_3L.png}}
+		\subfloat[$\theta$ lepton 2\label{subfig:Theta2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_theta_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\eta$ lepton 1\label{subfig:Eta11}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_eta_3L.png}}
+		\subfloat[$\eta$ lepton 2\label{subfig:Eta22}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_eta_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\phi$ lepton 1\label{subfig:Phi11}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_phi_3L.png}}
+		\subfloat[$\phi$ lepton 2\label{subfig:Phi22}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_phi_3L.png}}
 		\caption[The angular features for lepton 1 and 2.]{The angular features ($\theta$, $\eta$, $\phi$) for lepton 1 and 2. Almost all the angular values have an equal amount of events, except for $\theta$ with a peak around $\theta=\pi/2$ and $\eta$ with a peak around $\eta=0$. \label{fig:Angular12_vars}}
 	\end{figure}
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$\theta$ lepton 3\label{subfig:Theta3}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_theta_SR_3L.pdf}}
-		\subfloat[$\theta$ neutrino\label{subfig:Theta4}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_theta_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\eta$ lepton 3\label{subfig:Eta33}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_eta_SR_3L.pdf}}
-		\subfloat[$\eta$ neutrino\label{subfig:Eta44}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_eta_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\phi$ lepton 3\label{subfig:Phi33}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_phi_SR_3L.pdf}}
-		\subfloat[$\phi$ neutrino\label{subfig:Phi44}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_phi_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$\theta$ lepton 3\label{subfig:Theta3}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_theta_3L.png}}
+		\subfloat[$\theta$ neutrino\label{subfig:Theta4}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_theta_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\eta$ lepton 3\label{subfig:Eta33}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_eta_3L.png}}
+		\subfloat[$\eta$ neutrino\label{subfig:Eta44}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_eta_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\phi$ lepton 3\label{subfig:Phi33}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_phi_3L.png}}
+		\subfloat[$\phi$ neutrino\label{subfig:Phi44}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_phi_3L.png}}
 		\caption[The angular features for lepton 3 and the neutrino.]{The angular features ($\theta$, $\eta$, $\phi$) for lepton 3 and the neutrino. Almost all the angular values have an equal amount of events, except for $\theta$ with a peak around $\theta=\pi/2$ and $\eta$ with a peak around $\eta=0$. \label{fig:Angular34_vars}}
 	\end{figure}
 
 	%pt
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$p_T$ lepton 1\label{subfig:pt1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_pt_SR_3L.pdf}}
-		\subfloat[$p_T$ lepton 2\label{subfig:pt2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_pt_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$p_T$ lepton 3\label{subfig:pt31}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_pt_SR_3L.pdf}}
-		\subfloat[$p_T$ neutrino\label{subfig:pt42}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_pt_SR_3L.pdf}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_T$ lepton 1\label{subfig:pt1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_pt_3L.png}}
+		\subfloat[$p_T$ lepton 2\label{subfig:pt2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_pt_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$p_T$ lepton 3\label{subfig:pt31}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_pt_3L.png}}
+		\subfloat[$p_T$ neutrino\label{subfig:pt42}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_pt_3L.png}}\\
 		\caption[$p_T$ for all three leptons and neutrino.]{The transverse momentum for all four particles showing decreasing number of events when the momenta increases. Lepton 1 has events reaching highest $p_T$ around 800 GeV. \label{fig:pt_all}}
 	\end{figure}
 
 	%E, m3l
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$E$ lepton 1\label{subfig:E1}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep1_E_SR_3L.pdf}}
-		\subfloat[$E$ lepton 2\label{subfig:E2}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep2_E_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$E$ lepton 3\label{subfig:E3}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep3_E_SR_3L.pdf}}
-		\subfloat[$E$ neutrino\label{subfig:E4}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_lep4_E_SR_3L.pdf}}\\
-		\hspace*{3.cm}
-		\subfloat[Invariant mass of three lepton system\label{subfig:m3l}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_m_3l_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$E$ lepton 1\label{subfig:E1}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep1_E_3L.png}}
+		\subfloat[$E$ lepton 2\label{subfig:E2}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep2_E_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$E$ lepton 3\label{subfig:E3}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep3_E_3L.png}}
+		\subfloat[$E$ neutrino\label{subfig:E4}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_lep4_E_3L.png}}\\
+		\hspace*{2.5cm}
+		\subfloat[Invariant mass of three lepton system\label{subfig:m3l}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_m_3l_3L.png}}
 		\caption[$E$ for all particles and $m_{3l}$ for the three lepton system.]{Energy for all particles in Figures \ref{subfig:E1} to \ref{subfig:E4}, and the invariant mass for the three lepton system in \ref{subfig:m3l}. Similar behavior for lepton 1 and invariant mass with high amount of events reaching around 1 TeV. \label{fig:E_m3l}}
 	\end{figure}
 
 	% mll
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$m_{ll}$ lepton 1 and 2\label{subfig:mll12}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_12_SR_3L.pdf}}
-		\subfloat[$m_{ll}$ lepton 1 and 3\label{subfig:mll13}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_13_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$m_{ll}$ lepton 1 and neutrino\label{subfig:mll14}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_14_SR_3L.pdf}}
-		\subfloat[$m_{ll}$ lepton 2 and 3\label{subfig:mll23}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_23_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$m_{ll}$ lepton 2 and neutrino\label{subfig:mll24}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_24_SR_3L.pdf}}
-		\subfloat[$m_{ll}$ lepton 3 and neutrino\label{subfig:mll34}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_mll_34_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$m_{ll}$ lepton 1 and 2\label{subfig:mll12}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_12_3L.png}}
+		\subfloat[$m_{ll}$ lepton 1 and 3\label{subfig:mll13}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_13_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$m_{ll}$ lepton 1 and neutrino\label{subfig:mll14}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_14_3L.png}}
+		\subfloat[$m_{ll}$ lepton 2 and 3\label{subfig:mll23}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_23_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$m_{ll}$ lepton 2 and neutrino\label{subfig:mll24}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_24_3L.png}}
+		\subfloat[$m_{ll}$ lepton 3 and neutrino\label{subfig:mll34}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_mll_34_3L.png}}
 		\caption[Invariant masses between pairs of particles.]{Invariant masses between pairs of particles. The further out in the vertices the particles appear, the less is the invariant mass of the combinations of those particles. \label{fig:mll_vars}}
 	\end{figure}
 
 	% dPhi
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$\Delta \phi$ lepton 1 and 2\label{subfig:dPhi12}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_12_SR_3L.pdf}}
-		\subfloat[$\Delta \phi$ lepton 1 and 3\label{subfig:dPhi13}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_13_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\Delta \phi$ lepton 1 and neutrino\label{subfig:dPhi14}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_14_SR_3L.pdf}}
-		\subfloat[$\Delta \phi$ lepton 2 and 3\label{subfig:dPhi23}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_23_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\Delta \phi$ lepton 2 and neutrino\label{subfig:dPhi24}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_24_SR_3L.pdf}}
-		\subfloat[$\Delta \phi$ lepton 3 and neutrino\label{subfig:dPhi34}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dphi_34_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta \phi$ lepton 1 and 2\label{subfig:dPhi12}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_12_3L.png}}
+		\subfloat[$\Delta \phi$ lepton 1 and 3\label{subfig:dPhi13}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_13_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta \phi$ lepton 1 and neutrino\label{subfig:dPhi14}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_14_3L.png}}
+		\subfloat[$\Delta \phi$ lepton 2 and 3\label{subfig:dPhi23}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_23_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta \phi$ lepton 2 and neutrino\label{subfig:dPhi24}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_24_3L.png}}
+		\subfloat[$\Delta \phi$ lepton 3 and neutrino\label{subfig:dPhi34}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dphi_34_3L.png}}
 		\caption[The azimuthal angular difference features between pairs of particles.]{The azimuthal angular difference features between pairs of particles. Most of the combinations have small peaks around $\Delta\phi=\pm\pi$ and $\Delta\phi=0$. \label{fig:dPhi_vars}}
 	\end{figure}
 
 	% dR
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[$\Delta$R lepton 1 and 2\label{subfig:dR12}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_12_SR_3L.pdf}}
-		\subfloat[$\Delta$R lepton 1 and 3\label{subfig:dR13}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_13_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\Delta$R lepton 1 and neutrino\label{subfig:dR14}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_14_SR_3L.pdf}}
-		\subfloat[$\Delta$R lepton 2 and 3\label{subfig:dR23}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_23_SR_3L.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[$\Delta$R lepton 2 and neutrino\label{subfig:dR24}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_24_SR_3L.pdf}}
-		\subfloat[$\Delta$R lepton 3 and neutrino\label{subfig:dR34}]{\centering\includegraphics[width=0.55\linewidth]{Feature_plots/hist1d_dR_34_SR_3L.pdf}}
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta$R lepton 1 and 2\label{subfig:dR12}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_12_3L.png}}
+		\subfloat[$\Delta$R lepton 1 and 3\label{subfig:dR13}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_13_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta$R lepton 1 and neutrino\label{subfig:dR14}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_14_3L.png}}
+		\subfloat[$\Delta$R lepton 2 and 3\label{subfig:dR23}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_23_3L.png}}\\
+		\hspace*{-1.8cm}
+		\subfloat[$\Delta$R lepton 2 and neutrino\label{subfig:dR24}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_24_3L.png}}
+		\subfloat[$\Delta$R lepton 3 and neutrino\label{subfig:dR34}]{\centering\includegraphics[width=0.6\linewidth]{Feature_plots/hist1d_dR_34_3L.png}}
 		\caption[The angular distance features between pairs of particles.]{The angular distance features between pairs of particles. The number of events increase mostly as $\Delta R$ approaches 3.2, and the decreases as $\Delta R$ approaches 6. \label{fig:dR_vars}}
 	\end{figure}
 	
@@ -1749,11 +1766,11 @@
 	
 	\section{Preprocessing of the Data}
 	\label{sect:Method-PrepData}
-	After importing all the necessary libraries in a new script, \textit{Trilepton\_classifier.py}, we load in the dataframes and drop unnecessary features and events we will not consider in the classification. With some useful properties of Pandas dataframes, and utilizing Seaborn and Scikit-Learn, we need to do some preprocessing of the data. One thing we have to consider for our dataset is NaN, or NULL, values. Not all classification models can deal with NaN values, so these have to be dealt with. We can check for NaN values and drop them easily from the dataframe by doing the following in Listing \ref{Lst:NULL_check}:
-	\begin{lstlisting}[caption=Check NULL values., label=Lst:NULL_check]
+	After importing all the necessary libraries mentioned in section \ref{sect:Method-Packages} in a new script, \textit{Trilepton\_classifier.py}, we load the dataframes and drop unnecessary features that we have not explained at this point and events with e.g. NaN values we will not consider in the classification. Using the properties of Pandas dataframes and utilizing Seaborn and Scikit-Learn we will do some preprocessing of the data. One thing we have to consider for our dataset is NaN, or NULL, values. This have to be done since we in section \ref{sect:Method-MakingVariables} got errors in some events when $p>E$ which we gave NaN values and were dropped. Not all classification models can deal with NaN values so we cannot have those in the datasets. We double-check for any remaining NaN values and can drop them easily from the dataframe by doing the following:
+	\begin{lstlisting}[caption=Check NaN values in the datasets to be removed if existing., label=Lst:NULL_check]
 		df.isnull()   # Returns a boolean matrix, if the value is NaN then True otherwise False.
 		df.isnull().sum()   # Returns the column names along with the number of NaN values in that particular column.
-		df.dropna(inplace=True)  # Removes rows in the dataframe containing NaN values.
+		#df.dropna(inplace=True)  # Removes rows in the dataframe containing NaN values.
 	\end{lstlisting}
 
 
@@ -1834,11 +1851,11 @@
 		
 		[5 rows x 55 columns]
 	\end{lstlisting}
-	The data summary for the $N1=450$ GeV signal can be found in Appendix \ref{appendix:Signal450_Summary}. The two data summaries are very similar, but the 450 GeV signal has more events. The prints show short looks at the features in the dataframes, like the values for a few events, the names and index dtypes of each feature in the dataframes. They also count and print the number of non-null values and the memory usage. 
+	The data summary for the $N1=450$ GeV signal can be found in Appendix \ref{appendix:Signal450_Summary}. The two data summaries are very similar, but the 450 GeV signal has more events. The prints show the names and values of the features for a few events as well as their data type. They also count and print the number of non-null values and the memory usage. 
 	
-	Then we make a design matrix \textbf{X}, containing all the variables for each event, and a target vector \textbf{Y}, containing all the targets for each event. The targets are at this point of type \textit{tuples}. This makes classification more difficult, which is why we convert each event target in \textbf{Y} into an \textit{integer} and make a new target vector \textbf{y} with the different vertex permutations as in equation \ref{eq:Permutations}. 
+	Then we make a design matrix \textbf{X}, containing all the features for each event, and a target vector \textbf{Y}, containing all the targets for each event. The targets are at this point of type \textit{tuples}. This makes classification more difficult, which is why we convert each event target in \textbf{Y} into an \textit{integer} and make a new target vector \textbf{y} with the different vertex permutations as in equation \ref{eq:Permutations}. 
 	
-	Another useful thing to print is the individual target counts in the target vector \textbf{y} to check the number of each target in the dataframe. With this check, we quickly get an overview to see if we have a balanced or imbalanced dataset. This can be very important to check, since it might lead to problems later. The target counts for both signals are seen in Table \ref{tab:Counts_original}. We easily see that there is an imbalance in both the datasets, and that the 450 GeV signal has a lot more events. Vertex permutation 123 has the highest count for the 150 GeV signal, which is where the highest $p_T$ comes from the $N_1$ production vertex. For the 450 GeV signal 231 hs the highest count, which corresponds to the case where the highest $p_T$ comes from the $N_1$ decay. The second highest comes from the final $W$, and the third highest comes from the $N_1$ production vertex. When the mass of $N_1$ is large,450 GeV, a lot of momentum is released into the lepton when it decays. When $N_1$ is small, 150 GeV, the first lepton has more phase space and thus can typically have larger momentum.
+	Another useful thing to print is the individual target counts in the target vector \textbf{y} to check the number of each target in the dataframe. With this check, we quickly get an overview to see if we have a balanced or imbalanced dataset. This can be very important to check, since it might lead to problems later. The target counts for both signals are seen in Table \ref{tab:Counts_original}. We easily see that there is an imbalance in both datasets where the number of target counts vary a lot between the classes, and that the 450 GeV signal has a lot more events. Vertex permutation 123 has the highest count for the 150 GeV signal, which is where the highest $p_T$ lepton comes from the $N_1$ production vertex. For the 450 GeV signal 231 has the highest count, which corresponds to the case where the highest $p_T$ lepton comes from the $N_1$ decay. The second highest $p_T$ lepton comes from the final $W$, and the third highest comes from the $N_1$ production vertex. When the mass of $N_1= 450$ GeV, a lot of momentum is released into the lepton when it decays. When $N_1=150$ GeV, the first lepton has more phase space and thus can typically have larger momentum.
 	\begin{table}[ht!]
 		\centering
 		%\hspace{-1cm}
@@ -1868,10 +1885,10 @@
 	
 	\subsubsection{Correlations}
 	\label{subsubsect:Method-Correlations}
-	An important descriptive statistic for data analysis with multi-variable data is the \textit{correlation matrix} using Seaborn. It is a symmetric table of size $k\times k$, for $k$ features (this includes the targets as well), with pairwise correlations between the features in the data. It summarizes the relationships between the features that we most likely would not have seen by just looking at them. With machine learning, it is also an early preprocessing step that can give some information to whereas dimensionality reduction might come in handy when dealing with high-dimensionality data. The closer to 1 the correlation coefficients are, the more correlated are they. We don't want a value close to -1, since this indicates a strong negative correlation. The diagonal will of course always be 1, since it is the correlation between the feature itself. When a feature has a strong correlation to the target, it has a higher significance for predicting the output than a feature close to -1. This helps us exclude features that worsen the predictions. The optimal case is then a high positive correlation between the independent and dependent variables, while any strong correlation between the independent variables (causing redundancy) is not.
+	An important descriptive statistic for data analysis with multi-variable data is the \textit{correlation matrix} using Seaborn\cite{Seaborn}. It is a symmetric table of size $k\times k$, for $k$ features (this includes the targets as well), with pairwise correlations between the features in the data. It summarizes the relationships between the features. With machine learning, it is also an early preprocessing step that can give some information to whereas dimensionality reduction might come in handy when dealing with high-dimensionality data. The closer to 1 the correlation coefficients are, the more correlated they are. We don't want a value close to -1, since this indicates a strong negative correlation. The diagonal will of course always be 1, since it is the correlation between the feature itself. This helps us exclude features that worsen the predictions. The optimal case is then to have as many feature correlations around 0 as possible
 	
 	By using the correlations between the features, we print the feature pairs with strong correlation (magnitude greater than 0.7) for the $N1=150$ GeV signal:
-	\begin{lstlisting}[caption=Feature correlation 150 GeV signal,label=Feature150]
+	\begin{lstlisting}[caption=Correlation between the features with magnitude grater than 0.7 for 150 GeV signal dataset.,label=Feature150]
 		lep1_theta  lep1_eta     -0.982589
 		lep2_theta  lep2_eta     -0.980482
 		lep3_eta    lep3_theta   -0.979638
@@ -1897,7 +1914,7 @@
 		lep2_pt     lep1_pt       0.914949
 	\end{lstlisting}
 	We print the same for the 450 GeV signal yielding similar results:
-	\begin{lstlisting}[caption=Feature correlation 450 GeV signal.,label=Feature450]
+	\begin{lstlisting}[caption=Correlation between the features with magnitude grater than 0.7 for 450 GeV signal dataset.,label=Feature450]
 		lep1_eta    lep1_theta   -0.991685
 		lep4_eta    lep4_theta   -0.987881
 		lep3_eta    lep3_theta   -0.984183
@@ -1929,11 +1946,11 @@
 		lep2_pz     lep2_eta      0.898086
 		lep1_pz     lep1_eta      0.924052
 	\end{lstlisting} 
-	The features we have printed for the two signals shows features that have strong correlations, either positive or negative correlations, between the pairs. These feature correlations may affect the predictions and is something we do not want. For this reason we may want to remove some of these features. The full correlation matrices can be seen in Figures \textit{Correlation\_150.png} and \textit{Correlation\_450.png} in the \textbf{Plots}-folder at the GitHub repository. 
+	The features we have printed for the two signals shows features that have strong correlations, either positive or negative correlations, between the pairs. These feature correlations may affect the predictions and is something we do not want. For this reason we may want to remove some of these features. The full correlation matrices can be seen in Figures \ref{fig:Corr_150} and \ref{fig:Corr_450} in Appendix \ref{appendix:Correlations}. 
 		
-	To take a closer look at the correlations in the dataset, we use the mutual information of the features from section \ref{subsect:Theory-MutualInfo}. By using the \textit{mutual\_info\_classif} function by Scikit-Learn, we can easily compute the information gain of the features and the targets. We want the features that maximizes the information gain. This helps us single out unnecessary features for classification. The full information gains for all features can be seen in Appendix \ref{appendix:Correlations}.
+	To take a closer look at the correlations in the dataset, we use the mutual information of the features from section \ref{subsect:Theory-MutualInfo}. By using the \textit{mutual\_info\_classif} function by Scikit-Learn, we can easily compute the information gain of the features and the targets. We want the features that maximizes the information gain. This helps us find which unnecessary features to remove before classification. The full information gains for all features can be seen in Appendix \ref{appendix:Correlations}.
 	
-	From the strong correlation pairs, correlation matrices and the mutual information we choose to remove the eta features for all the four particles (lep(1,2,3,4)\_eta) in both signals since they show high correlations to other features and have low mutual information, as seen in Table \ref{tab:MutualInfo_eta}. lep1\_pt shows a high correlation with other features, but has one of the highest values for mutual information with the target, lep1\_pt $\approx 0.2766$ for the 150 GeV signal. This is why we do not remove it. In the case of decision trees, the information gain is used for the splitting in the trees.
+	From the strong correlation pairs, correlation matrices and the mutual information we choose to remove the eta features for all the four particles in both signals. They show high correlations to other features and have low mutual information, as seen in Table \ref{tab:MutualInfo_eta}. lep1\_pt shows a high correlation with other features, but has one of the highest values for mutual information with the target, lep1\_pt $\approx 0.2766$, for the 150 GeV signal. This is why we do not remove it. In the case of decision trees, the information gain is used for the splitting of trees.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -1957,8 +1974,8 @@
 	
 	\subsection{Resampling}
 	\label{subsect:Method-Resampling}
-	 After the feature selection, we make a function using the Imblearn library for imbalanced data. This allows us to choose between the options of both oversampling and undersampling, or only one of them. This function can be seen in Listing \ref{Lst:Resample} and will balance the data by first sampling the information we already have, then resample the dataset. Undersampling is used to decrease the size of the samples for one or more classes, while the oversampler increase the size of the samples for one or more classes. The \textit{random\_state} is used to reproduce the data when necessary, since the sampling algorithms will differ each time they are run.
-	\begin{lstlisting}[caption=Function for resampling data., label=Lst:Resample]
+	 After the feature selection, we make a function using the Imblearn\cite{Imblearn} library for imbalanced data. We want a balanced dataset to ensure that the classification model does not favor some classes due to an insufficient amount of data. With resampling we ensure that the classes have almost the same amount of data to be trained on. The Imblearn library allows us to choose between the options of both oversampling and undersampling, or only one of them. This function can be seen in Listing \ref{Lst:Resample} and will balance the data by first sampling the information we already have, then resample the dataset. Undersampling is used to decrease the size of the samples for one or more classes, while the oversampler increase the size of the samples for one or more classes. The \textit{random\_state} is used to reproduce the data when necessary, since the sampling algorithms will differ each time they are run.
+	\begin{lstlisting}[caption=Function for resampling and balancing the amount of data., label=Lst:Resample]
 		"""Resample the data to make the datasets more balanced."""
 		def Resample(X, y, under=False, over=False):
 			if under == True:
@@ -1975,9 +1992,9 @@
 			return X, y 
 	\end{lstlisting}
 
-	By looking at the target counts in section \ref{subsect:Method-Inspect Data}, we see that both datasets are imbalanced. For the 150 GeV data we use only oversampling with the ADASYN algorithm in Scikit-Learn to create more data depending on the distribution of the classes we will oversample. All the classes except the class with highest count, the majority class, will be sampled with ADASYN. The new target counts after resampling, for one run, are seen in Table \ref{tab:Counts_resample}.
+	By looking at the target counts in section \ref{tab:Counts_original}, we see that both datasets are imbalanced. For the 150 GeV data we use only oversampling with the ADASYN algorithm in Scikit-Learn to create more data depending on the distribution of the classes we will oversample. All the classes except the class with highest count, the majority class, will be sampled with ADASYN. The new target counts after resampling are seen in Table \ref{tab:Counts_resample}.
 	
-	For the 450 GeV signal we have a lot more data than the other signal, but the data are still very imbalanced. We balance the data by first undersample the majority class with a RandomUnderSampler algorithm and then oversample the minority classes with the ADASYN algorithm. The RandomUnderSampler takes random samples from the majority class to produce a subset of the data with approximately the size of the biggest minority class. We then get two majority classes with approximately the same size before the ADASYN algorithm oversample the minority classes. The new target counts after resampling, for one run, are seen in Table \ref{tab:Counts_resample}.
+	For the 450 GeV signal we have a lot more data than the other signal, but the data is still very imbalanced. We balance the data by first undersample the majority class with a RandomUnderSampler algorithm and then oversample the minority classes with the ADASYN algorithm. The RandomUnderSampler takes random samples from the majority class to produce a subset of the data with approximately the size of the biggest minority class. We then get two majority classes with approximately the same size before the ADASYN algorithm oversample the minority classes. The new target counts after resampling are seen in Table \ref{tab:Counts_resample}.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -2018,7 +2035,7 @@
 
 	\subsection{Scaling}
 	\label{subsect:Method-Scaling}
-	The next technique we will apply is scaling of the data. We will use \textit{standardization} of the data, which means we transform the values with a mean of 0 and a standard deviation of 1. This will fix any unwanted weighting favoring some features. Scikit-Learn has a function for doing this called \textit{StandardScaler}. We will both fit and transform the training data, meaning that we both compute the mean and standard deviation to standardize the training set. We have to transform the validation and test sets as well with the scaler, but we don't fit them. In Listing \ref{Lst:Scaling} we use the \textit{fit\_transform} on the training set, while only using \textit{transform} on the validation and test sets. Note that we only scale the features, since scaling the targets will assign a distribution to the categorical features. We do not want to do that.
+	The next technique we will apply is scaling of the data. We will use \textit{standardization} of the data, which means we transform the values with a mean of 0 and a standard deviation of 1. This will fix any unwanted weighting favoring some features. Scikit-Learn has a function for doing this called \textit{StandardScaler}. We will both fit and transform the training data, meaning that we both compute the mean and standard deviation to standardize the training set. We have to transform both the validation and test sets with the scaler, but we don't fit them. In Listing \ref{Lst:Scaling} we use the \textit{fit\_transform} on the training set, while only using \textit{transform} on the validation and test sets. Note that we only scale the features, since scaling the targets will assign a distribution to the categorical features.
 	\begin{lstlisting}[caption=Function for scaling data., label=Lst:Scaling]
 		"""Scale the data when called."""
 		def scaler(X_train, X_val, X_test):
@@ -2032,7 +2049,7 @@
 	
 	\section{Training the Classification Models} 
 	\label{sect:Method-Tuning}
-	With the input data properly balanced and scaled we will use the two signals to train several classification models to find the best performing classification model. We start with the training of the classification models on the validation set with various hyperparameters. We create a useful function that uses the \textit{RandomizedSearchCV} function in Scikit-Learn to test several different values of hyperparameters for some chosen model using a randomized search with cross-validation. This is much easier than changing one hyperparameter at a time for each run, since the randomized search function can test several hyperameters in one run. Our function in Listing \ref{Lst:RandomSearch} prints the results of the randomized search given some set(s) of hyperparameters. The results include the mean test scores for each combination of hyperparameter set, and the best mean test score with the corresponding hyperparameters.
+	With the input data properly balanced and scaled we will use the two signals to train several classification models to find the one with the best performance. We start with the training of the classification models on the validation set with various hyperparameters. We create a useful function that uses the \textit{RandomizedSearchCV} function in Scikit-Learn to test several different values of hyperparameters for some chosen model using a randomized search with cross-validation. This is much easier than changing one hyperparameter at a time for each run, since the randomized search function can test several hyperameters in one run. Our function in Listing \ref{Lst:RandomSearch} prints the results of the randomized search given some set(s) of hyperparameters. The results include the mean test scores for each set of hyperparameters, and the best mean test score, with the corresponding hyperparameters.
 	\begin{lstlisting}[caption=Function for training models using a randomized search function., label=Lst:RandomSearch]
 		def getTrainScores(gs):
 			# Function that prints the RandomizedSearchCV best parameters and mean scores
@@ -2049,12 +2066,12 @@
 			return results, best
 	\end{lstlisting}
 	
-	After training all the models with the randomized search function and implementing the best hyperparameters for each model, we use the validation set to test and compare the classification models. To evaluate and compare the models, we use the accuracy score on both the training and validation sets. This lets us see if we have any overfitting when the training accuracy score is much higher than the validation accuracy score. It is the accuracy score and the confusion matrices we will use as the main evaluation methods to check the model performances with the validation set. We also look at the variance and bias of the models. The \acrshort{xgb} and \acrshort{lgbm} models lets us plot the errors and log losses to see the convergence and fitting of these two models. The best overall performing model for each signal sample will be chosen for further use.
+	After training all the models with the randomized search function and implementing the best hyperparameters for each model, we use the validation set to test and compare the classification models. To evaluate and compare the models, we use the accuracy score on both the training and validation sets. This lets us see if we have any overfitting when the training accuracy score is much higher than the validation accuracy score. It is the accuracy score and the confusion matrices we will use as the main evaluation methods to check the model performances on the validation set. We also look at the variance and bias of the models. The \acrshort{xgb} and \acrshort{lgbm} models lets us plot the errors and log losses to see the convergence and fitting of these two models. The best overall performing model for each signal sample will be chosen for further use.
 	
 	
 	\subsection{Choosing the Best Performing Models}
 	\label{subsect:Method-ChooseBestModel}
-	In Table \ref{tab:Validation_150} we see values we get with the evaluation metrics after evaluating the performance of the classification models trained on the 150 GeV signal validation set after tuning each model. There we see the accuracy score of both the validation and training sets, the balanced accuracy score, the variance and the bias for each classifier. We see the same evaluation metrics for the same classifiers trained on the 450 GeV signal in Table \ref{tab:Validation_450}. From the tables we see that the most accurate classifiers for both signals are the \acrshort{xgb} and \acrshort{lgbm} classifiers.
+	In Table \ref{tab:Validation_150} the values of the evaluation metrics after tuning each model of the 150 GeV model is shown. There we see the accuracy score of both the validation and training sets, the balanced accuracy score, the variance and the bias for each classifier. We see the same evaluation metrics for the same classifiers trained on the 450 GeV signal in Table \ref{tab:Validation_450}. From the tables we see that the most accurate classifiers for both signals are the \acrshort{xgb} with accuracy scores 0.863 and 0.950 and \acrshort{lgbm} classifiers  with accuracy scores 0.877 and 0.954.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -2083,7 +2100,7 @@
 			LGBM & 0.877868 & 0.999926 & 0.877134 & 6046.5238 & 6055.6849\\
 			\hline
 		\end{tabular}	
-		\caption[Evaluation with 150 Gev signal validation set.]{Table containing evaluation values with the 150 GeV signal validation set of the classification models in section \ref{sect:Theory-ClassModels}. From left to right: The classification model, accuracy score of validation set, accuracy score of training set, balanced accuracy score, variance and bias.}
+		\caption[Evaluation with 150 Gev signal validation set.]{Table containing evaluation values with the 150 GeV signal validation set of the classification models in section \ref{sect:Theory-ClassModels}. From left to right: The classification model (names), accuracy score of validation set, accuracy score of training set, balanced accuracy score, variance and bias.}
 		\label{tab:Validation_150}
 	\end{table}
 	\begin{table}[htbp!]
@@ -2114,25 +2131,23 @@
 			LGBM & 0.954081 & 0.999922 & 0.952588 & 5999.1799 &  5950.8842\\
 			\hline
 		\end{tabular}	
-		\caption[Evaluation with 450 Gev signal validation set.]{Table containing evaluation values with the 450 GeV signal validation set of the classification models in section \ref{sect:Theory-ClassModels}. From left to right: The classification model, accuracy score of validation set, accuracy score of training set, balanced accuracy score, variance and bias.}
+		\caption[Evaluation with 450 Gev signal validation set.]{Table containing evaluation values with the 450 GeV signal validation set of the classification models in section \ref{sect:Theory-ClassModels}. From left to right: The classification model (names), accuracy score of validation set, accuracy score of training set, balanced accuracy score, variance and bias.}
 		\label{tab:Validation_450}
 	\end{table}
 	
 	\newpage
-	The confusion matrix for each classifier is also considered when we choose the best performing model for each signal. Like the evaluation metric tables of the classifiers, the \acrshort{lgbm} has the best confusion matrices for both signals. The confusion matrices for the two signals are seen in Figures \ref{fig:ConfVal_LGBM150} and \ref{fig:ConfVal_LGBM450}. The confusion matrices for the rest of the classifiers are found at the GitHub-repository in the \textit{Plots}-folder. With these confusion matrices we get to see the individual prediction accuracy for each class, which gives more info than just the accuracy score on the whole set. The confusion matrices for the \acrshort{lgbm} all show individual class accuracy scores bigger than 0.8, and most of them are bigger than 0.84 which is a good indication for a good classification model. 
+	The confusion matrix for each classifier is also considered when we choose the best performing model for each signal. Like the evaluation metric tables of the classifiers, the \acrshort{lgbm} has the best confusion matrices for both signals. The confusion matrices for the two signals are seen in Figure \ref{fig:ConfVals}. The confusion matrices for the rest of the classifiers are found at the GitHub-repository in the \textit{Plots}-folder. With these confusion matrices we get to see the individual prediction accuracy for each class, which gives more info than just the accuracy score on the whole set. The confusion matrices for the \acrshort{lgbm} all show individual class accuracy scores bigger than 0.8, and most of them are bigger than 0.84 which is a good indication for a good classification model. 
 	
 	Based on this evaluation of the validation set on the models, we will use the \acrshort{lgbm} as the preferred model further for both signals.
-	\begin{figure}[t!]
-		\centering\includegraphics[width=0.7\linewidth]{Validation_plots/Confusion_LGBM150.png}
-		\caption[Validation set confusion matrix for the \acrshort{lgbm} model trained on the 150 GeV signal.]{Validation set confusion matrix of the \acrshort{lgbm} classifier trained on the 150 GeV signal. The 150 GeV model seems to be better at predicting the 231, 312 and 321 classes with predicted accuracy scores bigger than 0.88 for these three classes. Overall for all classes, the model predicts all classes with accuracy scores bigger than 0.84. This is satisfactory for a good classification model.  \label{fig:ConfVal_LGBM150}}
-	\end{figure}
-	\begin{figure}[t!]
-		\centering\includegraphics[width=0.7\linewidth]{Validation_plots/Confusion_LGBM450.png}
-		\caption[Validation set confusion matrix for the \acrshort{lgbm} model trained on the 450 GeV signal.]{Validation set confusion matrix of the \acrshort{lgbm} classifier trained on the 450 GeV signal. The 450 GeV signal model is very good at predicting all the classes at 0.91 and better, except the 123 class with only 0.82. This is very good for a classification model. \label{fig:ConfVal_LGBM450}}
+	\begin{figure}[h!]
+		%\vspace*{-4.5cm}
+		\hspace*{-1.2cm}
+		\subfloat[150 GeV signal: Confusion matrix \label{subfig:ConfVal_LGBM150}]{\centering\includegraphics[width=0.6\linewidth]{Validation_plots/Confusion_LGBM150.png}}
+		\subfloat[450 GeV signal: Confusion matrix \label{subfig:ConfVal_LGBM450}]{\centering\includegraphics[width=0.6\linewidth]{Validation_plots/Confusion_LGBM450.png}}
+		\caption[Validation set confusion matrices for the \acrshort{lgbm} model trained.]{Left: Validation set confusion matrix of the \acrshort{lgbm} classifier trained on the 150 GeV signal. The 150 GeV model seems to be better at predicting the 231, 312 and 321 classes with predicted accuracy scores bigger than 0.88 for these three classes. Overall for all classes, the model predicts all classes with accuracy scores bigger than 0.84. Right: Validation set confusion matrix of the \acrshort{lgbm} classifier trained on the 450 GeV signal. The 450 GeV signal model predicts all the classes at 0.91 and better, except the 123 class with only 0.82. \label{fig:ConfVals}}
 	\end{figure}
 	
 	
-	\newpage
 	\section{Classification with Test Set}
 	\label{sect:Method-BestModelEval}
 	After choosing the best performing model in section \ref{sect:Method-Tuning} for each signal, we do a new evaluation using the test set.  We use the evaluation metrics from section \ref{sect:Theory-EvalMetrics} for evaluating the classification model performance to check that the performances of the best model is satisfying. 
@@ -2147,12 +2162,12 @@
 	
 	\subsubsection{150 GeV signal}
 	\label{subsect:Result-Test150}
-	With the test set we use more evaluation metrics to evaluate the \acrshort{lgbm} model on the test set. We start by looking at the classification report of the \acrshort{lgbm} model trained on the 150 GeV signal in Table \ref{tab:ClassReport_150}. All values for precision, recall and f1-score are higher than 0.8, which is an indicator that the \acrshort{lgbm} model is a good classifier for the 150 GeV signal. All classes seems to be predicted satisfactory and the model has a high accuracy score of 0.88. This can also be seen in the confusion matrix in Figure \ref{fig:ConfTest_150} which has very similar prediction scores compared to the validation set confusion matrix (fig. \ref{fig:ConfVal_LGBM150}).
+	With the test set we use more evaluation metrics to evaluate the \acrshort{lgbm} model. We start by looking at the classification report of the \acrshort{lgbm} model trained on the 150 GeV signal in Table \ref{tab:ClassReport_150}. All values for precision, recall and f1-score are higher than 0.8, which is an indicator that the \acrshort{lgbm} model is a good classifier for the 150 GeV signal. All classes seems to be predicted satisfactory and the model has a high accuracy score of 0.88. This can also be seen in the confusion matrix in Figure \ref{fig:ConfTest_150} which has very similar prediction scores compared to the validation set confusion matrix (Fig. \ref{fig:ConfVals}).
 	\begin{table}[htb!]
 		\centering
 		\begin{tabular}{ |c|c|c|c|c| }
 			\hline \rule{0pt}{13pt}
-			Vertex perturbation & Precision & Recall & F1-score & Support \\
+			Vertex permutation & Precision & Recall & F1-score & Support \\
 			\hline \rule{0pt}{13pt}
 			123 & 0.88 & 0.84 & 0.86 & 5360 \\
 			\hline \rule{0pt}{13pt}
@@ -2173,7 +2188,7 @@
 			weighted avg & 0.88 & 0.88 & 0.88 & 31769 \\
 			\hline
 		\end{tabular}	         
-		\caption[Classification report of the \acrshort{lgbm} model trained on the 150 GeV signal.]{Classification report of the \acrshort{lgbm} model trained on the 150 GeV signal with the test set. All classes show high scores for precision, recall and f1-score, except for recall on the 123 vertex. All high scores indicates a good classification model.}
+		\caption[Classification report of the \acrshort{lgbm} model trained on the 150 GeV signal.]{Classification report of the \acrshort{lgbm} model trained on the 150 GeV signal with the test set. All classes show high scores for precision, recall and f1-score, except for recall on the 123 vertex. The high scores indicate a good classification model.}
 		\label{tab:ClassReport_150}
 	\end{table} 
 	\begin{figure}[htb!]
@@ -2195,7 +2210,7 @@
 		\label{tab:Test_150}
 	\end{table}
 	
-	We also plot the precision-recall curve and \acrshort{roc} curve. The \acrshort{roc} curves in Figure \ref{fig:ROCTest_150} all show \acrshort{auc} scores around 0.99. This is very good since a classification model with an \acrshort{auc} score higher than 0.8 is usually considered a good model. The precision-recall curve is seen in Figure \ref{fig:PrecisionRecallTest_150} also shows high \acrshort{auc} scores higher than 0.92. A very good classifier should have an \acrshort{auc} higher than 0.9, which this model has.
+	We also plot the precision-recall curve and \acrshort{roc} curve. The \acrshort{roc} curves in Figure \ref{fig:ROCTest_150} all show \acrshort{auc} scores around 0.99. An \acrshort{auc} score higher than 0.8 is usually considered a good model. The precision-recall curve is seen in Figure \ref{fig:PrecisionRecallTest_150} and shows \acrshort{auc} scores higher than 0.92.
 	\begin{figure}[h!tb]
 		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_150.png}
 		\caption[Test set \acrshort{roc} plot for the \acrshort{lgbm} model trained on the 150 GeV signal.]{\acrshort{roc} curve plot for the \acrshort{lgbm} model with the 150 GeV signal test set. The \acrshort{auc} for all classes are around 0.99, which shows that the model is a very good model for predicting the classes. \label{fig:ROCTest_150}}
@@ -2205,7 +2220,7 @@
 		\caption[Test set precision-recall plot for the \acrshort{lgbm} model trained on the 150 GeV signal.]{Precision-recall curve plot for the classes predicted by the \acrshort{lgbm} model with the 150 GeV signal test set. All classes and the average have \acrshort{auc} higher than 0.92, once again showing the good performance of the model. \label{fig:PrecisionRecallTest_150}}
 	\end{figure}
 	
-	Lastly, we take a look at the 20 most important features decided by the \acrshort{lgbm} model as seen in Figure \ref{fig:ImpTop_150}. The invariant mass pairs are clearly the most important features when predicting with the model, with $mll_12$ the most important one. Other important reoccurring features are $dPhi$, $dR$ and $E$. So the variables we have added to the data with the angular variables and invariant masses of pairs of particles have high importance when predicting.
+	Finally, we take a look at the 20 most important features decided by the \acrshort{lgbm} model, seen in Figure \ref{fig:ImpTop_150}. The invariant mass pairs are clearly the most important features when predicting with the model, with $mll_{12}$ being the most important one. Other important features are $dPhi$, $dR$ and $E$. Thus the variables we have added to the data with the angular variables and invariant masses of pairs of particles, have high importance when predicting.
 	\begin{figure}[htb!]
 		\centering\includegraphics[width=0.7\linewidth]{Test_plots/Importance_top_150.png}
 		\caption[Test set most important features of the \acrshort{lgbm} model trained on the 150 GeV signal.]{The most important features decided by the \acrshort{lgbm} model trained on the 150 GeV signal for predicting new data. The features we added to the data with the angular variables and invariant masses of pairs of particles show high importance when making predictions. \label{fig:ImpTop_150}}
@@ -2216,12 +2231,12 @@
 
 	\subsubsection{450 GeV signal}
 	\label{subsect:Result-Test450}
-	For the 450 GeV signal, the classification report in Table \ref{tab:ClassReport_450} shows similar results like the 150 GeV signal, but better. Almost all values are around 0.9 or higher, except for one which are the same recall for the 123 vertex. This indicates that the \acrshort{lgbm} model trained on the 450 GeV is a very good classifier. The confusion matrix for the 450 GeV signal model in Figure \ref{fig:ConfTest_450} is very similar to the validation set, with all classes higher than 0.92 and an accuracy score of 0.96. Compared with the 150 GeV confusion matrix, the 450 GeV trained model is better on predicting all the classes except the 123 vertex, but they are basically equal for this class.
+	For the 450 GeV signal, the classification report in Table \ref{tab:ClassReport_450} shows similar results like the 150 GeV signal, but better. Almost all values are around 0.9 or higher, except for the recall for the 123 vertex, as seen for the 150 GeV signal. This indicates that the \acrshort{lgbm} model trained on the 450 GeV is a very good classifier. The confusion matrix for the 450 GeV signal model in Figure \ref{fig:ConfTest_450} is very similar to the validation set, with all classes higher than 0.92 and an accuracy score of 0.96. Compared with the 150 GeV confusion matrix, the 450 GeV trained model is better on predicting all the classes except the 123 vertex, for which the two models perform equally.
 	\begin{table}[ht!]
 		\centering
 		\begin{tabular}{ |c|c|c|c|c| }
 			\hline \rule{0pt}{13pt}
-			Vertex perturbation & Precision & Recall & F1-score & Support \\
+			Vertex permutation & Precision & Recall & F1-score & Support \\
 			\hline \rule{0pt}{13pt}
 			123 & 0.97 & 0.83 & 0.89 & 12133 \\
 			\hline \rule{0pt}{13pt}
@@ -2242,15 +2257,15 @@
 			weighted avg & 0.96 & 0.96 & 0.96 & 77223 \\
 			\hline
 		\end{tabular}	         
-		\caption[Classification report of the \acrshort{lgbm} model trained on the 450 GeV signal.]{Classification report of the \acrshort{lgbm} model trained on the 450 GeV signal with the test set. All classes show high scores for precision, recall and f1-score, except for recall on the 123 vertex. All high scores indicates a very good classification model.}
+		\caption[Classification report of the \acrshort{lgbm} model trained on the 450 GeV signal.]{Classification report of the \acrshort{lgbm} model trained on the 450 GeV signal with the test set. All classes show high scores for precision, recall and f1-score, except for recall on the 123 vertex. The high scores indicate a very good classification model.}
 		\label{tab:ClassReport_450}
 	\end{table}
 	\begin{figure}[htb!]
 		\centering\includegraphics[width=0.7\linewidth]{Test_plots/Conf_mat_450.png}
-		\caption[Test set confusion matrix for the \acrshort{lgbm} model trained on the 150 GeV signal.]{Test set confusion matrix of the \acrshort{lgbm} classifier trained on the 450 GeV signal. The model on the test set shows similar accuracy scores for the classes like it did with the validation set, where all classes are predicted with 0.9 or higher except for the 123 vertex perturbation class. \label{fig:ConfTest_450}}
+		\caption[Test set confusion matrix for the \acrshort{lgbm} model trained on the 150 GeV signal.]{Test set confusion matrix of the \acrshort{lgbm} classifier trained on the 450 GeV signal. The model on the test set shows similar accuracy scores for the classes like it did with the validation set, where all classes are predicted with 0.9 or higher except for the 123 vertex permutation class. \label{fig:ConfTest_450}}
 	\end{figure}
 	
-	The evaluation metrics in Table \ref{tab:Test_450} show a high accuracy score, \acrshort{cks} and balanced accuracy, not to far away from the accuracy score of the training set. This means that we are less likely of having overfitting when the two accuracy scores are close in value. The log loss is also less than for the 150 GeV signal.
+	The evaluation metrics in Table \ref{tab:Test_450} show a high accuracy score, \acrshort{cks} and balanced accuracy, not to far away from the accuracy score of the training set. This means that we are less likely of having overfitting since the two accuracy scores are close in value. The log loss is also less than for the 150 GeV signal.
 	\begin{table}[htb!]
 		\hspace{-0.8cm}
 		\begin{tabular}{ |c|c|c|c|c|c|c| }
@@ -2264,7 +2279,7 @@
 		\label{tab:Test_450}
 	\end{table}
 	
-	The \acrshort{roc} curves in Figure \ref{fig:ROCTest_450} are even better than for the other signal, with \acrshort{auc} around 1.0 for all classes. The precision-recall curve in Figure \ref{fig:PrecisionRecallTest_450} is also better, with all \acrshort{auc} values higher than 0.97. These plots indicate a very good classification model on these data.
+	The \acrshort{roc} curves in Figure \ref{fig:ROCTest_450} are better than the 150 GeV signal, with \acrshort{auc} around 1.0 for all classes. The precision-recall curve in Figure \ref{fig:PrecisionRecallTest_450} is also better, with all \acrshort{auc} values higher than 0.97. These plots indicate a very good classification model on these data.
 	\begin{figure}[h!tb!]
 		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_450.png}
 		\caption[Test set \acrshort{roc} plot for the \acrshort{lgbm} model trained on the 450 GeV signal.]{\acrshort{roc} curve plot for the \acrshort{lgbm} model with the 450 GeV signal test set. The \acrshort{auc} for all classes and averages are around 1.0, which shows that the model is a very good model for predicting the classes. \label{fig:ROCTest_450}}
@@ -2274,13 +2289,13 @@
 		\caption[Test set precision-recall plot for the \acrshort{lgbm} model trained on the 450 GeV signal.]{Precision-recall curve plot for the classes predicted by the \acrshort{lgbm} model with the 450 GeV signal test set. All classes and the average have \acrshort{auc} higher than 0.97, once again showing the good performance of the model. \label{fig:PrecisionRecallTest_450}}
 	\end{figure}
 	
-	The 20 most important features decided by the \acrshort{lgbm} model as seen in Figure \ref{fig:ImpTop_450}. It is still the invariant mass pairs that are clearly the most important features when predicting with the model, with $mll_14$ now the most important one. Other reoccurring important features are also here $dPhi$, $dR$ and $E$. So the variables we have added to the data with the angular variables and invariant masses of pairs of particles have high importance when predicting for both signals.
+	The 20 most important features decided by the \acrshort{lgbm} model as seen in Figure \ref{fig:ImpTop_450}. It is still the invariant mass pairs that are clearly the most important features when predicting with the model, with $mll_{14}$ now the most important one. Other important features are here $dPhi$, $dR$ and $E$.
 	\begin{figure}[htb!]
 		\centering\includegraphics[width=0.7\linewidth]{Test_plots/Importance_top_450.png}
 		\caption[Test set most important features of the \acrshort{lgbm} model trained on the 450 GeV signal.]{The most important features decided by the \acrshort{lgbm} model trained on the 450 GeV signal for predicting new data. The features we added to the data with the angular variables and invariant masses of pairs of particles show high importance when making predictions also in this case. \label{fig:ImpTop_450}}
 	\end{figure}
 	
-	The performance of the \acrshort{lgbm} on the 450 GeV signal is proven to be vert good and even better than the 150 GeV signal. This model is also saved with Pickle to be used later.
+	The performance of the \acrshort{lgbm} on the 450 GeV signal is proven to be very good and even better than the 150 GeV signal. This model is also saved with Pickle to be used later.
 
 
 %----------------------------------------------------------------------
@@ -2291,14 +2306,14 @@
 	
 	\chapter{Classification Results}
 	\label{chap:Result-ClassResult}
-	To classify leptons in background and signal Ntuples, we first trained classification models on two signals samples with truth data and chose the best performing model for each signal sample. Then we evaluated the performance of these models with classification evaluation metrics. With the models saved, we classify backgrounds and signal Ntuples from section \ref{sect:Method-Data}. We present the classification results in this chapter. Discussions of the results are done in chapter \ref{chap:Discussion}.
+	To classify leptons in background and signal Ntuples, we first trained classification models on two signals samples with truth data and chose the best performing model for each signal sample. Then we evaluated the performance of these models with classification evaluation metrics. With the models saved, we can classify background and signal Ntuples from section \ref{sect:Method-Data} after they've been through all the steps of the data and \acrshort{mc} processing chain in Fig. \ref{fig:DataFlow}. We present the classification results in this chapter. Discussions of the results are done in chapter \ref{chap:Discussion}.
 	
 	
 	\section{Ntuple Classification} 
 	\label{sect:Result-BkgClass}
-	The models have been trained on two samples of signal data with truth variables for classifying leptons. Now we want to classify and predict the lepton vertices in various background data which has been simulated, digitized and paved through detector reconstruction to give a good representation of the data. The background data are originally ROOT-files which have to be converted to dataframes with the same features like the truth signals, except for the truth origin. We use a new script for classification of the backgrounds and signal Ntuples, called \textit{Trilepton\_classify\_Ntuples.py}. This time we do not create the target variables since the backgrounds are not truth data. We also do this with two signal samples, similar to the samples used in classification but containing more data and more variables after reconstruction.
+	The models have been trained on two samples of signal data with truth variables for classifying leptons. Now we want to classify and predict the lepton vertices in various background data which has been simulated, digitized and paved through detector reconstruction to give a good representation of the data. The background Ntuples are originally ROOT-files which have to be converted to dataframes with the same features like the signals, except for the truth. We use a new script for classification of the backgrounds and signal Ntuples, called \textit{Trilepton\_classify\_Ntuples.py}. This time we do not create the target variables since the backgrounds do not contain truth data. We also do this with the two signal samples, containing the same events as the samples used in training/validation/test, but containing data after reconstruction.
 	
-	After converting the backgrounds and signals to dataframes, we load the files containing the trained best models for the two signals and use them to classify the background and signal lepton vertices. The predicted vertex perturbations for the two signals are seen in Tables \ref{tab:Counts_150signal_Ntuples} and \ref{tab:Counts_450signal_Ntuples}. Table \ref{tab:Counts_150signal_Ntuples} contains the predicted counts of the two signals with the 150 GeV trained model, while Table \ref{tab:Counts_450signal_Ntuples} contains the predicted counts of the two signals with the 450 GeV trained model. The most predicted vertices are the 123 and 132 vertices. This makes sense since the leptons are ordered after highest $p_t$, and in this case the highest $p_T$ comes from the $N_1$ production vertex where the $p_T$ of the produced particles decreases after the first vertex decay. We get one 213 predictions of the 450 GeV signal with the 450 trained model. This may be a misclassification case since it only happens once.
+	After converting the backgrounds and signals to dataframes, we load the files containing the trained best models for the two signals and use them to classify the background and signal lepton vertices. The predicted vertex permutations for the two signals are seen in Tables \ref{tab:Counts_150signal_Ntuples} and \ref{tab:Counts_450signal_Ntuples}. Table \ref{tab:Counts_150signal_Ntuples} contains the predicted counts of the two signals with the 150 GeV trained model, while Table \ref{tab:Counts_450signal_Ntuples} contains the predicted counts of the two signals with the 450 GeV trained model. These two tables have different counts for the vertex classes, indicating that the two models predict differently. The most predicted vertices are the 123 and 132 vertices. This makes sense since the leptons are ordered after highest $p_t$, and in this case the highest $p_T$ lepton comes from the $N_1$ production vertex where the $p_T$ of the produced particles decreases after the first vertex decay. We get one 213 predictions of the 450 GeV signal with the 450 trained model. This may be a misclassification case since it only happens once.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -2330,7 +2345,7 @@
 		\label{tab:Counts_450signal_Ntuples}
 	\end{table}
 
-	For the background Ntuples, we see the predicted vertex perturbations in Table \ref{tab:Counts_150_Ntuples} for the 150 GeV trained model, and in Table \ref{tab:ClassReport_450} for the 450 GeV trained model. Most of the predicted vertices are still 123 and 132, like for the signals. In these cases we now get more predictions of the 213 vertex as well, and still almost none of the last three vertices in the tables.
+	For the background Ntuples, we see the predicted vertex permutations in Table \ref{tab:Counts_150_Ntuples} for the 150 GeV trained model, and in Table \ref{tab:Counts_450signal_Ntuples} for the 450 GeV trained model. Most of the predicted vertices are still 123 and 132, like for the signals. In these cases we now get more predictions of the 213 vertex as well, and still almost none of the last three vertices in the tables. Like for the signals it makes sense that since the leptons are ordered after highest $p_T$, lepton 1 should at least be in the first two vertices. This is very clear for the backgrounds where lepton 1 never is predicted coming from the third vertex.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -2391,16 +2406,15 @@
 	\end{table}
 	
 	
-	For each dataframe, the predicted outcomes are saved in the dataframe before the dataframe is converted to a (\acrshort{csv}) file, and then converted back into ROOT like we did earlier in section \ref{subsect:Method-PlottingVariables}. The ROOT-files now contain all original variables, as well as the variables we produced and used for classification and the predicted vertex perturbations. 
+	For each dataframe, the predicted outcomes are saved in the dataframe before the dataframe is converted to a (\acrshort{csv}) file, and then converted back into ROOT like we did earlier in section \ref{subsect:Method-PlottingVariables}. The ROOT-files now contain all original variables, as well as the variables we produced and used for classification and the predicted vertex permutations. 
 	
 	
-	\section{Signal Region Distributions}
+	\section{Signal Regions} 
 	\label{sect:Result-SRDist}
-	We then plot the background and signal variable distributions again using the first ROOT-plotting scripts. We define some signal regions and cuts in the variables used for the plotting. The outcome classes (lepton vertices) from the classification are used to define cuts. We will use the lepton flavors, same flavor (\acrshort{sf}) and different flavor (\acrshort{df}), and signs of the leptons, opposite sign (\acrshort{os}), for the three leptons as cuts as well since these scenarios are of more interest to us from equation \ref{eq:Particle_Model}. All these cuts are seen in Table \ref{tab:Cuts_class}. From Tables \ref{tab:Counts_150signal_Ntuples} to \ref{tab:Counts_450_Ntuples}, the most predicted vertices are 123, 132 and 213. The other three vertices are predicted so much less, close to zero in comparison, that we would not get anything by using them as cuts. That is why we leave them out of the analysis further on. The \acrshort{df}, \acrshort{sf} and \acrshort{os} are to be applied between leptons \textit{i} and \textit{j} depending on the vertex perturbation, e.g. \acrshort{sf} would be lep\textit{i}\_Flavor == lep\textit{j}\_Flavor. The leptons \textit{i} and \textit{j} are the first and second vertices in each vertex perturbation, e.g. vertex 123 has \textit{i}=1 and \textit{j}=2.
-	
-	Then we will use some (benchmark) cuts for a more "standard" analysis at $\sqrt{s} =$ 14 TeV from \citet{inverseseesaw} for comparison. These cuts are seen in Table \ref{tab:Cuts_Benchmark}. We have left one cut out, $p_T^{b-Tagged}$, since this variable is not available to use in our files.
+	We then plot the background and signal variable distributions again using the first ROOT-plotting scripts. We define some signal regions and cuts in the variables used for the plotting. The outcome classes (lepton vertices) from the classification are used to define cuts. We will use the lepton flavors, same flavor (\acrshort{sf}) and different flavor (\acrshort{df}), and signs of the leptons, opposite sign (\acrshort{os}), for the three leptons as cuts as well since these scenarios are of most interest to us from equation \ref{eq:Particle_Model}. All these cuts are seen in Table \ref{tab:Cuts_class}. From Tables \ref{tab:Counts_150signal_Ntuples} to \ref{tab:Counts_450_Ntuples}, the most predicted vertices are 123, 132 and 213. The other three vertices are predicted so much less, close to zero in comparison, that we would not get anything by using them as cuts. That is why we leave them out of the analysis. The \acrshort{df}, \acrshort{sf} and \acrshort{os} are to be applied between leptons \textit{i} and \textit{j} depending on the vertex permutation, e.g. \acrshort{sf} would be lep\textit{i}\_Flavor == lep\textit{j}\_Flavor. The leptons \textit{i} and \textit{j} are the first and second vertices in each vertex permutation, e.g. vertex 123 has \textit{i}=1 and \textit{j}=2. 
 	\begin{table}[h!]
-		\hspace{-0.5cm}
+		%\hspace{-0.5cm}
+		\centering
 		\begin{tabular}{|c|c|}
 			\hline
 			\multicolumn{2}{|c|}{\textbf{Signal region cuts:}}\\
@@ -2412,9 +2426,11 @@
 			Lepton vertices & pred\_class == [123, 132, 213]\\
 			\hline
 		\end{tabular}
-		\caption[Signal region cuts for Ntuples.]{Signal region cuts used for plotting variable distributions of Ntuples for backgrounds and signals with classification variables and predicted lepton vertices. Cuts to be applied where leptons \textit{i} and \textit{j} to have same flavor (\acrshort{sf}) and opposite sign (\acrshort{os}), and leptons \textit{i} and \textit{j} to have different flavor (\acrshort{df}) and \acrshort{os}. The leptons \textit{i} and \textit{j} are the first and second vertices in each vertex perturbations, e.g. vertex 123 has \textit{i}=1 and \textit{j}=2. Combine them with the cuts for lepton vertices.}
+		\caption[Signal region cuts for Ntuples.]{Signal region cuts used for plotting variable distributions of Ntuples for backgrounds and signals with classification variables and predicted lepton vertices. Cuts to be applied where leptons \textit{i} and \textit{j} to have same flavor (\acrshort{sf}) and opposite sign (\acrshort{os}), and leptons \textit{i} and \textit{j} to have different flavor (\acrshort{df}) and \acrshort{os}. The leptons \textit{i} and \textit{j} are the first and second vertices in each vertex permutation, e.g. vertex 123 has \textit{i}=1 and \textit{j}=2. Combine them with the cuts for lepton vertices.}
 		\label{tab:Cuts_class}
 	\end{table}
+	
+	Then we will use some (benchmark) cuts for a more "standard" analysis at $\sqrt{s} =$ 14 TeV from \citet{inverseseesaw} for comparison. These cuts are seen in Table \ref{tab:Cuts_Benchmark}. \footnote{We have left one cut out, $p_T^{b-Tagged}$, since this variable is not available to use in our files.}
 	\begin{table}[ht!]
 		\centering
 		\begin{tabular}{|c|}
@@ -2428,87 +2444,180 @@
 		\caption[Benchmark analysis cuts.]{Cuts used for a benchmark analysis to be compared with our cuts from Table \ref{tab:Cuts_class}. The combinations of $l_il_j$ are for $l_1$, $l_2$ and $l_3$. $M_Z=91.2$ GeV is the mass of the $Z$-boson and $m_{3l}$ is the invariant mass of the three lepton system. Reference: Table 6 in \citet{inverseseesaw}.}
 		\label{tab:Cuts_Benchmark}
 	\end{table}
-			
-	
-%----------------------------------------------------------------------
-	
-	\chapter{Distribution Analysis of Classified Ntuples}
-	\label{chap:Result-VarDist}
-	The most interesting features we want to look at are the invariant mass of the three lepton system and the \acrshort{met} for both the 150 GeV and 450 GeV signals with various cuts defined in Table \ref{tab:Cuts_class} and \ref{tab:Cuts_Benchmark}. 
-	
-	The plots for the invariant masses with \acrshort{df} for lepton 1 and 2 are seen in Figure \ref{fig:m3l_DF}, and the plots with \acrshort{sf} for lepton 1 and 2 are seen in Figure \ref{fig:m3l_SF}. After the cuts the number of events for the \acrshort{mc} and signals are much less Vertex 213 has a lot less events with this vertex perturbation from the classification predictions compared to the 123 132. There are only a few backgrounds with this predicted vertex perturbation and only a few events for the 450 GeV signal with \acrshort{sf}. Most of the events are below 500-600 GeV, except for the ttbar with some events beyond these masses. So the signal models seem to favor the 123 and 132 vertex perturbations. The 450 GeV model also seem to have more events predicted for these three vertices than the 150 GeV model have. 
-	
-	There is a clear difference between the \acrshort{df} and \acrshort{sf} plots where there are a lot more events in total in the \acrshort{sf} plots. This lepton flavor violation (\acrshort{lfv}) also applies for the other vertices where the \acrshort{sf} have at least a magnitude of order 10 times more events in total than the \acrshort{df} plots. The 150 GeV signal in the plots stay with the number of backgrounds events and share the same behavior when the masses increase. The 450 GeV is easier to split from the backgrounds since it has more events for higher masses, from around the neutrino mass of 450-500 GeV the heavier signal becomes dominant over the backgrounds in terms of events. The standard analysis plot in Figure \ref{fig:m3l_Bench} have cuts on the invariant mass higher than 100 GeV. This plot has the same order of total events as the plots with \acrshort{df}.
 
-	The 213 vertex show the same results like the invariant mass, with much fewer events. All the events we get are for lower energies below 300 GeV. The 150 GeV signal has more events for energies between 300 and 400 GeV, while the 450 GeV signal has more events below 200 GeV. Also for \acrshort{met} we get that the \acrshort{sf} plots have much more events than the \acrshort{df} plots. For this feature we can't differentiate as easily between the backgrounds and signals we could before. All the signals seem to have the same amount of events like the backgrounds, and we do not have the same difference between the two signals either. They are much closer in number of events for this feature. There is some difference where the 450 GeV signal has more events for higher energies from 400 GeV for the 123 and 132 vertices.
+
+	\section{Distributions}
+	\label{chap:Result-VarDist}
+	The most interesting features we want to look at are the invariant mass of the three lepton system and the \acrshort{met} for both the 150 GeV and 450 GeV signals with cuts defined in Table \ref{tab:Cuts_class} and \ref{tab:Cuts_Benchmark}. In the following plots we have the histogram distributions we have plotted earlier, e.g. like in section \ref{sect:Method-Features}, in the upper part of the plots and in the lower part of the plots we have the Significance Z plots of the simulated signals to look for excess. Significance plots show the expected significance Z of the signals and quantifies the separation between the backgrounds and the signals. When the significance is high it means we have good sensitivity to the signal.
+
+	In Table \ref{tab:SignalRegions_150} and \ref{tab:SignalRegions_450} we see the number of events for the different signal regions from table \ref{tab:Cuts_class} for each backgrounds, the total number of events for the backgrounds and the two neutrino signals. After the cuts we see that the number of events for the \acrshort{mc} and signals are much less compared to Table \ref{tab:Counts_150_Ntuples} and \ref{tab:Counts_450_Ntuples}. There is also a difference between the flavors of the first and second vertex leptons \acrshort{sf} and \acrshort{df} where the \acrshort{sf} plots have distributions with much more events. The total number of background event ratios for \acrshort{df}/\acrshort{sf} are seen in Table \ref{tab:dfsf_ratio} for the three vertex permutations.
+	\begin{table}[htb!]
+		\centering
+		%\hspace{-1cm}
+		\begin{tabular}{ |c|c|c|c|c|c|c| }
+			\hline
+			\multirow{3}{*}{Ntuples} & \multicolumn{6}{c|}{150 GeV model Cuts} \\
+			\cline{2-7} \rule{0pt}{13pt}
+			& \multicolumn{2}{c}{123} & \multicolumn{2}{|c}{132} & \multicolumn{2}{|c|}{213} \\
+			\cline{2-7} \rule{0pt}{13pt}
+			& \acrshort{sf} & \acrshort{df} & \acrshort{sf} & \acrshort{df} & \acrshort{sf} & \acrshort{df} \\
+			\hline \rule{0pt}{13pt}
+			diboson2L & 189.3 & 55.3 & 65.2 & 52.8 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			diboson3L & 5924.9 & 1963.7 & 4841.0 & 1522.2 & 0.7 & 0.2 \\
+			\hline \rule{0pt}{13pt}
+			diboson4L & 3519.6 & 398.5 & 1649.1 & 694.0 & 0.2 & 0.1 \\
+			\hline \rule{0pt}{13pt}
+			ttbar+X & 409.3 & 197.9 & 358.2 & 178.7 & 0.1 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			singletop & 143.6 & 135.8 & 82.3 & 72.8 & 0.1 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			triboson & 35.1 & 25.1 & 25.6 & 19.2 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			ttbar & 2730.9 & 2718.0 & 1557.8 & 1519.4 & 0.7 & 1.0 \\
+			\hline \rule{0pt}{13pt}
+			Zjets & 74606.5 & 2065.8 & 23289.2 & 14726.9 & 11.4 & 0.2 \\
+			\hline \rule{0pt}{13pt}
+			\acrshort{sm} total & 87559.2 & 7560.1 & 31868.3 & 18786.0 & 13.2 & 1.5 \\
+			\hline \rule{0pt}{13pt}
+			150 GeV & 6392.4 & 6309.4 & 2869.1 & 2768.5 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			450 GeV & 8658.1 & 8890.8 & 5401.7 & 5162.3 & 0.0 & 0.0 \\
+			\hline
+		\end{tabular}	
+		\caption[Number of events for signal regions for 150 GeV.]{Table for the number of events for each background, the total for backgrounds and signals with the combinations of vertex and flavor cuts for 150 GeV model. \acrshort{os}, baseline and signal lepton cuts are applied as before in Table \ref{tab:Cuts_class}.}
+		\label{tab:SignalRegions_150}
+	\end{table}
+	\begin{table}[htb!]
+		\centering
+		%\hspace{-1cm}
+		\begin{tabular}{ |c|c|c|c|c|c|c| }
+			\hline
+			\multirow{3}{*}{Ntuples} & \multicolumn{6}{c|}{450 GeV model Cuts} \\
+			\cline{2-7} \rule{0pt}{13pt}
+			& \multicolumn{2}{c}{123} & \multicolumn{2}{|c}{132} & \multicolumn{2}{|c|}{213} \\
+			\cline{2-7} \rule{0pt}{13pt}
+			& \acrshort{sf} & \acrshort{df} & \acrshort{sf} & \acrshort{df} & \acrshort{sf} & \acrshort{df} \\
+			\hline \rule{0pt}{13pt}
+			diboson2L & 193.5 & 51.7 & 67.2 & 53.6 & 0.1 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			diboson3L & 5634.3 & 1939.9 & 4397.4 & 1616.1 & 0.0 & 0.1 \\
+			\hline \rule{0pt}{13pt}
+			diboson4L & 3578.3 & 398.2 & 1639.6 & 676.4 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			ttbar+X & 389.2 & 186.3 & 375.9 & 190.0 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			singletop & 132.4 & 128.1 & 88.5 & 83.0 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			triboson & 32.7 & 24.6 & 28.4 & 20.3 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			ttbar & 2532.9 & 2526.4 & 1679.5 & 1638.2 & 0.4 & 0.5 \\
+			\hline \rule{0pt}{13pt}
+			Zjets & 75098.6 & 2171.9 & 23404.5 & 14226.3 & 69.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			\acrshort{sm} total & 87591.8 & 7427.1 & 32221.1 & 18504.0 & 69.7 & 0.7 \\
+			\hline \rule{0pt}{13pt}
+			150 GeV & 6529.2 & 6359.7 & 2876.1 & 2714.0 & 0.0 & 0.0 \\
+			\hline \rule{0pt}{13pt}
+			450 GeV & 9349.0 & 9264.7 & 4698.2 & 4706.4 & 0.0 & 0.0 \\
+			\hline
+		\end{tabular}	
+		\caption[Number of events for signal regions for 450 GeV.]{Table for the number of events for each background, the total for backgrounds and signals with the combinations of vertex and flavor cuts for 450 GeV model. \acrshort{os}, baseline and signal lepton cuts are applied as before in Table \ref{tab:Cuts_class}.}
+		\label{tab:SignalRegions_450}
+	\end{table}
+	\begin{table}[htb!]
+		\centering
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Signal & 123 & 132 & 213 \\
+			\hline \rule{0pt}{13pt}
+			150 GeV & 0.0863 & 0.589 & 0.114 \\
+			\hline \rule{0pt}{13pt}
+			450 GeV & 0.0848 & 0.574 & 0.042 \\
+			\hline
+		\end{tabular}
+	\caption[Flavor ratios for cuts.]{Flavor ratio, \acrshort{df}/\acrshort{sf}, for the two signals with vertex cuts. \label{tab:dfsf_ratio}}
+	\end{table}
 	
-	The standard analysis once again give similar results to the \acrshort{df} with either an electron in the first vertex and a muon in the second vertex, or vice versa. They both have the same order of total events in the plots lower event peaks below energies of 100 GeV.
+	The plots for the invariant masses with \acrshort{df} between the leptons are seen in Figure \ref{fig:m3l_DF}, and the plots with \acrshort{sf} for the leptons are seen in Figure \ref{fig:m3l_SF}. There are less events with the 213 vertex permutation compared to the 123 and 132 vertices. There are only a few backgrounds in the 213 vertex cut plots (Fig. \ref{subfig:m3l_DF_213_150}, \ref{subfig:m3l_DF_213_450}, \ref{subfig:m3l_SF_213_150}, \ref{subfig:m3l_SF_213_450}) that has events with this predicted vertex permutation compared with the other vertex cuts, about 1-70 events. Most of the events are around 100-200 GeV where more or less all events are below 500 GeV. The signal models favor the 123 and 132 vertex permutations with no signals in the 213 vertex permutation. In total for the backgrounds the 450 GeV model for the 213 vertex has more events compared to the 150 GeV model, $\approx$ 70 vs 13 events. There is a clear difference between the \acrshort{df} and \acrshort{sf} plots where there are a lot more events in total in the \acrshort{sf} plots as seen in Table \ref{tab:dfsf_ratio} for the flavor ratios. 
+	
+	The 150 GeV simulated signal in the plots have around the same number of events like the backgrounds and where the number of events decrease when the masses increase, with some fluctuations mostly after reaching around 500 GeV. This makes the 150 GeV simulated signal difficult to differentiate from the backgrounds. The 450 GeV simulated signal is easier to split from the backgrounds since it has more events for higher masses, from around the $m_{3l}$ mass of 400 GeV the heavier signal becomes dominant over the backgrounds in terms of events. For the simulated signals there is not much difference between the flavors for the first and second vertex leptons with only maximum 300 events in difference for the same vertices.
+	
+	The significance plots for the $m_{3l}$ plots with \acrshort{sf}, 123 and 132 vertex cuts are very similar for the 450 GeV simulated signal where it starts at 0 GeV and raises to over 4 $\sigma$ around 250 GeV. The 150 GeV simulated signal raises around 100 GeV but varies a lot more depending on the signal regions. For the 123 vertex and 150 GeV signal model is stays around 1-2 $\sigma$ after invariant mass of 200 GeV, while for the 450 GeV model it goes up to between 3-4 $\sigma$. For the 132 vertex and 150 GeV model the 150 GeV simulated signal goes up to 1 $\sigma$ between 150-750 GeV and goes down to 0. For the 450 GeV model the 150 GeV signal stays at around 1 $\sigma$ until around 950 GeV before it goes to 0 again. For \acrshort{df} the significance of the 450 GeV signal starts at almost 3 $\sigma$ and reaches over 4 $\sigma$ around 160 GeV for both signal models. The 150 GeV signal with the 150 GeV model starts at 2 $\sigma$ and reaches almost 4 $\sigma$ at 1000 GeV, while it ends at around 3.5 $\sigma$ for the 450 GeV model. The 132 vertex is similar for both signal models where the 450 GeV signal increases to over 4 $\sigma$ at 200 GeV, while the 150 GeV signal increases to 1 $\sigma$ before it ends up a 0 around 900-1000 GeV. There are no signals in the 213 vertex plots which give no significance to look at.
+	
+	The standard analysis plot in Figure \ref{fig:m3l_Bench} have cuts on the invariant mass higher than 100 GeV. This plot has a total number of 214780.4 background events which is much more than the \acrshort{sf} plots. The 450 GeV simulated signal is easier to differentiate from the backgrounds after 450 GeV while the 150 GeV simulated signal is more difficult, similar to the plots with the vertex cuts. The significance of the 150 Gev signal increases slowly towards 1 $\sigma$ while the invariant mass increases to 1 TeV. THe 450 GeV goes over 4 $\sigma$ at around 380 GeV and stays there.
+
+	Also for \acrshort{met} we get that the \acrshort{sf} plots have much more events than the \acrshort{df} plots. For this feature we can't differentiate as easily between the backgrounds and signals we could before for both the vertex cuts and for the benchmark cuts. All the signals seem to have the same amount of events like the backgrounds, and we do not have the same difference between the two signals either. They are much closer in number of events for this feature. For \acrshort{df} and vertex 123 for both signal models we have that the 450 GeV simulated signal has more events that the \acrshort{mc} around 100-500 GeV. 
+	
+	The significance for the \acrshort{df} and 123 vertex plots goes quickly from 3 $\sigma$ to over 4 $\sigma$ and stays there for the 450 GeV signals, while the 150 GeV signals starts at 2 $\sigma$ and ends at 0 around 410 GeV in the 150 GeV model and around 280 GeV in the 450 GeV model. The significance for the 150 GeV signal and 132 vertex cuts for both signal models increases to around 1 $\sigma$ and fluctuates until almost 300 GeV where it goes to 0. For the 450 GeV signal the significance increases to over 4 $\sigma$ around 100 GeV and starts to decrease around 250 GeV. It ends just above 2 $\sigma$ in the 150 GeV model while it ends at 0 at 500 GeV in the 450 GeV model. For the \acrshort{sf} and vertex 123 both signal models have the 450 GeV signal reach above 4 $\sigma$, but the 150 GeV model has the signal dropping around 400 GeV ending back at around 4 $\sigma$ at 600 GeV. The 150 GeV signal goes up to 1 $\sigma$ and goes back to 0 around 300 GeV. For the \acrshort{sf} and 132 vertex plots the 450 GeV signals go over 4 $\sigma$ around 100 GeV and decreases from 200 GeV when $E_T^{\text{miss}}$ approaches 600 GeV. The 150 GeV model ends up at 0, while the 450 GeV model ends up at 2 $\sigma$ for the 450 GeV signal. The 150 GeV signals stay more or less between 0-1 $\sigma$ for both models.
+	
+	In the benchmark plot for \acrshort{met} the significance for the 150 GeV signal stays at 0 while it increases and ends up at 4 $\sigma$ at 600 GeV for the 450 GeV signal.
 	
 	%m3l % DF
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:m3l_DF_123_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx123_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:m3l_DF_123_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx123_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:m3l_DF_132_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx132_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:m3l_DF_132_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx132_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:m3l_DF_213_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx213_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:m3l_DF_213_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx213_450.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:m3l_DF_123_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx123_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:m3l_DF_123_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx123_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:m3l_DF_132_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx132_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:m3l_DF_132_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx132_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:m3l_DF_213_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx213_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:m3l_DF_213_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx213_450.pdf}}
 		\caption[Invariant mass of the three lepton system with DF cuts.]{The invariant mass of the three lepton system with \acrshort{df} and \acrshort{os} cuts between lepton 1 and 2 and different vertex cuts for the two signals with masses 150 GeV (left side plots) and 450 GeV (right side plots) defined in the subcaptions. \label{fig:m3l_DF}}
 	\end{figure}
 		% SF
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:m3l_SF_123_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx123_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:m3l_SF_123_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx123_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:m3l_SF_132_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx132_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:m3l_SF_132_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx132_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:m3l_SF_213_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx213_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:m3l_SF_213_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx213_450.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:m3l_SF_123_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx123_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:m3l_SF_123_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx123_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:m3l_SF_132_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx132_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:m3l_SF_132_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx132_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:m3l_SF_213_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx213_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:m3l_SF_213_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx213_450.pdf}}
 		\caption[Invariant mass of the three lepton system with SF cuts.]{The invariant mass of the three lepton system with \acrshort{sf} and \acrshort{os} cuts between lepton 1 and 2 and different vertex cuts for the two signals with masses 150 GeV (left side plots) and 450 GeV (right side plots) defined in the subcaptions. \label{fig:m3l_SF}}
 	\end{figure}
 	\begin{figure}[htb!]
 		%\hspace*{-0.8cm}
-		\centering\includegraphics[width=0.8\linewidth]{Class_cut_plots/SRBenchmark/hist1d_m_3l_SR_Benchmark_150.pdf}
+		\centering\includegraphics[width=0.6\linewidth]{Class_cut_plots/SRBenchmark/hist1d_m_3l_SR_Benchmark_150.pdf}
 		\caption[Invariant mass of the three lepton system with benchmark cuts.]{The invariant mass of the three lepton system with the benchmark cuts for a standard analysis with \acrshort{mc} and two signals. \label{fig:m3l_Bench}}
 	\end{figure}
 	
 	%met_Et    % DF
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:met_DF_123_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx123_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:met_DF_123_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx123_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:met_DF_132_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx132_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:met_DF_132_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx132_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:met_DF_213_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx213_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:met_DF_213_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx213_450.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:met_DF_123_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx123_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},123\label{subfig:met_DF_123_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx123_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:met_DF_132_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx132_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},132\label{subfig:met_DF_132_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx132_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:met_DF_213_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx213_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{df},\acrshort{os},213\label{subfig:met_DF_213_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_DF_OS_vtx213_450.pdf}}
 		\caption[\acrshort{met} with DF cuts.]{The \acrshort{met} with \acrshort{df} and \acrshort{os} cuts between lepton 1 and 2 and different vertex cuts for the two signals with masses 150 GeV (left side plots) and 450 GeV (right side plots) defined in the subcaptions. \label{fig:met_DF}}
 	\end{figure}
 		% SF
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:met_SF_123_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx123_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:met_SF_123_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx123_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:met_SF_132_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx132_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:met_SF_132_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx132_450.pdf}}\\
-		\hspace*{-1.cm}
-		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:met_SF_213_150}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx213_150.pdf}}
-		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:met_SF_213_450}]{\centering\includegraphics[width=0.55\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx213_450.pdf}}
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:met_SF_123_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx123_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},123\label{subfig:met_SF_123_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx123_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:met_SF_132_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx132_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},132\label{subfig:met_SF_132_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx132_450.pdf}}\\
+		%\hspace*{-1.cm}
+		\subfloat[150 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:met_SF_213_150}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx213_150.pdf}}
+		\subfloat[450 GeV signal: \acrshort{sf},\acrshort{os},213\label{subfig:met_SF_213_450}]{\centering\includegraphics[width=0.45\linewidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx213_450.pdf}}
 		\caption[\acrshort{met} with SF cuts.]{The \acrshort{met} with \acrshort{sf} and \acrshort{os} cuts between lepton 1 and 2 and different vertex cuts for the two signals with masses 150 GeV (left side plots) and 450 GeV (right side plots) defined in the subcaptions. \label{fig:met_SF}}
 	\end{figure}
 	\begin{figure}[htb!]
-		\hspace*{-0.8cm}
-		\centering\includegraphics[width=0.8\linewidth]{Class_cut_plots/SRBenchmark/hist1d_met_Et_SR_Benchmark_450.pdf}		\caption[\acrfull{met} with benchmark cuts.]{The \acrshort{met} with the benchmark cuts for a standard analysis with \acrshort{mc} and two signals. \label{fig:met_Bench}}
+		%\hspace*{-0.8cm}
+		\centering\includegraphics[width=0.6\linewidth]{Class_cut_plots/SRBenchmark/hist1d_met_Et_SR_Benchmark_450.pdf}		\caption[\acrfull{met} with benchmark cuts.]{The \acrshort{met} with the benchmark cuts for a standard analysis with \acrshort{mc} and two signals. \label{fig:met_Bench}}
 	\end{figure}
 		
 
@@ -2516,10 +2625,10 @@
 %----------------------------------------------------------------------
 %----------------------------------------------------------------------
 
-	\part{Discussion, Conclusion and Future Prospects}
+	\part{*Discussion, Conclusion and Future Prospects}
 	\label{part:Conclusion}
 	
-	\chapter{Discussion}  % Se på kommentarer fra Heidi
+	\chapter{Discussion}  % Se på kommentarer fra Heidi og Eirik
 	\label{chap:Discussion}
 	This chapter is dedicated to the discussion of the findings we get working with this thesis as presented in part \ref{part:Results}. The discussion of the results are ranged by tasks where we first discuss the classification performances of the models we have used, how we choose the best performing model and the classification of the Ntuples. Second, we compare and discuss the new feature distributions with different cuts applied.
 	
@@ -2552,18 +2661,18 @@
 	
 	\section{Conclusion}
 	\label{sect:Conclusion-Conclusion}
-	In this thesis we have tested a new approach in particle physics by utilizing \acrshort{ml} and multiclass classification of lepton vertices to be used to differentiate simulated signal and backgrounds. We first trained classification models on two neutrino signal scenarios with different neutrino masses of 150 GeV and 450 GeV. These models have been used to find the classification models that best predicts lepton vertex perturbations for a trilepton and a neutrino final state system. The proton-proton decay model is based on the decay of a \acrshort{sm} $W$-boson decaying to a heavy pseudo-Dirac neutrino through the Inverse seesaw mechanism, leading to the trilepton final state. The Light Gradient Boosting Machine was found to be the best performing model with accuracy score of 0.88 for the 150 GeV trained signal and accuracy score of 0.96 for the 450 GeV trained signal.
+	In this thesis we have tested a new approach in particle physics by utilizing \acrshort{ml} and multiclass classification of lepton vertices to be used to differentiate simulated signal and backgrounds. We first trained classification models on two neutrino signal scenarios with different neutrino masses of 150 GeV and 450 GeV. These models have been used to find the classification models that best predicts lepton vertex permutations for a trilepton and a neutrino final state system. The proton-proton decay model is based on the decay of a \acrshort{sm} $W$-boson decaying to a heavy pseudo-Dirac neutrino through the Inverse seesaw mechanism, leading to the trilepton final state. The Light Gradient Boosting Machine was found to be the best performing model with accuracy score of 0.88 for the 150 GeV trained signal and accuracy score of 0.96 for the 450 GeV trained signal.
 	
-	We then classified the vertex perturbations of simulated background \acrshort{mc} and two similar neutrino signals for data produced in 2018 at the \acrshort{lhc}. The most predicted vertex perturbations were used as cuts for a feature analysis to check for \acrshort{lfv} between lepton 1 and 2 for electrons and muons for a few selected features. The invariant mass of the three lepton system and the \acrshort{met} were used for comparing our selected signal region cuts with a more standard analysis from \citet{inverseseesaw}. 
+	We then classified the vertex permutations of simulated background \acrshort{mc} and two similar neutrino signals for data produced in 2018 at the \acrshort{lhc}. The most predicted vertex permutations were used as cuts for a feature analysis to check for \acrshort{lfv} between lepton 1 and 2 for electrons and muons for a few selected features. The invariant mass of the three lepton system and the \acrshort{met} were used for comparing our selected signal region cuts with a more standard analysis from \citet{inverseseesaw}. 
 	
-	The standard analysis was found to give the same results for a \acrshort{df} and \acrshort{os} with vertex perturbations 123 and 132 for both signals. The classification models for the two signals seemed to favor the \acrshort{sf} and \acrshort{os} case more with much more events for this signal region cut. With the 450 GeV signal we found it easier to differentiate against background when we looked at higher masses than 450-500 GeV of the invariant three lepton system mass.
+	The standard analysis was found to give the same results for a \acrshort{df} and \acrshort{os} with vertex permutations 123 and 132 for both signals. The classification models for the two signals seemed to favor the \acrshort{sf} and \acrshort{os} case more with much more events for this signal region cut. With the 450 GeV signal we found it easier to differentiate against background when we looked at higher masses than 450-500 GeV of the invariant three lepton system mass.
 
 	
 	\section{Future Work}
 	\label{sect:Conclusion-Future}
 	We have tested a few classification models yielding various results and performances on the datasets. There are other \acrshort{ml} models to test and other useful libraries for \acrshort{ml} that could be used to train classification models, e.g. Tensorflow or Keras. Another \acrshort{ml} technique to be tested could be deep learning or other networks that may give different results than the ones we have used in this thesis. Only the \acrshort{mc} and two neutrino signals were classified with the \acrshort{lgbm} model. The data could also be classified and analyzed together with the \acrshort{mc} and signals.
 	
-	The work on \acrshort{ml} has been the main focus of this thesis. A natural continuation of this work is to extend it with more detailed particle physics studies, such as more in depth of the particle. Another possible continuation of this work would be to extend the analysis to include other data periods, like data from the whole Run 2 by the \acrshort{lhc}. This is easily implemented in the scripts we have used to plot the feature distributions. Other neutrino signals with other masses could also be interesting to test. In section \ref{sect:Method-Features} we discovered a poor compliance between the data and \acrshort{mc} in the original Ntuples for $p_T$ and \acrshort{met} after reaching around 200 GeV. This is something that could be looked at and tried to improve in the future. The invariant mass production errors with $p>E$ is something to further studied as well.
+	The work on \acrshort{ml} has been the main focus of this thesis. A natural continuation of this work is to extend it with more detailed particle physics studies, such as more in depth of the particle physics and the deviation of the number of \acrshort{ss} vs. \acrshort{os} the \acrshort{cms} looked at in the article \cite{mymodel2}. Another possible continuation of this work would be to extend the analysis to include other data periods, like data from the whole Run 2 by the \acrshort{lhc}. This is easily implemented in the scripts we have used to plot the feature distributions. Other neutrino signals with other masses could also be interesting to test. In section \ref{sect:Method-Features} we discovered a poor compliance between the data and \acrshort{mc} in the original Ntuples for $p_T$ and \acrshort{met} after reaching around 200 GeV. This is something that could be looked at and tried to improve in the future. The invariant mass production errors with $p>E$ is something to further studied as well.
 
 	
 %----------------------------------------------------------------------
@@ -2685,16 +2794,122 @@
 	
 	\chapter{Correlations}
 	\label{appendix:Correlations}
-	\underline{Signal $N1=150$ GeV:}	
+	\underline{Signal $N1=150$ GeV:}
+	\begin{figure}[h!tb]
+		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_150.png}
+		\caption[Correlation matrix for the features in the 150 GeV signal.]{Correlation matrix for all the features in the 150 GeV signal dataset. Values close to -1 and 1 shows strong correlations between those features. \label{fig:Corr_150}}
+	\end{figure}
 	\begin{lstlisting}
 		Information gain of the features:
-		OrderedDict([('lep2_phi', 0.05178672925582184), ('lep1_phi', 0.053745432520311276), ('dphi_24', 0.05485490369918944), ('lep3_phi', 0.05502894645503176), ('lep3_eta', 0.05594756636754683), ('lep3_theta', 0.05598787413359707), ('lep4_phi', 0.05641456053531346), ('lep4_pz', 0.05947799347697558), ('lep2_eta', 0.06035343605141508), ('lep2_theta', 0.060373423669804804), ('dphi_14', 0.06083513368874938), ('dphi_34', 0.06115565193619199), ('lep1_eta', 0.061662610215777125), ('lep1_theta', 0.06168403392066146), ('lep3_pz', 0.06422467081537953), ('lep4_theta', 0.06485782851335387), ('lep4_eta', 0.0648977837020408), ('lep4_py', 0.06604010400547766), ('lep4_px', 0.06752198284777089), ('lep4_E', 0.06793095808433014), ('dR_34', 0.06849304962655012), ('lep1_pz', 0.06885166365937634), ('lep2_pz', 0.06906061765196592), ('dR_13', 0.0716082982162769), ('dR_14', 0.07197872976190567), ('dphi_13', 0.07423421063493052), ('dR_24', 0.07595752322276583), ('lep3_E', 0.08410378910700622), ('lep4_pt', 0.09082301709001017), ('dphi_23', 0.09258874841582809), ('dphi_12', 0.09770848996184833), ('lep1_E', 0.10512713284596842), ('lep3_px', 0.10532072166635142), ('lep2_E', 0.10629293534281459), ('lep3_py', 0.10734840100318799), ('dR_12', 0.10964280256859293), ('dR_23', 0.11751795736407011), ('mll_24', 0.12528976189890173), ('lep1_px', 0.14667014422688363), ('lep2_px', 0.14672888551516206), ('lep2_py', 0.15222854675813702), ('lep1_py', 0.1559645954915414), ('lep3_pt', 0.17443874057539732), ('mll_14', 0.19302957284767652), ('mll_34', 0.20736617389081324), ('mll_23', 0.2081857239040863), ('lep2_pt', 0.27355582731666006), ('lep1_pt', 0.276609594149106), ('mll_13', 0.28691694495451703), ('mll_12', 0.3932658736116754)])
+		[('lep2_phi', 0.05178672925582184), 
+		('lep1_phi', 0.053745432520311276), 
+		('dphi_24', 0.05485490369918944), 
+		('lep3_phi', 0.05502894645503176), 
+		('lep3_eta', 0.05594756636754683), 
+		('lep3_theta', 0.05598787413359707), 
+		('lep4_phi', 0.05641456053531346), 
+		('lep4_pz', 0.05947799347697558), 
+		('lep2_eta', 0.06035343605141508), 
+		('lep2_theta', 0.060373423669804804), 
+		('dphi_14', 0.06083513368874938), 
+		('dphi_34', 0.06115565193619199), 
+		('lep1_eta', 0.061662610215777125), 
+		('lep1_theta', 0.06168403392066146), 
+		('lep3_pz', 0.06422467081537953), 
+		('lep4_theta', 0.06485782851335387), 
+		('lep4_eta', 0.0648977837020408), 
+		('lep4_py', 0.06604010400547766), 
+		('lep4_px', 0.06752198284777089), 
+		('lep4_E', 0.06793095808433014), 
+		('dR_34', 0.06849304962655012), 
+		('lep1_pz', 0.06885166365937634), 
+		('lep2_pz', 0.06906061765196592), 
+		('dR_13', 0.0716082982162769), 
+		('dR_14', 0.07197872976190567), 
+		('dphi_13', 0.07423421063493052), 
+		('dR_24', 0.07595752322276583), 
+		('lep3_E', 0.08410378910700622), 
+		('lep4_pt', 0.09082301709001017), 
+		('dphi_23', 0.09258874841582809), 
+		('dphi_12', 0.09770848996184833), 
+		('lep1_E', 0.10512713284596842), 
+		('lep3_px', 0.10532072166635142), 
+		('lep2_E', 0.10629293534281459), 
+		('lep3_py', 0.10734840100318799), 
+		('dR_12', 0.10964280256859293), 
+		('dR_23', 0.11751795736407011), 
+		('mll_24', 0.12528976189890173), 
+		('lep1_px', 0.14667014422688363), 
+		('lep2_px', 0.14672888551516206), 
+		('lep2_py', 0.15222854675813702), 
+		('lep1_py', 0.1559645954915414), 
+		('lep3_pt', 0.17443874057539732), 
+		('mll_14', 0.19302957284767652), 
+		('mll_34', 0.20736617389081324), 
+		('mll_23', 0.2081857239040863), 
+		('lep2_pt', 0.27355582731666006), 
+		('lep1_pt', 0.276609594149106), 
+		('mll_13', 0.28691694495451703), 
+		('mll_12', 0.3932658736116754)]
 	\end{lstlisting}
 	
 	\underline{Signal $N1=450$ GeV:}
+	\begin{figure}[h!tb]
+		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_150.png}
+		\caption[Correlation matrix for the features in the 450 GeV signal.]{Correlation matrix for all the features in the 450 GeV signal dataset. Values close to -1 and 1 shows strong correlations between those features. \label{fig:Corr_450}}
+	\end{figure}
 	\begin{lstlisting}
 		Information gain of the features:
-		OrderedDict([('lep4_theta', 0.4191552527318376), ('lep4_phi', 0.42027977972758146), ('lep3_eta', 0.42045370659465386), ('lep1_phi', 0.4210809806293345), ('lep2_pz', 0.42162772292849215), ('lep2_eta', 0.42201102378344824), ('lep2_phi', 0.4230067197296721), ('lep1_pz', 0.424541501741019), ('lep4_eta', 0.4257280226520528), ('lep3_pz', 0.42672816312478656), ('lep3_phi', 0.427599991411618), ('lep3_theta', 0.42907751026540675), ('lep4_pz', 0.4301374641613722), ('lep2_theta', 0.4312103916746548), ('lep1_E', 0.43129937565133747), ('lep4_px', 0.43132544346123725), ('dR_12', 0.4322203904822728), ('lep4_E', 0.43372185011808995), ('dphi_12', 0.43389037653643614), ('lep4_py', 0.43395756196715096), ('dR_13', 0.4347988629887223), ('dphi_13', 0.43616113224927466), ('lep1_eta', 0.43616248827916504), ('lep1_theta', 0.4386034683797735), ('lep3_E', 0.44167047831807293), ('lep2_E', 0.44415728982148406), ('lep3_px', 0.4471424012534033), ('dphi_24', 0.4487297203828642), ('lep3_py', 0.44887857656083185), ('lep1_px', 0.45032798796079376), ('lep1_py', 0.4515757089823731), ('lep4_pt', 0.45213792012843435), ('lep2_px', 0.4580357692816419), ('lep2_py', 0.4610110981533644), ('dphi_14', 0.4611574842208519), ('dphi_23', 0.462426274698871), ('dR_24', 0.4692019081992844), ('dphi_34', 0.4784639532967272), ('dR_14', 0.4809026477868572), ('lep3_pt', 0.48225046197217947), ('lep1_pt', 0.49983354913044953), ('dR_34', 0.5095008908298231), ('lep2_pt', 0.5120865029463617), ('dR_23', 0.5122830173546382), ('mll_24', 0.5187574240316617), ('mll_13', 0.540453212175724), ('mll_14', 0.5424036353399868), ('mll_12', 0.5602705982085625), ('mll_34', 0.6049717229179872), ('mll_23', 0.6204488569318036)])
+		[('lep4_theta', 0.4191552527318376), 
+		('lep4_phi', 0.42027977972758146), 
+		('lep3_eta', 0.42045370659465386), 
+		('lep1_phi', 0.4210809806293345), 
+		('lep2_pz', 0.42162772292849215), 
+		('lep2_eta', 0.42201102378344824), 
+		('lep2_phi', 0.4230067197296721), 
+		('lep1_pz', 0.424541501741019), 
+		('lep4_eta', 0.4257280226520528), 
+		('lep3_pz', 0.42672816312478656), 
+		('lep3_phi', 0.427599991411618), 
+		('lep3_theta', 0.42907751026540675), 
+		('lep4_pz', 0.4301374641613722), 
+		('lep2_theta', 0.4312103916746548), 
+		('lep1_E', 0.43129937565133747), 
+		('lep4_px', 0.43132544346123725), 
+		('dR_12', 0.4322203904822728), 
+		('lep4_E', 0.43372185011808995), 
+		('dphi_12', 0.43389037653643614), 
+		('lep4_py', 0.43395756196715096), 
+		('dR_13', 0.4347988629887223), 
+		('dphi_13', 0.43616113224927466), 
+		('lep1_eta', 0.43616248827916504), 
+		('lep1_theta', 0.4386034683797735), 
+		('lep3_E', 0.44167047831807293), 
+		('lep2_E', 0.44415728982148406), 
+		('lep3_px', 0.4471424012534033), 
+		('dphi_24', 0.4487297203828642), 
+		('lep3_py', 0.44887857656083185), 
+		('lep1_px', 0.45032798796079376), 
+		('lep1_py', 0.4515757089823731), 
+		('lep4_pt', 0.45213792012843435), 
+		('lep2_px', 0.4580357692816419), 
+		('lep2_py', 0.4610110981533644), 
+		('dphi_14', 0.4611574842208519), 
+		('dphi_23', 0.462426274698871), 
+		('dR_24', 0.4692019081992844), 
+		('dphi_34', 0.4784639532967272), 
+		('dR_14', 0.4809026477868572), 
+		('lep3_pt', 0.48225046197217947), 
+		('lep1_pt', 0.49983354913044953), 
+		('dR_34', 0.5095008908298231), 
+		('lep2_pt', 0.5120865029463617), 
+		('dR_23', 0.5122830173546382), 
+		('mll_24', 0.5187574240316617), 
+		('mll_13', 0.540453212175724), 
+		('mll_14', 0.5424036353399868), 
+		('mll_12', 0.5602705982085625), 
+		('mll_34', 0.6049717229179872), 
+		('mll_23', 0.6204488569318036)])
 	\end{lstlisting}
 	
 	
