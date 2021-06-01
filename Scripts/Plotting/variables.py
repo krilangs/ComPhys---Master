@@ -152,7 +152,7 @@ def configure_vars(sig_reg):
     'mll_24':{'tlatex':'m(#font[12]{ll}_{2#nu})','units':'GeV','hXNbins':60,'hXmin':0,'hXmax':400,'cut_pos':120,'cut_dir':'upper'},
     'mll_34':{'tlatex':'m(#font[12]{ll}_{3#nu})','units':'GeV','hXNbins':60,'hXmin':0,'hXmax':300,'cut_pos':120,'cut_dir':'upper'},
 
-    'm_3l':{'tlatex':'m_{3l}','units':'GeV','hXNbins':100,'hXmin':0,'hXmax':1000,'cut_pos':120,'cut_dir':'upper'},   
+    'm_3l':{'tlatex':'m_{3l}','units':'GeV','hXNbins':100,'hXmin':0,'hXmax':1000,'cut_pos':120,'cut_dir':'lower'},   
 
 
    ### ### 
