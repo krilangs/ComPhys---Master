@@ -65,17 +65,19 @@
 		
 		In this thesis we use the two simulated signal samples containing particles properties with Machine Learning to train classification models on these signals. This is a supervised learning case where we use multiclass classification to classify the vertex permutations of the leptons. The leptons in each event in the original Ntuples are ordered after $p_T$ where lepton 1 is the lepton with highest $p_T$. With the multiclass classification we want to find from which vertex these leptons really originate from in each event. We train several different classification models to find the best performing model to use on unseen data.
 		 
-		For these simulated signals we find that the Light Gradient Boosting Machine (\acrshort{lgbm}) is the best for classifying both simulated signals with accuracy scores of 0.88 for the 150 GeV signal and 0.96 for the 450 GeV signal when evaluating with the test set. 
+		For these simulated signals we find that the Light Gradient Boosting Machine (\acrshort{lgbm}) is the fastest and best for classifying both simulated signals with accuracy scores of 0.88 for the 150 GeV signal and 0.96 for the 450 GeV signal when evaluating with the test set. 
 		
-		With the \acrshort{lgbm} model we classify simulated background and signal data containing proton-proton collision events to find the particle vertex permutations for the three leptons in the final states. The outcome is to compare features for these backgrounds and signals with different signal regions, and compare with a more standard analysis as benchmark. 
+		With the \acrshort{lgbm} model we classify simulated background and signal data containing proton-proton collision events to find the particle vertex permutations for the three leptons in the final state. The outcome is to classify the vertex permutations such that we can study the charge and flavor of the leptons in the production and decay of the heavy neutrino. We study and compare features for these backgrounds and signals with different signal regions, and compare with a more standard analysis as benchmark. If an excess is observed some time in the future, we would like to study which neutrino mass model we  are dealing with.
 		
-		For the two simulated signals we only get predictions for the 123 and 132 vertices of the leptons, while the simulated backgrounds have predicted vertex permutations for 123, 132 and 213. The 213 vertex predicted much less than the other two vertex permutations. The 213 vertex er predicted a maximum 10871 number of times, while 123 and 132 are predicted between 22337 and 5821865.
+		For the two simulated signals we only get predictions for the 123 and 132 vertices of the leptons, while the simulated backgrounds have predicted vertex permutations for 123, 132 and 213. The 213 vertex is predicted much less than the other two vertex permutations. The 213 vertex er predicted a maximum 10871 number of times, while 123 and 132 are predicted between 22337 and 5821865.
 		
-		We find that the same flavor and opposite sign state of lepton 1 and 2 are more dominant with much more events than the different flavor and opposite sign for lepton 1 and 2 case. For the invariant mass of the three lepton system we find that it is easier to differentiate between background and the 450 GeV neutrino signal for masses higher than 450-500 GeV. For the missing transverse energy (\acrshort{met}) backgrounds and signals have similar number of events and are difficult to differentiate.
+		In the signal regions we find that the same flavor and opposite sign state of leptons from vertex 1 and 2 for electrons and muons are more dominant with much more events than the different flavor and opposite sign cases for the backgrounds. We get different degrees of lepton flavor violation for the different vertex permutations. For the signals there is not that much difference in the flavor ratios.
+		
+		For the invariant mass of the three lepton system ($m_{3l}$) we find that it is easier to differentiate between background and the 450 GeV neutrino signal for masses higher than 400-500 GeV. The significance of the 450 GeV for $m_{3l}$ reach maximum above 4 $\sigma$ for all signal regions after 250 GeV, except for the 213 vertex permutations with no signal events. For the missing transverse energy (\acrshort{met}) backgrounds and signals have similar number of events and are more difficult to differentiate. The significance was found to be higher with the 450 GeV signals compared to the 150 GeV signal, and higher for the $m_{3l}$ compared with the \acrshort{met}. The significance of the signals are much less in the \acrshort{met} distributions compared with the $m_{3l}$ distributions.  As expected the \acrshort{met} does not discriminate well the signals and backgrounds and we do not expect any excess in the signal distributions for \acrshort{met}.
 
-		For the standard analysis we get the same number of events for the invariant mass of the three lepton system and the \acrshort{met} for the simulated background and signal events compared to the cases with cuts for flavor, sign and vertices of leptons. The cuts used for the standard analysis shows results as good as the cuts with the lepton vertex permutations applied.
+		The multiclass classification of the lepton vertex permutations with the \acrshort{lgbm} model have successfully predicted the lepton vertices, yielding better performance than the current simple benchmark analysis in general.
 		
-		The multiclass classification of the lepton vertex permutations with the \acrshort{lgbm} model have successfully predicted the lepton vertices, yielding results comparable to a standard analysis.
+		Searching for new physics with the \acrshort{lhc} is demanding and it is not always clear how to get the results we want. This is where \acrshort{ml} can be of great assistance to uncover new physics by e.g. implementing multiclass classification to classify lepton vertices like we have done in this thesis. This study has been a great help to understand how \acrshort{ml} techniques can be used to analyze and discover new physics, especially in particle physics.
 	\end{abstract}
 
 
@@ -85,7 +87,9 @@
 	\begin{abstract}
 		I want to thank my supervisor Heidi Sandaker for letting me pretend to be a particle physicist during the work of this Computational Science thesis. I also want to give a big thanks to my co-supervisor Eirik Gramstad for the help with my thesis, answering my many questions and providing me with the data I use. I also want to thank the HEP group at the University of Oslo for taking me in and letting me use their computing hardware and be a part of their group.
 		
-		My family and friends also need some appreciation during the work with this thesis, for the support they have shown me and believing in me.
+		My family and friends also need some appreciation during the work with this thesis, for the support they have shown me the past year and believing in me.
+		
+		I want to give a special thanks to someone near and dear to me for having the patience to be with me the last few months, and always believing in me. I could not have done this without you.
 	\end{abstract}
 
 
@@ -202,7 +206,7 @@
 	
 	\begin{figure}[ht!]
 		\vspace{-1.0cm}
-		\hspace*{-2.2cm}
+		\hspace*{-2.cm}
 		\centering\includegraphics[width=1.0\linewidth]{SM.png}
 		\caption[The Standard Model.]{The Standard Model contents, source \cite{SM}.\label{fig:SM}}
 	\end{figure} 
@@ -1452,13 +1456,13 @@
 	
 	\section{Data}
 	\label{sect:Method-Data}
-	The inputs we are using in this thesis consists of Monte Carlo (\acrshort{mc}) simulated background data and neutrino signals as well as data from p-p collisions at $\sqrt{s}=13$ TeV. The \acrshort{mc} and data go through the same chain of Reconstruction, Derivation and Analysis, shown in Figure \ref{fig:DataFlow}. For the \acrshort{mc} simulations (right side of Fig. \ref{fig:DataFlow}) we have an additional step of Generation, Simulation and Digitization before Reconstruction. The (event) Generation step is a simulation of the interaction between quarks and gluons in proton-proton collisions, parton showering and hadronization and subsequent decays into stable particles. Next step is detector Simulation which simulate how the particles interact with the detector. The Digitization step turns simulated energy deposits into detector responses looking like real raw data. The \acrshort{mc} are from here on treated similarly as real data. In the Reconstruction step histograms of the raw data are made. The Derivation step reduces the size of the datasets from PB to TB, before the datasets will be even further reduced to MB-GB sized ROOT Ntuples.
+	The inputs we are using in this thesis consists of Monte Carlo (\acrshort{mc}) simulated background data and neutrino signals as well as data from p-p collisions at $\sqrt{s}=13$ TeV. The following \acrshort{atlas} data processing chain information is taken from \citet{catmore2020atlas}. The \acrshort{mc} and data go through the same chain of Reconstruction, Derivation and Analysis, shown in Figure \ref{fig:DataFlow}. For the \acrshort{mc} simulations (right side of Fig. \ref{fig:DataFlow}) we have an additional step of Generation, Simulation and Digitization before Reconstruction. The (event) Generation step is a simulation of the interaction between quarks and gluons in proton-proton collisions, parton showering and hadronization and subsequent decays into stable particles. Next step is detector Simulation which simulate how the particles interact with the detector. The Digitization step turns simulated energy deposits into detector responses looking like real raw data. The \acrshort{mc} are from here on treated similarly as real data. In the Reconstruction step histograms of the raw data are made. The Derivation step reduces the size of the datasets from PB to TB, before the datasets will be even further reduced to MB-GB sized ROOT Ntuples.
 	 
 	In this thesis the background data are made to best represent all possible production-mechanisms that may give a three lepton final state with a given transverse momentum plus \acrshort{met}.
 	\begin{figure}[htb!]
 		\hspace*{-0.6cm}
 		\centering\includegraphics[width=0.8\linewidth]{dataFlow.png}
-		\caption[Data flow for producing data and \acrshort{mc}.]{The data flow for producing data and \acrshort{mc}/background simulation. \acrshort{mc} start with Generation (right side) going through all the steps ending up with Analysis. Data start with a Trigger (left side) that picks out interesting events and information from a detector, e.g. the \acrshort{atlas} detector. \label{fig:DataFlow}}
+		\caption[Data flow for producing data and \acrshort{mc}.]{The data flow for producing data and \acrshort{mc}/background simulation. \acrshort{mc} start with Generation (right side) going through all the steps ending up with Analysis. Data start with a Trigger (left side) that picks out interesting events and information from a detector, e.g. the \acrshort{atlas} detector. Credit: \citet{catmore2020atlas}. \label{fig:DataFlow}}
 	\end{figure}
 
 	The data (left side of Fig. \ref{fig:DataFlow}) we use is proton-proton collisions at $\sqrt{13}=13$ TeV from the \acrshort{lhc} from 2018. For the data we have a Trigger step that picks out interesting events. What is regarded as interesting is defined by the physicists and the collaboration depending on the analysis they want to perform. In our case we trigger on three leptons with a given transverse momentum. This reduces the rate of writing data to disk. 
@@ -1477,9 +1481,6 @@
 	In Figure \ref{fig:Pt_orig} we see the Pt of the three leptons. As expected, since the arrangement of the leptons are after $p_T$ lepton 1 has a long tail towards high $p_T$ reaching beyond 800 GeV. Lepton 2 has only a few events around 800 GeV, while $p_T$ of lepton 3 reaches only to about 500 GeV. All distributions have most events at low $p_T$ and decreasing as $p_T$ increases. The smaller signal with mass $N_1=150$ GeV reaches its peak much earlier than the 450 GeV signal in all $p_T$ figures. This makes sense since the signal with higher mass neutrino will have more events with high energy leptons.
 	
 	Met\_Et and met\_Phi are seen in Figure \ref{fig:MET_orig}. The Phi feature is very similar to the Phi feature for the three lepton, where the number of events is more or less equal for all values of $\phi$. The transverse energy, or $E_T^{\text{miss}}$, reaches to 600 GeV. Like for the $p_T$ of the leptons, the smaller signal reaches its peak much earlier and has fewer events with higher $p_T$.
-	
-	A thing to notice from these figures is the poor compliance between data and \acrshort{mc} for $p_T$ and \acrshort{met} from around 200 GeV. The optimal case would have all the dots in the lower frames on the 1-marked line for Data/SM, while we get a deviation bigger than 0.5 from the 1-line. The Data/SM (lower) plots show how well the simulated \acrshort{mc} fit with the data for different features values. The reason for this discrepancy is not known to us. It might be from bad modeling, but this error goes beyond this thesis since we focus more on the \acrshort{mc} part.
-	
 	\begin{figure}[h!]
 		\vspace*{-4.5cm}
 		%\hspace*{-1.cm}
@@ -1524,6 +1525,8 @@
 		\caption[Phi and missing transverse momentum plots for the neutrino.]{The figure shows the Phi and $E_t$ of the missing transverse momentum for data, \acrshort{mc} and two neutrino signals. The Phi feature is similar to the three lepton Phi features, and the \acrshort{met} is similar to the Pt feature for the leptons. \label{fig:MET_orig}}
 	\end{figure}
 
+	A thing to notice from these figures is the remarkably good compliance between data and \acrshort{mc}. The optimal case would have all the dots in the lower frames on the 1-marked line for Data/SM, and our data and \acrshort{mc} looks to give a ver ygood agreement. The Data/SM (lower) plots show how well the simulated \acrshort{mc} fit with the data for different features values.
+
 
 	\section{Making New Variables}
 	\label{sect:Method-MakingVariables}
@@ -1539,7 +1542,7 @@
 	This means that e.g. the 132 vertex has the highest $p_T$ lepton coming from vertex 1, second lepton from vertex 3 and thrid lepton from vertex 2.
 	
 	The function for making the new variables can be seen in Listing \ref{Lst:Making_variables}. The new dataframe is then exported as a .h5-file. 
-	\begin{lstlisting}[caption=Making new variables., label=Lst:Making_variables]
+	\begin{lstlisting}[caption=Function for making new variables., label=Lst:Making_variables]
 		# Method for flattening and adding additional variables
 		def lepaugmentation(df, nlep):
 			px  = awkward.fromiter(df['px'])
@@ -1551,20 +1554,6 @@
 		
 			# Make tlv - handy when computing angular variables
 			tlv = uproot_methods.classes.TLorentzVector.TLorentzVectorArray.from_cartesian(px, py, pz, E)
-		
-			df["tlv"] = tlv[:]
-		
-			df["pt"]  = tlv[:].pt
-			pt  = awkward.fromiter(df['pt'])
-			pt_org  = awkward.fromiter(df['pt'])
-			df["phi"] = tlv[:].phi
-			phi = awkward.fromiter(df['phi'])
-		
-			df["theta"] = tlv.theta
-			theta  = awkward.fromiter(df['theta'])
-		
-			df["eta"] = tlv.eta
-			eta  = awkward.fromiter(df['eta'])
 		
 			\\...
 		
@@ -1785,7 +1774,7 @@
 	\subsection{Inspect Data}
 	\label{subsect:Method-Inspect Data}
 	Pandas dataframes lets us easily print a few lines and a summary of the dataframe. We then get a quick overview of what the data looks like. The $N1=150$ GeV data summary:
-	\begin{lstlisting}[caption=Inspect data.,label=InspectData]
+	\begin{lstlisting}[caption=Inspecting the 150 GeV data set.,label=InspectData]
 		<class 'pandas.core.frame.DataFrame'>
 		Int64Index: 66885 entries, 0 to 67773
 		Data columns (total 55 columns):
@@ -1869,7 +1858,7 @@
 		%\hspace{-1cm}
 		\begin{tabular}{ |c|c|c| }
 			\hline
-			\multirow{2}{*}{Vertex permutations} & \multicolumn{2}{|c|}{$N1$}\\
+			\multirow{2}{*}{Vertex permutations} & \multicolumn{2}{c|}{$N1$}\\
 			\cline{2-3} \rule{0pt}{13pt}
 			 & 150 GeV & 450 GeV  \\
 			\hline \rule{0pt}{13pt}
@@ -2321,7 +2310,7 @@
 	\label{sect:Result-BkgClass}
 	The models have been trained on two samples of signal data with truth variables for classifying leptons. Now we want to classify and predict the lepton vertices in various background data which has been simulated, digitized and paved through detector reconstruction to give a good representation of the data. The background Ntuples are originally ROOT-files which have to be converted to dataframes with the same features like the signals, except for the truth. We use a new script for classification of the backgrounds and signal Ntuples, called \textit{Trilepton\_classify\_Ntuples.py}. This time we do not create the target variables since the backgrounds do not contain truth data. We also do this with the two signal samples, containing the same events as the samples used in training/validation/test, but containing data after reconstruction.
 	
-	After converting the backgrounds and signals to dataframes, we load the files containing the trained best models for the two signals and use them to classify the background and signal lepton vertices. The predicted vertex permutations for the two signals are seen in Tables \ref{tab:Counts_150signal_Ntuples} and \ref{tab:Counts_450signal_Ntuples}. Table \ref{tab:Counts_150signal_Ntuples} contains the predicted counts of the two signals with the 150 GeV trained model, while Table \ref{tab:Counts_450signal_Ntuples} contains the predicted counts of the two signals with the 450 GeV trained model. These two tables have different counts for the vertex classes, indicating that the two models predict differently. The most predicted vertices are the 123 and 132 vertices. This makes sense since the leptons are ordered after highest $p_t$, and in this case the highest $p_T$ lepton comes from the $N_1$ production vertex where the $p_T$ of the produced particles decreases after the first vertex decay. We get one 213 predictions of the 450 GeV signal with the 450 trained model. This may be a misclassification case since it only happens once.
+	After converting the backgrounds and signals to dataframes, we load the files containing the trained best models for the two signals and use them to classify the background and signal lepton vertices. The predicted vertex permutations for the two signals are seen in Tables \ref{tab:Counts_150signal_Ntuples} and \ref{tab:Counts_450signal_Ntuples}. Table \ref{tab:Counts_150signal_Ntuples} contains the predicted counts of the two signals with the 150 GeV trained model, while Table \ref{tab:Counts_450signal_Ntuples} contains the predicted counts of the two signals with the 450 GeV trained model. These two tables have different counts for the vertex classes, indicating that the two models predict differently. The most predicted vertices are the 123 and 132 vertices. This makes sense since the leptons are ordered after highest $p_t$, and in both of these cases the highest $p_T$ lepton comes from the $N_1$ production vertex. The $p_T$ of the produced particles decreases after the first vertex decay. We get one 213 predictions of the 450 GeV signal with the 450 trained model. This may look like a misclassification case since it only happens once, but we will see that the backgrounds also have the 213 vertex predicted. The signals look to only contain events with the 123 and 132 vertices.
 	\begin{table}[htbp!]
 		\centering
 		%\hspace{-1cm}
@@ -2456,7 +2445,7 @@
 
 	\section{Distributions}
 	\label{chap:Result-VarDist}
-	The most interesting features we want to look at are the invariant mass of the three lepton system and the \acrshort{met} for both the 150 GeV and 450 GeV signals with cuts defined in Table \ref{tab:Cuts_class} and \ref{tab:Cuts_Benchmark}. In the following plots we have the histogram distributions we have plotted earlier, e.g. like in section \ref{sect:Method-Features}, in the upper part of the plots and in the lower part of the plots we have the Significance Z plots of the simulated signals to look for excess. Significance plots show the expected significance Z of the signals and quantifies the separation between the backgrounds and the signals. When the significance is high it means we have good sensitivity to the signal.
+	The most interesting features we want to look at are the invariant mass of the three lepton system and the \acrshort{met} for both the 150 GeV and 450 GeV signals with cuts defined in Table \ref{tab:Cuts_class} and \ref{tab:Cuts_Benchmark}. In the following plots we have the histogram distributions we have plotted earlier, e.g. like in section \ref{sect:Method-Features}, in the upper part of the plots and in the lower part of the plots we have the Significance Z plots of the simulated signals to look for excess. Significance plots show the expected significance Z of the signals and quantifies the separation between the backgrounds and the signals. When the significance is high it means we have good sensitivity to the signal. The significance plots are used to see where we should cut in the variable we're looking at to maximize the significance. Typically we want to cut where the significance distribution has it's maximum. If we can reach $>5$ $\sigma$ it is possible to discover the model. If it reaches 1.37 we have sensitivity to possibly exclude the model if the data follows the \acrshort{sm} background expectation.
 
 	In Table \ref{tab:SignalRegions_150} and \ref{tab:SignalRegions_450} we see the number of events for the different signal regions from table \ref{tab:Cuts_class} for each backgrounds, the total number of events for the backgrounds and the two neutrino signals. After the cuts we see that the number of events for the \acrshort{mc} and signals are much less compared to Table \ref{tab:Counts_150_Ntuples} and \ref{tab:Counts_450_Ntuples}. There is also a difference between the flavors of the first and second vertex leptons \acrshort{sf} and \acrshort{df} where the \acrshort{sf} plots have distributions with much more events. The total number of background event ratios for \acrshort{df}/\acrshort{sf} are seen in Table \ref{tab:dfsf_ratio} for the three vertex permutations.
 	\begin{table}[htb!]
@@ -2537,27 +2526,27 @@
 		\centering
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			Signal & 123 & 132 & 213 \\
+			Model & 123 & 132 & 213 \\
 			\hline \rule{0pt}{13pt}
 			150 GeV & 0.0863 & 0.589 & 0.114 \\
 			\hline \rule{0pt}{13pt}
 			450 GeV & 0.0848 & 0.574 & 0.042 \\
 			\hline
 		\end{tabular}
-	\caption[Flavor ratios for cuts.]{Flavor ratio, \acrshort{df}/\acrshort{sf}, for the two signals with vertex cuts. \label{tab:dfsf_ratio}}
+	\caption[Flavor ratios for vertex cuts.]{Flavor ratio, \acrshort{df}/\acrshort{sf}, for the two signal models with vertex cuts showing that there are a lot more \acrshort{sf} events than \acrshort{df} events for the backgrounds. \label{tab:dfsf_ratio}}
 	\end{table}
 	
-	The plots for the invariant masses with \acrshort{df} between the leptons are seen in Figure \ref{fig:m3l_DF}, and the plots with \acrshort{sf} for the leptons are seen in Figure \ref{fig:m3l_SF}. There are less events with the 213 vertex permutation compared to the 123 and 132 vertices. There are only a few backgrounds in the 213 vertex cut plots (Fig. \ref{subfig:m3l_DF_213_150}, \ref{subfig:m3l_DF_213_450}, \ref{subfig:m3l_SF_213_150}, \ref{subfig:m3l_SF_213_450}) that has events with this predicted vertex permutation compared with the other vertex cuts, about 1-70 events. Most of the events are around 100-200 GeV where more or less all events are below 500 GeV. The signal models favor the 123 and 132 vertex permutations with no signals in the 213 vertex permutation. In total for the backgrounds the 450 GeV model for the 213 vertex has more events compared to the 150 GeV model, $\approx$ 70 vs 13 events. There is a clear difference between the \acrshort{df} and \acrshort{sf} plots where there are a lot more events in total in the \acrshort{sf} plots as seen in Table \ref{tab:dfsf_ratio} for the flavor ratios. 
+	The plots for the invariant masses with \acrshort{df} between the leptons are seen in Figure \ref{fig:m3l_DF}, and the plots with \acrshort{sf} for the leptons are seen in Figure \ref{fig:m3l_SF}. There are less events with the 213 vertex permutation compared to the 123 and 132 vertices. There are only a few backgrounds in the 213 vertex cut plots (Fig. \ref{subfig:m3l_DF_213_150}, \ref{subfig:m3l_DF_213_450}, \ref{subfig:m3l_SF_213_150}, \ref{subfig:m3l_SF_213_450}) that has events with this predicted vertex permutation compared with the other vertex cuts, about 1-70 events. Most of the events are around 100-200 GeV where more or less all events are below 500 GeV. The signal models favor the 123 and 132 vertex permutations with no signals in the 213 vertex permutation. In total for the backgrounds the 450 GeV model for the 213 vertex has more events compared to the 150 GeV model, $\approx$ 70 vs 13 events. There is a clear difference between the \acrshort{df} and \acrshort{sf} plots where there are a lot more events in total in the \acrshort{sf} plots as seen in Table \ref{tab:dfsf_ratio} for the flavor ratios. Mainly because $Z$ can not decay into electron-muon (emu) events and thus reduces the large backgrounds such as $WZ$ and $Z+$jets.
 	
-	The 150 GeV simulated signal in the plots have around the same number of events like the backgrounds and where the number of events decrease when the masses increase, with some fluctuations mostly after reaching around 500 GeV. This makes the 150 GeV simulated signal difficult to differentiate from the backgrounds. The 450 GeV simulated signal is easier to split from the backgrounds since it has more events for higher masses, from around the $m_{3l}$ mass of 400 GeV the heavier signal becomes dominant over the backgrounds in terms of events. For the simulated signals there is not much difference between the flavors for the first and second vertex leptons with only maximum 300 events in difference for the same vertices.
+	The 150 GeV simulated signal in the plots have around the same number of events like the backgrounds and where the number of events decrease when the masses increase, with some fluctuations mostly after reaching around 500 GeV. This makes the 150 GeV simulated signal more difficult to differentiate from the backgrounds, however it reaches a significance of $>2$ in the \acrshort{df} channels. The 450 GeV simulated signal is easier to split from the backgrounds since it has more events for higher masses, from around the $m_{3l}$ mass of 400 GeV the heavier signal becomes dominant over the backgrounds in terms of events. For the simulated signals there is not much difference between the flavors for the first and second vertex leptons with only maximum 300 events in difference for the same vertices.
 	
-	The significance plots for the $m_{3l}$ plots with \acrshort{sf}, 123 and 132 vertex cuts are very similar for the 450 GeV simulated signal where it starts at 0 GeV and raises to over 4 $\sigma$ around 250 GeV. The 150 GeV simulated signal raises around 100 GeV but varies a lot more depending on the signal regions. For the 123 vertex and 150 GeV signal model is stays around 1-2 $\sigma$ after invariant mass of 200 GeV, while for the 450 GeV model it goes up to between 3-4 $\sigma$. For the 132 vertex and 150 GeV model the 150 GeV simulated signal goes up to 1 $\sigma$ between 150-750 GeV and goes down to 0. For the 450 GeV model the 150 GeV signal stays at around 1 $\sigma$ until around 950 GeV before it goes to 0 again. For \acrshort{df} the significance of the 450 GeV signal starts at almost 3 $\sigma$ and reaches over 4 $\sigma$ around 160 GeV for both signal models. The 150 GeV signal with the 150 GeV model starts at 2 $\sigma$ and reaches almost 4 $\sigma$ at 1000 GeV, while it ends at around 3.5 $\sigma$ for the 450 GeV model. The 132 vertex is similar for both signal models where the 450 GeV signal increases to over 4 $\sigma$ at 200 GeV, while the 150 GeV signal increases to 1 $\sigma$ before it ends up a 0 around 900-1000 GeV. There are no signals in the 213 vertex plots which give no significance to look at.
+	The significance plots for the $m_{3l}$ plots with the \acrshort{sf} channel, 123 and 132 vertex regions are very similar for the 450 GeV simulated signal where it starts at 0 GeV and reaches the maximum significance over 4 $\sigma$ around 250 GeV. The 150 GeV simulated signal significance increases after 100 GeV but varies a lot more depending on the signal regions. For the 123 vertex in 450 GeV model the significance of the 150 GeV signal reaches its maximum around 800 GeV, while in the 150 GeV model it stays around 2 $\sigma$ from 300-950 GeV. For the 132 vertex plots the 150 GeV signal never goes beyond 2 $\sigma$. For the \acrshort{df} channel and the 123 vertex region the significance of the 450 GeV signal starts at almost 3 $\sigma$ and reaches over 4 $\sigma$ around 160 GeV for both signal models. The 150 GeV signal in the 150 GeV model starts at 2 $\sigma$ and reaches beyond 4 $\sigma$ around 850 GeV. In the 450 Gev model the 150 GeV signal reaches its maximum with $\sigma>4$ between 400-800 GeV. In the 132 vertex plots the maximum significance is close to 4 $\sigma$ in the 150 GeV model and 3 $\sigma$ in the 450 GeV model for the 150 GeV signal in the region around 600-700 GeV. There are no signals in the 213 vertex plots which give no significance to look at.
 	
-	The standard analysis plot in Figure \ref{fig:m3l_Bench} have cuts on the invariant mass higher than 100 GeV. This plot has a total number of 214780.4 background events which is much more than the \acrshort{sf} plots. The 450 GeV simulated signal is easier to differentiate from the backgrounds after 450 GeV while the 150 GeV simulated signal is more difficult, similar to the plots with the vertex cuts. The significance of the 150 Gev signal increases slowly towards 1 $\sigma$ while the invariant mass increases to 1 TeV. THe 450 GeV goes over 4 $\sigma$ at around 380 GeV and stays there.
+	The standard analysis plot in Figure \ref{fig:m3l_Bench} have cuts on the invariant mass higher than 100 GeV. This plot has a total number of 214780.4 background events which is much more than the \acrshort{sf} plots. The 450 GeV simulated signal is easier to differentiate from the backgrounds after 450 GeV while the 150 GeV simulated signal is more difficult, similar to the plots with the vertex cuts. The significance of the 150 Gev signal increases slowly towards 1 $\sigma$ while the invariant mass increases to 1 TeV. For the 150 GeV model we reach higher sensitivity with our \acrshort{ml} model than with this simplified model. The 450 GeV goes over 4 $\sigma$ at around 380 GeV and stays there.
 
-	Also for \acrshort{met} we get that the \acrshort{sf} plots have much more events than the \acrshort{df} plots. For this feature we can't differentiate as easily between the backgrounds and signals we could before for both the vertex cuts and for the benchmark cuts. All the signals seem to have the same amount of events like the backgrounds, and we do not have the same difference between the two signals either. They are much closer in number of events for this feature. For \acrshort{df} and vertex 123 for both signal models we have that the 450 GeV simulated signal has more events that the \acrshort{mc} around 100-500 GeV. 
+	Also for \acrshort{met} we get that the \acrshort{sf} plots have much more events than the \acrshort{df} plots. For this feature we can't differentiate as easily between the backgrounds and signals we could before for both the vertex cuts and for the benchmark cuts. All the signals seem to have the same amount of events like the backgrounds, and we do not have the same difference between the two signals either. They are much closer in number of events for this feature. For \acrshort{df} and vertex 123 for both signal models we have that the 450 GeV simulated signal has more events that the \acrshort{mc} around 100-500 GeV. The only real source of \acrshort{met} for our signal models comes from the neutrino thus we do not expect any excess of high \acrshort{met} in the signal distributions. However, one does see a slightly longer tail in the \acrshort{met} distribution of the 450 GeV signal since it typically has more momentum available for the neutrino.
 	
-	The significance for the \acrshort{df} and 123 vertex plots goes quickly from 3 $\sigma$ to over 4 $\sigma$ and stays there for the 450 GeV signals, while the 150 GeV signals starts at 2 $\sigma$ and ends at 0 around 410 GeV in the 150 GeV model and around 280 GeV in the 450 GeV model. The significance for the 150 GeV signal and 132 vertex cuts for both signal models increases to around 1 $\sigma$ and fluctuates until almost 300 GeV where it goes to 0. For the 450 GeV signal the significance increases to over 4 $\sigma$ around 100 GeV and starts to decrease around 250 GeV. It ends just above 2 $\sigma$ in the 150 GeV model while it ends at 0 at 500 GeV in the 450 GeV model. For the \acrshort{sf} and vertex 123 both signal models have the 450 GeV signal reach above 4 $\sigma$, but the 150 GeV model has the signal dropping around 400 GeV ending back at around 4 $\sigma$ at 600 GeV. The 150 GeV signal goes up to 1 $\sigma$ and goes back to 0 around 300 GeV. For the \acrshort{sf} and 132 vertex plots the 450 GeV signals go over 4 $\sigma$ around 100 GeV and decreases from 200 GeV when $E_T^{\text{miss}}$ approaches 600 GeV. The 150 GeV model ends up at 0, while the 450 GeV model ends up at 2 $\sigma$ for the 450 GeV signal. The 150 GeV signals stay more or less between 0-1 $\sigma$ for both models.
+	The significance for the \acrshort{df} and 123 vertex plots goes quickly from 3 $\sigma$ to over 4 $\sigma$ and stays there for the 450 GeV signal. The 150 GeV signals starts at 2 $\sigma$ and ends at 0 around 410 GeV in the 150 GeV model and around 280 GeV in the 450 GeV model because we run out of events in the signal model. The significances of the signals are much less in the \acrshort{met} distributions compared with the $m_{3l}$ distributions and, as expected, does not discriminate very well the signals and backgrounds.
 	
 	In the benchmark plot for \acrshort{met} the significance for the 150 GeV signal stays at 0 while it increases and ends up at 4 $\sigma$ at 600 GeV for the 450 GeV signal.
 	
@@ -2633,10 +2622,10 @@
 %----------------------------------------------------------------------
 %----------------------------------------------------------------------
 
-	\part{*Discussion, Conclusion and Future Prospects}
+	\part{Discussion, Conclusion and Future Prospects}
 	\label{part:Conclusion}
 	
-	\chapter{Discussion}  % Se på kommentarer fra Heidi og Eirik
+	\chapter{Discussion}
 	\label{chap:Discussion}
 	This chapter is dedicated to the discussion of the findings we get working with this thesis as presented in part \ref{part:Results}. The discussion of the results are ranged by tasks where we first discuss the classification performances of the models we have used, how we choose the best performing model and the classification of the Ntuples. Second, we compare and discuss the new feature distributions with different cuts applied.
 	
@@ -2645,7 +2634,7 @@
 	\label{sect:Discussion-PerformanceEval}	
 	When we used the correlations and mutual information of the features in section \ref{subsubsect:Method-Correlations}, we came to the conclusion to remove the eta variables for each lepton from the dataframes. There were other features with high correlations, greater than |0.7|, or low mutual information, lower than 0.1 for 150 GeV and lower than 0.45 for 450 GeV, as well. Removing some of these features together with the etas gave only worse results. This is why we only removed the eta features from the dataframes.
 	
-	During resampling (sect. \ref{subsect:Method-Resampling}) of the imbalanced datasets we used different techniques of resampling depending on which signal was to be trained with. From the target counts of the signals in Table \ref{tab:Counts_original}, we see that the 450 GeV signal has from 3938 to 139686 events while the 150 GeV signal only has from 4013 to 26801 events. For the 150 GeV signal, undersampling the majority class with the RandomUnderSampler would not be a great idea since we would not have that much data left to train on afterwards. We would then get something around 12800 events for each class, instead of around 26000 events for each class using only oversampling. With the 450 GeV signal, we still have enough data that we could use the RandomUnderSampler to undersample the majority class to around 65000 events. Using both resampling techniques gave better results since we got overfitting on the trained data when only using oversampling to around 130000 events per class.
+	During resampling (sect. \ref{subsect:Method-Resampling}) of the imbalanced datasets we used different techniques of resampling depending on which signal was to be trained on. From the target counts of the signals in Table \ref{tab:Counts_original}, we see that the 450 GeV signal has from 3938 to 139686 events while the 150 GeV signal only has from 4013 to 26801 events. For the 150 GeV signal, undersampling the majority class with the RandomUnderSampler would not be a great idea since we would not have that much data left to train on afterwards. We would then get something around 12800 events for each class, instead of around 26000 events for each class using only oversampling. With the 450 GeV signal, we still have enough data that we could use the RandomUnderSampler to undersample the majority class to around 65000 events. Using both resampling techniques gave better results since we got overfitting on the trained data when only using oversampling to around 130000 events per class.
 	
 	With the 150 GeV signal we trained ten different classification models with various results. In Table \ref{tab:Validation_150} we see the evaluation metrics used for the validation set. Most of the classifiers have an accuracy score below 0.8, which is not good enough to be used more. The classifiers that stand out are the AdaBoost, \acrshort{xgb} and \acrshort{lgbm} models with at least an accuracy score of 0.85. The \acrshort{lgbm} model has the highest accuracy score both overall with score of 0.88, and individually for each class as seen in the \acrshort{lgbm} confusion matrix in Figure \ref{fig:ConfVals}. We get the same kind of results with the 450 GeV signal, but all the accuracy scores are much higher. Most of the classifiers get a score higher than 0.9, but the \acrshort{lgbm} model is the best also here with accuracy score of 0.95. The reason why the accuracy scores are higher for the 450 GeV model might be because we now have a lot more events ($\approx$ 65000 events for each class) than for the 150 GeV model ($\approx$ 26000 events for each class). The models have a lot more data to train on and detect important differences in the features for deciding a class. The accuracy scores and confusion matrices are the reasons why we pick the \acrshort{lgbm} as the best performing model to be used more. The \acrshort{lgbm} was also the fastest model to train.
 
@@ -2654,34 +2643,44 @@
 	
 	\section{Comparing Ntuple Distributions}
 	\label{sect:Discussion-CompNtuples}
-	From the analysis of the different cuts applied to the invariant mass of the three lepton system and the \acrshort{met}, we see that we have a lot more events in the \acrshort{sf} plots by comparing the total number of \acrfull{mc} events for the invariant masses in Figures \ref{fig:m3l_DF} and \ref{fig:m3l_SF} and the \acrshort{met} Figures \ref{fig:met_DF} and \ref{fig:m3l_SF}. The number of events for each plot with cuts are easier shown in Tables \ref{tab:SignalRegions_150} and \ref{tab:SignalRegions_450} for the 150 and 450 GeV models, respectively. The \acrshort{df}/\acrshort{sf} ratios for each vertex permutation are seen in Table \ref{tab:dfsf_ratio} showing that there are a lot more \acrshort{sf} events. This ratio difference does not apply for the two signals, where the number of \acrshort{sf} and \acrshort{df} events are more or less equal for each vertex and between each model. From the ratios we can conclude that \acrshort{sf} is favored over \acrshort{df} with two electrons or two muons in the first and second vertices. 
+	From the analysis of the different cuts applied to the invariant mass of the three lepton system and the \acrshort{met}, we see that we have a lot more events in the \acrshort{sf} plots by comparing the total number of \acrshort{mc} events for $m_{3l}$ in Figures \ref{fig:m3l_DF} and \ref{fig:m3l_SF}, the \acrshort{met} Figures \ref{fig:met_DF} and \ref{fig:m3l_SF} and the number of events for each plot with cuts shown in Tables \ref{tab:SignalRegions_150} and \ref{tab:SignalRegions_450} for the 150 and 450 GeV models, respectively. The \acrshort{df}/\acrshort{sf} ratios for the two signal models and each vertex permutation are seen in Table \ref{tab:dfsf_ratio} also showing that there are a lot more \acrshort{sf} events. This ratio difference does not apply for the two simulated signals, where the number of \acrshort{sf} and \acrshort{df} events are more equal for each vertex and between the models. The 450 GeV signal has on average between 2000-3000 more events in each plot than the 150 GeV signal, except for the plots with the 213 vertex where there are no signal events. From the plot of the expected flavor ratios and \acrshort{lfc} in Figure \ref{fig:LepFlavDist} for the two models, the 150 GeV shows clearly a larger \acrshort{df} component. This is also what we see in Table \ref{tab:dfsf_ratio}, and is most prominent for the 123 and 132 vertex permutations. We can conclude that \acrshort{sf} is favored over \acrshort{df} with two electrons or two muons in the first and second vertices.
 	
-	The standard analysis plot for the invariant mass as significance similar to the \acrshort{sf} and 132 vertex permutation where the 450 GeV significance increases to over 4 $\sigma$ while the 150 GeV stays around 1 $\sigma$. The sensitivity looks to be bigger in the \acrshort{df} channel with almost the same amount of signal events, but the backgrounds are much less. This is as expected since \acrshort{df} removes $Z$-decay which happens in the $WZ$ and $Z+$jets backgrounds. From the flavor ratios we get different degrees of \acrshort{lfv} for the different vertex permutations. This is interesting to look at for the future if we were to discover excess to better understand what type of neutrino mass model we are dealing with. This would also be interesting for the \acrshort{ss} vs. \acrshort{os} like the \acrshort{cms} saw.
+	The standard analysis plot for the invariant mass has significance similar to the \acrshort{sf} and 132 vertex permutation where the 450 GeV significance increases to over 4 $\sigma$ while the 150 GeV stays below 1 $\sigma$. The sensitivity looks to be bigger in the \acrshort{df} channel with almost the same amount of signal events, but the backgrounds have much less events. This is as expected since the \acrshort{df} cut removes $Z$-decay which happens in the $WZ$ and $Z+$jets backgrounds. From the flavor ratios we get different degrees of \acrshort{lfv} for the different vertex permutations. This is interesting to look at for the future if we were to discover excess to better understand what type of neutrino mass model we are dealing with. This would also be interesting for the \acrshort{ss} vs. \acrshort{os} like the \acrshort{cms} saw.
 	
-	The 450 GeV signal looks easier to split from the backgrounds when looking at higher invariant masses for the three lepton system than 400-500 GeV. The 450 GeV signal is more dominant in this region with more events. So the standard analysis looks to have the same results for dividing background and signal. There does not seem to be any big differences for the two trained signal models when comparing the same cuts. The amount of total events changes but this does not change much of the behavior of the backgrounds or the signals in the plots.
+	The 450 GeV signal looks easier to split from the backgrounds when looking at higher invariant masses than 400-500 GeV for the three lepton system with the 123 and 132 vertex permutations. The 450 GeV signal is more dominant in this region in terms of events. The standard analysis looks to have the same results for dividing background and signal where the 450 GeV signal has more events for $m_{3l}>500$ GeV. In general it seems like our trained model performs better then the simple benchmark analysis. However, one should bare in mind that the benchmark model from Table \ref{tab:Cuts_Benchmark} has not been optimized on the signal models under study.
 	
-	For \acrshort{met} it is not as easy to differentiate between the backgrounds and signals since both signals have more or less the same amount of events like the backgrounds have. The 450 GeV can be differentiated to some extent between 100 and 400 GeV for the 123 vertex plots. The signals do also have very similar amount of events for energies below 400 GeV. So to differentiate the signals from the models we might need to look in the higher energy regions.
+	For \acrshort{met} it is not as easy to differentiate between the backgrounds and signals since both signals have more or less the same amount of events like the backgrounds have. The 450 GeV can be differentiated to some extent between 100 and 400 GeV for the 123 vertex plots. The signals do also have very similar amount of events for energies below 400 GeV. So to differentiate the signals from the models we might need to look in the higher energy regions. For the significance with the \acrshort{met} the 150 GeV signal were only as high as 2 $\sigma$ with this signal region for 0-100 GeV. For the other signal regions the 150 GeV signal significance stays mostly between 0-1 $\sigma$. The significances are much less in the \acrshort{met} distributions. As expected the \acrshort{met} does not discriminate well the signals and backgrounds.
 	
 	
 %----------------------------------------------------------------------	
 
-	\chapter{*Conclusion and Future Work}
+	\chapter{Conclusion and Future Work}
 	\label{chap:Conclusion}	
 	
 	\section{Conclusion}
 	\label{sect:Conclusion-Conclusion}
-	In this thesis we have tested a new approach in particle physics by utilizing \acrshort{ml} and multiclass classification of lepton vertices to be used to differentiate simulated signal and backgrounds. We first trained classification models on two neutrino signal scenarios with different neutrino masses of 150 GeV and 450 GeV. These models have been used to find the classification models that best predicts lepton vertex permutations for a trilepton and a neutrino final state system. The proton-proton decay model is based on the decay of a \acrshort{sm} $W$-boson decaying to a heavy pseudo-Dirac neutrino through the Inverse seesaw mechanism, leading to the trilepton final state. The Light Gradient Boosting Machine was found to be the best performing model with accuracy score of 0.88 for the 150 GeV trained signal and accuracy score of 0.96 for the 450 GeV trained signal.
+	In this thesis we have tested a new approach in particle physics by utilizing \acrshort{ml} and multiclass classification of lepton vertices to be used to differentiate simulated signal and backgrounds and looking for excess. We first trained multiclass classification models on two neutrino signal scenarios with different neutrino masses of 150 and 450 GeV. These models have been used to find the classification models that best predicts the lepton vertex permutations for a trilepton plus a neutrino final state system. The proton-proton decay model is based on the decay of a \acrshort{sm} $W$-boson decaying to a heavy pseudo-Dirac neutrino through the Inverse seesaw mechanism, leading to the trilepton final state. The Light Gradient Boosting Machine (\acrshort{lgbm}) was found to be the best performing model with accuracy score of 0.88 for the 150 GeV trained signal and accuracy score of 0.96 for the 450 GeV trained signal.
 	
-	We then classified the vertex permutations of simulated background \acrshort{mc} and two similar neutrino signals for data produced in 2018 at the \acrshort{lhc}. The most predicted vertex permutations were used as cuts for a feature analysis to check for \acrshort{lfv} between lepton 1 and 2 for electrons and muons for a few selected features. The invariant mass of the three lepton system and the \acrshort{met} were used for comparing our selected signal region cuts with a more standard analysis from \citet{inverseseesaw}. 
+	We then classified the vertex permutations of simulated background \acrshort{mc} and two similar neutrino signals corresponding to the data recorded by the \acrshort{lhc} in 2018. The most predicted vertex permutations, 123, 132 and 213, were used as cuts for a feature analysis to check for \acrshort{lfv} between the leptons coming from vertex 1 and 2 for electrons and muons. The invariant mass of the three lepton system and the \acrshort{met} were used for comparing our selected signal region cuts with a more standard analysis applying different cuts from \citet{inverseseesaw}. 
 	
-	The standard analysis was found to give the same results for a \acrshort{df} and \acrshort{os} with vertex permutations 123 and 132 for both signals. The classification models for the two signals seemed to favor the \acrshort{sf} and \acrshort{os} case more with much more events for this signal region cut. With the 450 GeV signal we found it easier to differentiate against background when we looked at higher masses than 450-500 GeV of the invariant three lepton system mass.
+	The standard analysis was found to give similar results for the signals significance for the \acrshort{sf} with \acrshort{os} cuts and vertex permutation 132 for both signals. The classification models for the backgrounds seemed to favor the \acrshort{sf} and \acrshort{os} case more with much more events for the 123 and 132 vertex permutations for these signal region cuts. The two simulated signals had number of events quite similar for the \acrshort{sf} and \acrshort{df}. With the 450 GeV signal we found it easier to differentiate against background when we looked at higher masses than 400-500 GeV of the invariant three lepton system mass for both the flavor, charge and vertex permutation signal regions and the standard analysis signal region. This differentiation between the backgrounds and the 450 GeV signal could also somewhat be seen with the \acrshort{met} for the \acrshort{df}, \acrshort{os} and 123 vertex signal regions between 100 and 400 GeV. The significance were found to be higher with the 450 GeV signal compared with the 150 GeV signal, and higher for the $m_{3l}$ compared with the \acrshort{met}.
+	
+	In general it seems like our trained models perform better than the simple benchmark analysis. However, one should bare in mind that the benchmark model in Table \ref{tab:Cuts_Benchmark} has not been optimized on the signal models under study.
+	
+	Modern \acrshort{ml} techniques are rapidly modified and developed in the field of particle physics and high energy physics (\acrshort{hep}) for analysis. The article by \citet{MLFuture} presents a list of interesting literature into the development and application of \acrshort{ml} techniques for \acrshort{hep} analyses. The article is constantly updated and made for the community to follow the development of different \acrshort{ml} techniques. It only contains a fraction of the papers about the use of \acrshort{ml} with particle physics that are out there. 
 
 	
 	\section{Future Work}
 	\label{sect:Conclusion-Future}
 	We have tested a few classification models yielding various results and performances on the datasets. There are other \acrshort{ml} models to test and other useful libraries for \acrshort{ml} that could be used to train classification models, e.g. Tensorflow or Keras. Another \acrshort{ml} technique to be tested could be deep learning or other networks that may give different results than the ones we have used in this thesis. Only the \acrshort{mc} and two neutrino signals were classified with the \acrshort{lgbm} model. The data could also be classified and analyzed together with the \acrshort{mc} and signals.
 	
-	The work on \acrshort{ml} has been the main focus of this thesis. A natural continuation of this work is to extend it with more detailed particle physics studies, such as more in depth of the particle physics and the deviation of the number of \acrshort{ss} vs. \acrshort{os} the \acrshort{cms} looked at in the article \cite{mymodel2}. Another possible continuation of this work would be to extend the analysis to include other data periods, like data from the whole Run 2 by the \acrshort{lhc}. This is easily implemented in the scripts we have used to plot the feature distributions. Other neutrino signals with other masses could also be interesting to test. In section \ref{sect:Method-Features} we discovered a poor compliance between the data and \acrshort{mc} in the original Ntuples for $p_T$ and \acrshort{met} after reaching around 200 GeV. This is something that could be looked at and tried to improve in the future. The invariant mass production errors with $p>E$ is something to further studied as well.
+	The work on \acrshort{ml} has been the main focus of this thesis. A natural continuation of this work is to extend it with more detailed particle physics studies, such as more in depth of the particle physics and the deviation of the number of \acrshort{ss} vs. \acrshort{os} the \acrshort{cms} looked at in the article \cite{mymodel2}. 
+	
+	Another possible continuation of this work would be to extend the analysis to include other data periods, like data from the whole Run 2 by the \acrshort{lhc}. This is easily implemented in the scripts we have used to plot the feature distributions. It would also be interesting to test the models on the data to see how it fits with the \acrshort{sm} background expectations.
+	
+	Other neutrino signals with other masses could also be interesting to test. The invariant mass production errors with $p>E$ is something to further studied as well.
+	
+	The most interesting results of this work would be if an excess is observed to try and see if one can understand more about the events and which underlying theoretical model would fit the observed excess best.
 
 	
 %----------------------------------------------------------------------
@@ -2724,7 +2723,7 @@
 	\chapter{450 GeV Signal Data Summary}
 	\label{appendix:Signal450_Summary}
 	The $N1=450$ GeV data summary:
-	\begin{lstlisting}
+	\begin{lstlisting}[caption=Inspecting the 450 GeV data set.,label=InspectData_450]
 		<class 'pandas.core.frame.DataFrame'>
 		Int64Index: 259436 entries, 0 to 261331
 		Data columns (total 55 columns):
@@ -2804,9 +2803,9 @@
 	\chapter{Correlations}
 	\label{appendix:Correlations}
 	\underline{Signal $N1=150$ GeV:}
-	\begin{figure}[h!tb]
-		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_150.png}
-		\caption[Correlation matrix for the features in the 150 GeV signal.]{Correlation matrix for all the features in the 150 GeV signal dataset. Values close to -1 and 1 shows strong correlations between those features. \label{fig:Corr_150}}
+	\begin{figure}[htb!]
+		\centering\includegraphics[width=0.7\linewidth]{Correlation_150.png}
+		\caption[Correlation matrix of the features in the 150 GeV signal dataset.]{Correlation matrix of the features in the 150 GeV signal dataset. Values close to 1 or -1 show high correlations between the features. \label{fig:Corr_150}}
 	\end{figure}
 	\begin{lstlisting}
 		Information gain of the features:
@@ -2863,9 +2862,9 @@
 	\end{lstlisting}
 	
 	\underline{Signal $N1=450$ GeV:}
-	\begin{figure}[h!tb]
-		\centering\includegraphics[width=0.7\linewidth]{Test_plots/ROC_150.png}
-		\caption[Correlation matrix for the features in the 450 GeV signal.]{Correlation matrix for all the features in the 450 GeV signal dataset. Values close to -1 and 1 shows strong correlations between those features. \label{fig:Corr_450}}
+	\begin{figure}[htb!]
+		\centering\includegraphics[width=0.7\linewidth]{Correlation_450.png}
+		\caption[Correlation matrix of the features in the 450 GeV signal dataset.]{Correlation matrix of the features in the 450 GeV signal dataset. Values close to 1 or -1 show high correlations between the features. \label{fig:Corr_450}}
 	\end{figure}
 	\begin{lstlisting}
 		Information gain of the features:
