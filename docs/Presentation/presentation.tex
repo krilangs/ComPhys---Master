@@ -31,25 +31,14 @@
 			\item Introduction
 				\begin{enumerate}[(i)]
 					\item Particle physics model
-					\item Central Machine Learning concepts
+					\item Machine Learning
 				\end{enumerate}
 			\item Multiclass Classification
 			\item Results
-			\item Summary, Conclusion, Outlook
+			\item Summary, Conclusion and Outlook
 		\end{enumerate}
 	\end{frame}
-	\note{
-		\begin{enumerate}
-			\item Introduction
-			\begin{enumerate}[(i)]
-				\item Particle physics model
-				\item Central Machine Learning concepts
-			\end{enumerate}
-			\item Multiclass Classification
-			\item Results
-			\item Summary, Conclusion, Outlook
-		\end{enumerate}
-	}
+
 
 
 	\begin{frame}[t]{Standard Model}
@@ -61,9 +50,9 @@
 	\end{frame}
 	\note{
 		SM explain with great precision. Fundamental particles in figure w/ charge, spin and mass.
-		Does not explain graviton and non-zero mass of neutrino.
+		Does not explain graviton and non-zero mass of neutrino. Know from neutrino oscillations they change flavor and must have mass.
 		
-		Introduce Inverse seesaw mechanism w/ heavy neutrinos and right-handed neutrinos. Left-handed for all SM particles, and LH means direction of spin and motion are opposite. ISS-> trilepton final state with a neutrino through p-p collisions and decay through W-boson and heavy pseudo-Dirac neutrino.
+		Introduce Inverse seesaw mechanism w/ heavy neutrinos and right-handed neutrinos. Only left-handed neutrinos, LH and RH for other SM particles. LH means direction of spin and motion are opposite. ISS-> trilepton final state with a neutrino through p-p collisions and decay through W-boson and heavy pseudo-Dirac neutrino. Continue to next slide with model->
 	}
 
 
@@ -82,6 +71,20 @@
 	}
 
 
+	\begin{frame}[t]{Proton-Proton Collision Data}
+		\begin{figure}[htb!]
+			\hspace*{-0.6cm}
+			\centering\includegraphics[width=0.8\linewidth]{dataFlow.png}
+			\caption{The data flow for producing the proton-proton collision data and simulations. Credit: \citet{catmore2020atlas}. \label{fig:DataFlow}}
+		\end{figure}
+	\end{frame}
+	\note{
+		MC simulated backgrounds, simulated neutrinos and p-p data at 13 TeV from LHC 2018 - data flow left side - not interesting. MC and signals - right side - ML. 
+		
+		Signal sim - train ML - after Generation - truth - sim of event interactions quark/gluons + subsequent decays. Next steps - sim particle interactions w/detectors - conv sim to "real" raw data as hist - reduce amount of data. MC - best represent all prod-mech with trilepton+MET. MC + signals - classif after Analysis.
+	}
+
+
 	\begin{frame}[t]{Machine Learning Process}
 		\begin{block}{What we want to do:}
 			Use machine learning to identify lepton vertices in simulated backgrounds and signals.
@@ -91,7 +94,7 @@
 				\item Use supervised learning and multiclass classification.
 				\item Train and optimize machine learning algorithms
 				\item Evaluate which model that best predicts the vertices.
-				\item Predict leptons for simulated backgrounds and signals.
+				\item Predict lepton vertices for simulated backgrounds and signals.
 			\end{enumerate}
 		\end{block}
 		\begin{block}{End goal:}
@@ -106,7 +109,7 @@
 		
 		Need good and fast algorithms for classification, lot of data to work with. Need preprocessing of data before classification. Train models on training set. Many hyperparameters to optimize on validation set. Evaluation metrics for performance evaluation for validation and test set. Export best model, skips training the models each time.
 		
-		Signal region cuts to study LFV for lepton 1 and 2. Compare with a more standard analysis by Pascoli et al.
+		Signal region cuts to study LFV for lepton 1 and 2. Compare with a more standard analysis by \citet{inverseseesaw}.
 	}
 
 
@@ -119,7 +122,15 @@
 		\end{enumerate}
 	\end{frame}
 	\note{
-		...
+		Check correlations - strong correlations=strong linear dependence=remove one feature=should give better results. Information gain - want higher values=features have more information regarding the classes.
+		
+		Imbalanced data=more data for some classes (bias)=bad predictions of minority classes - resampling techniques to balance classes (number of events).
+		
+		Split data - training, validation, test - training=train models - validation=tune model hyperparameters and check models - test=check final performance of (tuned) models.
+		
+		Scale - avoid weighted favoring of some classes - only for features - standardization=0 mean, 1 std.dev.
+		
+		Tune with a randomized search method with cross-validation for different hyperparameters depending on classification type and algorithm. 
 	}
 
 
@@ -130,7 +141,7 @@
 		\end{figure}
 	\end{frame}
 	\note{
-		...
+		Supervised learning problem - balance between variance and bias - best compromise=best model for model complexity/number of data points. High bias=underfitting - high variance=overfitting. Overfitting more normal today. Figure - optimal at test minimum. Quality of model - on data not seen during training.
 	}
 
 
@@ -145,7 +156,9 @@
 		\end{enumerate}
 	\end{frame}
 	\note{
-		...
+		Binary classifiers to multiclass: LR - linear regression with a logistic function to predict. MLP - neural network - input, hidden, output layers - weights, biases, non-linear activation func to output - hyperparameters, regularization control overfitting. DTC - simpler, single tree model with features - criterion for value splits - control hyperparm for overfit. RF - ensemble of trees - increase accuracy, decease variance. Boost - iteration weights - sequential models built - better classifier. AdaBoost - adaptive boost - weights adapt each iteration - majority vote -> better classifier. GradientBoost - tree boost approx Ada - weighted gradient in loss func - HistGradient larger data sets - less time, higher accuracy - bins. XGB - opt hist dist grad boost alg - accurate fast parallel - scalable -  dist of features - complex w/hyperparameters. LGBM - distributed gradient boost - faster, memory efficient, accurate - large data sets - information gain - drop feat threshold.
+		
+		Multiclass: Multiclass to binary cases techniques.
 	}
 
 
@@ -174,12 +187,12 @@
 				LGBM & \textbf{0.8779} & 0.9999 & \textbf{0.9541} & 0.9999\\
 				\hline
 			\end{tabular}	
-			\caption{Table containing accuracy scores of the highest performing classification models trained on the 150 GeV and 450 GeV validation and training sets.}
+			\caption{Accuracy scores of the highest performing classification models trained on the 150 GeV and 450 GeV validation and training sets.}
 			\label{tab:Validation}
 		\end{table}
 	\end{frame}
 	\note{
-		...
+		Highest scoring - both signals - validation and training scores. Tendency to overfit - 450 scores closer. XGB and LGBM best - LGBM better and faster - LGBM chosen.
 	}
 
 
@@ -188,11 +201,11 @@
 			\centering
 			\subfloat{\includegraphics[width=0.5\textwidth]{Test_plots/Conf_mat_150.png}}
 			\subfloat{\includegraphics[width=0.5\textwidth]{Test_plots/Conf_mat_450.png}}
-			\caption{Light Gradient Boosting Mechanism confusion matrix on the test set for both signals.}
+			\caption{Light Gradient Boosting Mechanism (LGBM) confusion matrix on the test set for both signals.}
 		\end{figure}
 	\end{frame}
 	\note{
-		...
+		LGBM on test data - no tuning - more metrics. Confusion matrices - diagonal between 0.8-1.0 - good predictions. 450 GeV more accurate - 132, 231, 312, 321 better accuracy.
 	}
 
 
@@ -226,16 +239,62 @@
 				450 & 1.0 & 1.0 & 0.994  \\
 				\hline
 			\end{tabular}	         
-			\caption{Area under the curve (AUC) scores for both ROC and precision-recall curves..}
+			\caption{Micro and macro area under the curve (AUC) scores for both ROC and precision-recall curves.}
 			\label{tab:AUC}
 		\end{table}
+	\end{frame}
+	\note{
+		Table 1: Accuracy scores, CKS and log loss (error) of LGBM - validation and test similar accuracy - good for different data - NB: same original data set. 450 GeV still better - high acc - low log loss.
+		
+		Table 2: Micro and macro AUC for ROC and precision-recall - show overall performance - AUC over 0.8=good model - both values over 0.9. LGBM shows great promise on predicting the vertices on these test set.
+	}
+
+
+	\begin{frame}[t]{Classify Simulated Data}
+		What to classify with the LGBM:
+		\begin{enumerate}[(i)]
+			\item Simulated background production-mechanisms with trilepton final states plus MET.
+			\item Two reconstructed neutrino signals, with neutrino masses of 150 and 450 GeV.
+		\end{enumerate}
+	
+		\begin{itemize}
+			\item Use classified vertex permutations to define new signal regions with opposite sign and same flavor or opposite flavor for lepton 1 and 2.
+			\item Compare signal regions with benchmark analysis.
+		\end{itemize}
+		
 	\end{frame}
 	\note{
 		...
 	}
 
 
+	\begin{frame}[t]{title}
+		content...
+	\end{frame}
+	\note{
+		...
+	}
 
+
+	\begin{frame}[t]{Summary and Outlook}
+		content...
+	\end{frame}
+	\note{
+		...
+	}
+
+	
+	\begin{frame}[t]{Predicted Signal Vertices}
+		\begin{figure}[htbp!]
+			\centering\includegraphics[width=0.6\linewidth]{Signal_table.png}
+			\caption{Number of events for each vertex of the two signals and the fraction for each vertex. Left: the truth data we used to train our classifiers on. Middle: The truth vertices for the reconstructed signals we predict. Right: The classified vertices of the reconstructed signals. \label{fig:NeutrinoClass}}
+		\end{figure}
+	\end{frame}
+	\note{
+		Extra: Notice classified vertices vs truth of reconstructed vertices.
+		...
+	}
+	
 %--------------
 	\begin{frame}[t]{References}
 		\bibliographystyle{unsrtnat} %plain, unsrt, abbrv
