@@ -261,14 +261,56 @@
 			\item Use classified vertex permutations to define new signal regions with opposite sign and same flavor or opposite flavor for lepton 1 and 2.
 			\item Compare signal regions with benchmark analysis.
 		\end{itemize}
-		
 	\end{frame}
 	\note{
-		...
+		LGBM - performs well on truth neutrino signals - classify similar datasets - simulated backgrounds and signals - same neutrino masses.
+		
+		Expected - most events with highest $p_T$ from $N_1$ production - loose momentum after decaying - 123 and 132 vertices most both - few 213 also for MC - enough for further analysis.
 	}
 
 
-	\begin{frame}[t]{title}
+	\begin{frame}[t]{Predicted Signal Vertices}
+		\begin{figure}[htbp!]
+			\centering\includegraphics[width=0.7\linewidth]{Signal_table.png}
+			\caption{Number of events for each vertex of the two signals and the fraction for each vertex. Left: the truth data we used to train our classifiers on. Middle: The truth vertices for the reconstructed signals we predict. Right: The classified vertices of the reconstructed signals. \label{fig:NeutrinoClass}}
+		\end{figure}
+	\end{frame}
+	\note{
+		Extra: Check on signal predictions - see table for vertex events - 150 and 450 predicted with respective model - see number of events for each vertex + fractions. Left: original truth data - training ML - Middle: reconstructed signals we classify - Right: classified vertices.
+		
+		Interesting to mention - truth after Generation and recon 150 GeV - similar event fractions - 450 GeV have not as close. Events disappears after reconstruction - between left to middle. Classif - 123 and 132 predicted - one 213 with 450 - predictions does not fit truth recon - Why? - LGBM trained on signals before recon in data flow - not sure if true, a guess - further analysis needed?
+	}
+
+
+	\begin{frame}[t]{Signal Regions}
+		\begin{itemize}
+			\item SF \& OS
+			\item DF \& OS
+			\item Vertex = [123, 132, 213]
+		\end{itemize}
+	
+		\begin{table}[ht!]
+			\centering
+			\begin{tabular}{|c|}
+				\hline \rule{0pt}{13pt}
+				\textbf{Benchmark "Standard" Analysis at $\sqrt{s}=$ 14 TeV:}\\
+				\hline \rule{0pt}{13pt}
+				$m_{l_i,l_j}>$ 10 GeV,\quad $|m_{l_i,l_j}-M_Z|>$ 15 GeV,\quad $|m_{3l}-M_Z|>$ 15 GeV,\\
+				$p_T^{l_1}>$ 55 GeV,\quad $p_T^{l_2}>$ 15 GeV,\quad $m_{3l}>$ 80 GeV\\
+				\hline
+			\end{tabular}
+			\caption{Cuts used for a benchmark analysis. The combinations of $l_il_j$ are for $l_1$, $l_2$ and $l_3$. $M_Z=91.2$ GeV is the mass of the $Z$-boson and $m_{3l}$ is the invariant mass of the three lepton system. Reference: Table 6 in \citet{inverseseesaw}.}
+			\label{tab:Cuts_Benchmark}
+		\end{table}
+	\end{frame}
+	\note{
+		SF, DF and OS between classified lepton 1 and 2.
+		
+		Compare with standard analysis - missing one b-tagged cut - not available in datasets.
+	}
+
+
+	\begin{frame}[t]{Analysis Results}
 		content...
 	\end{frame}
 	\note{
@@ -283,17 +325,6 @@
 		...
 	}
 
-	
-	\begin{frame}[t]{Predicted Signal Vertices}
-		\begin{figure}[htbp!]
-			\centering\includegraphics[width=0.6\linewidth]{Signal_table.png}
-			\caption{Number of events for each vertex of the two signals and the fraction for each vertex. Left: the truth data we used to train our classifiers on. Middle: The truth vertices for the reconstructed signals we predict. Right: The classified vertices of the reconstructed signals. \label{fig:NeutrinoClass}}
-		\end{figure}
-	\end{frame}
-	\note{
-		Extra: Notice classified vertices vs truth of reconstructed vertices.
-		...
-	}
 	
 %--------------
 	\begin{frame}[t]{References}
