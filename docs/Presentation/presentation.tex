@@ -311,18 +311,47 @@
 
 
 	\begin{frame}[t]{Analysis Results}
-		content...
+		Look at:
+		\begin{itemize}
+			\item Invariant mass of three lepton system, $m_{3l}$, and MET (neutrino).
+			\item Event distributions and significance.
+			\item SF versus DF.
+			\item ML versus benchmark.
+		\end{itemize}
 	\end{frame}
 	\note{
-		...
+		Invariant mass three lepton system and MET - event distributions and significance - high significance=high sensitivity - where to cut on variable to maximize sensitivity.
+		
+		Much less events after cuts - more events for SF - difference from Z not decaying into electron-muon events - less events for large MC (DF) like WZ and Z+jets - same number events for signals SF and DF.
+		
+		213 - no significance, no signal - few MC events - little information from 213 distributions here.
+		
+		450 GeV sim signal - easier to differentiate with MC - masses above 400-500 GeV for $m_{3l}$ - somewhat visible for MET at 100-400 GeV - MET does not discriminate well signals and MC, as expected.
+		
+		Significance higher for 450 GeV comp 150 GeV - higher for $m_{3l}$ comp MET. Our model better than the benchmark.
 	}
 
 
 	\begin{frame}[t]{Summary and Outlook}
-		content...
+		\begin{itemize}
+			\item We have shown that multiclass classification is well suited for predicting from which vertex a lepton comes from.
+			\item Proper data is a challenge to avoid overfitting and bad predictions. Preprocessing of data and tuning hyperparameters needed.
+			\item Different number of events for SF and DF.
+			\item Trained multiclass model performs better than benchmark model.
+		\end{itemize}
+	
+		Modern ML techniques are rapidly modified and developed in the field of particle physics and high energy physics analysis.
 	\end{frame}
 	\note{
-		...
+		Shown - use multiclass classification and ML - predict and classify - sim of subseq decay leptons - from p-p collisions - final state model w/three leptons + neutrino.
+		
+		Training models - proper data - big challenge - overfitting and bad predictions. Preprocessing data - tuning hyperparameters.
+		
+		Lepton Flavor violation - SF more events - lep 1 and 2 - predicted vertices - high significance in some signal regions. 
+		
+		ML models better than benchmark - benchmark not optimized.
+		
+		Future: Modern ML techniques - modified and developed - particle physics and HEP analysis - better suited model to test. Other particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
 	}
 
 	
