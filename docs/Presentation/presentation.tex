@@ -7,6 +7,7 @@
 \setbeameroption{show notes on second screen=right}
 %\usepackage[backend=biber]{biblatex} 
 \usepackage[square,comma,numbers]{natbib}
+\setbeamertemplate{footline}[frame number]
 
 % other packages
 \usepackage{latexsym,amsmath,xcolor,multicol,booktabs,calligra}
@@ -18,7 +19,6 @@
 \author{Kristoffer Langstad}
 \institute{University of Oslo, Department of Physics}
 \date{\today}
-
 
 \begin{document}
 	\begin{frame}[t]{Thesis Presentation}
@@ -66,8 +66,18 @@
 		Figure of P-P collisions to trilepton final state and decays. Charges. At LHC and CERN, detected by ATLAS but neutrinos are not. Only MET since conservation of energy.
 		
 		Called charged current Drell-Yan process, same model we look at for neutrinos as by \citet{inverseseesaw}. Gives almost conserved lepton number and consider only electrons and muons. Amount of SS and OS events vertex 1 and 2 differ from normal seesaw. Allows LFV for vertex 1 and 2 for e and mu. Study two simulated neutrino signals, mass 150 GeV and 450 GeV, expect different LFV for different neutrino mass models.
-		
-		Not always trivial to identify particles. P-P collisions simulated, and measure properties like momentum, transverse momentum and coord-angles. Make new variables dPhi, dR and mll.
+	}
+
+
+	\begin{frame}[t]{Lepton Flavor Distributions}
+		\begin{figure}[htbp!]
+			\hspace*{-1.0cm}
+			\centering\includegraphics[width=0.8\linewidth]{h_sf_df_dist_truth.png}
+			\caption[Lepton flavor distribution between vertex 1 and 2.]{Distribution of the lepton flavor between vertex 1 and 2 for the 150 and 450 GeV signals where we either have two electrons, or two muons (SF) or an electron and a muon (DF).  \label{fig:LepFlavDist}}
+		\end{figure} 
+	\end{frame}
+	\note{
+		Distributions of lepton flavor - event ratios lepton 1 and 2 - electrons and muons - two neutrino signals - SF: ee or mumu - DF: emu or mue. 450 - more SF events - 150 - barely more DF events.
 	}
 
 
@@ -81,11 +91,45 @@
 	\note{
 		MC simulated backgrounds, simulated neutrinos and p-p data at 13 TeV from LHC 2018 - data flow left side - not interesting. MC and signals - right side - ML. 
 		
-		Signal sim - train ML - after Generation - truth - sim of event interactions quark/gluons + subsequent decays. Next steps - sim particle interactions w/detectors - conv sim to "real" raw data as hist - reduce amount of data. MC - best represent all prod-mech with trilepton+MET. MC + signals - classif after Analysis.
+		Signal sim - train ML - after Generation - truth. MC - best represent all prod-mech with trilepton+MET. MC + signals - classif after Analysis.
 	}
 
 
-	\begin{frame}[t]{Machine Learning Process}
+	\begin{frame}[t]{Data Features}
+		Original dataset features:
+		\begin{itemize}
+			\item Flavor, Charge, $\eta$, $\phi$, $p_T$, $E_T^{miss}$.
+		\end{itemize}
+		New and added features:
+		\begin{itemize}
+			\item $p_x$, $p_y$, $p_z$, $\theta$, $E$.
+			\item $\Delta\phi$, $\Delta R$, $m_{ll}$, $m_{3l}$.
+		\end{itemize}
+		Target features:
+		\begin{itemize}
+			\item $[123, 132, 213, 231, 312, 321]$
+		\end{itemize}
+	\end{frame}
+	\note{
+		Not always trivial to identify particles. P-P collisions simulated, and measure properties like momentum, transverse momentum and coord-angles. Make new variables dPhi, dR and mll, m3l.
+		
+		Make target classes - vertex permutations - three vertices, model in slide 4. Leading, subleading, subsubleading - wrt. pT - leading lepton = lepton 1, highest pT - six possible permutations to classify w/ML.
+	}
+
+
+	\begin{frame}[t]{Feature Distributions}
+		\begin{figure}[h]
+			\centering
+			\subfloat{\includegraphics[width=0.5\textwidth]{Feature_plots/hist1d_lep1_pt_3L.png}}
+			\subfloat{\includegraphics[width=0.5\textwidth]{Feature_plots/hist1d_lep1_px_3L.png}}\\
+			\centering
+			\subfloat{\includegraphics[width=0.5\textwidth]{Feature_plots/hist1d_m_3l_3L.png}}
+			\subfloat{\includegraphics[width=0.5\textwidth]{Feature_plots/hist1d_mll_12_3L.png}}
+		\end{figure}
+	\end{frame}
+
+
+	\begin{frame}[t]{*Machine Learning Process}
 		\begin{block}{What we want to do:}
 			Use machine learning to identify lepton vertices in simulated backgrounds and signals.
 		\end{block}
