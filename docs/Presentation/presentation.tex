@@ -127,9 +127,12 @@
 			\subfloat{\includegraphics[width=0.5\textwidth]{Feature_plots/hist1d_mll_12_3L.png}}
 		\end{figure}
 	\end{frame}
+	\note{
+		Short explanation of what we see.
+	}
 
 
-	\begin{frame}[t]{*Machine Learning Process}
+	\begin{frame}[t]{Machine Learning Process}
 		\begin{block}{What we want to do:}
 			Use machine learning to identify lepton vertices in simulated backgrounds and signals.
 		\end{block}
@@ -149,11 +152,13 @@
 		\end{block}
 	\end{frame}
 	\note{
-		Machine learning to train to identify the particles vertices, pattern recognition in particle properties. Truth simulated data, know the origins and what particles have been produced. Train various ML algorithms, use best performing model to predict simulated backgrounds and signals. Six different lepton vertex permutations. Multiclass classification case with six classes, not been studied much previously in particle physics. 
+		Machine learning - train to identify the particles vertices - pattern recognition in particle properties. Truth simulated neutrino signals - know the origins. Train various ML algorithms - use best performing model to predict simulated backgrounds and signals. Six lepton vertex permutations - multiclass classification case with six classes -  not been studied much previously in particle physics. 
 		
-		Need good and fast algorithms for classification, lot of data to work with. Need preprocessing of data before classification. Train models on training set. Many hyperparameters to optimize on validation set. Evaluation metrics for performance evaluation for validation and test set. Export best model, skips training the models each time.
+		Supervised learning - multiclass classification - train and tune ML algorithms/models - evaluate the models for predicting classes/vertices - predict lepton vertices sim backgrounds and signals.
 		
-		Signal region cuts to study LFV for lepton 1 and 2. Compare with a more standard analysis by \citet{inverseseesaw}.
+		Need good, fast algorithms for classification - lot of data - preprocessing of data before classification - train models on training set. Validation set for tuning hyperparameters. Evaluation metrics - performance - validation and test set. Export best model, skips training the models each time.
+		
+		Signal region cuts - study LFV for lepton 1 and 2 - distributions - compare with a more standard analysis by \citet{inverseseesaw}.
 	}
 
 
@@ -166,26 +171,29 @@
 		\end{enumerate}
 	\end{frame}
 	\note{
-		Check correlations - strong correlations=strong linear dependence=remove one feature=should give better results. Information gain - want higher values=features have more information regarding the classes.
+		Check correlations - strong correlations=strong linear dependence - remove one feature=better results. Mutual information - want higher values=features have more information regarding the classes - statistical dependence between variables.
 		
 		Imbalanced data=more data for some classes (bias)=bad predictions of minority classes - resampling techniques to balance classes (number of events).
 		
-		Split data - training, validation, test - training=train models - validation=tune model hyperparameters and check models - test=check final performance of (tuned) models.
+		Split data - training, validation, test - training=train models - validation=tune model hyperparameters and check models - tune w/randomized search - cross-validation - hyperparameters. Test=check final performance of (tuned) models.
 		
-		Scale - avoid weighted favoring of some classes - only for features - standardization=0 mean, 1 std.dev.
-		
-		Tune with a randomized search method with cross-validation for different hyperparameters depending on classification type and algorithm. 
+		Scale - transform values - standardization=0 mean, 1 std.dev- avoid weighted favoring of some classes - only for features - want categorical classes not distributions.
 	}
 
 
 	\begin{frame}[t]{Bias-Variance Tradeoff}
 		\begin{figure}[htbp!]
-			\centering\includegraphics[width=0.8\linewidth]{bias-variance.png}
-			\caption{Illustration of the quality of a model from how well it does on data not seen during training with variance and bias regions. Source by \citet{mehta2019high}. \label{fig:BiasVar}}
+			\centering
+			\subfloat{\includegraphics[width=0.5\linewidth]{bias-variance2.png}}
+			\subfloat{\includegraphics[width=0.5\linewidth]{bias-variance.png}}
+			\caption{Illustration of the quality of a model from how well it does on data not seen during training with variance and bias regions. Figures by \citet{mehta2019high}. \label{fig:BiasVar}}
 		\end{figure}
 	\end{frame}
 	\note{
-		Supervised learning problem - balance between variance and bias - best compromise=best model for model complexity/number of data points. High bias=underfitting - high variance=overfitting. Overfitting more normal today. Figure - optimal at test minimum. Quality of model - on data not seen during training.
+		Supervised learning problem - balance between variance and bias - best compromise=best model for number of data points/training set size and model complexity. 
+		Left: Out-of-sample error - test set error - in-sample error - training set error. Higher number of data points - lower var, higher bias, lower total error.
+		
+		Right: Low complexity=high bias,low var=underfitting - high complexity=low bias,high var=overfitting. Overfitting more normal today. Figure - optimal at test minimum. Quality of model - on data not seen during training.
 	}
 
 
@@ -193,14 +201,28 @@
 		Types of classification algorithms used:
 		\begin{enumerate}[(i)]
 			\item Logistic regression
-			\item Multi-layer perceptron
+			\item Multi-layer perceptron (MLP)
 			\item Trees
+			\begin{enumerate}[(1)]
+				\item Decision Tree
+				\item Random Forest
+			\end{enumerate}
 			\item Boosters
+			\begin{enumerate}[(1)]
+				\item AdaBoost
+				\item Gradient Boosting (HGBC)
+				\item Extreme Gradient Boost (XGBoost)
+				\item Light Gradient Boosting Machine (LGBM)
+			\end{enumerate}
 			\item Multiclassifiers
+			\begin{enumerate}[(1)]
+				\item One-Vs-Rest 
+				\item One-Vs-One
+			\end{enumerate}
 		\end{enumerate}
 	\end{frame}
 	\note{
-		Binary classifiers to multiclass: LR - linear regression with a logistic function to predict. MLP - neural network - input, hidden, output layers - weights, biases, non-linear activation func to output - hyperparameters, regularization control overfitting. DTC - simpler, single tree model with features - criterion for value splits - control hyperparm for overfit. RF - ensemble of trees - increase accuracy, decease variance. Boost - iteration weights - sequential models built - better classifier. AdaBoost - adaptive boost - weights adapt each iteration - majority vote -> better classifier. GradientBoost - tree boost approx Ada - weighted gradient in loss func - HistGradient larger data sets - less time, higher accuracy - bins. XGB - opt hist dist grad boost alg - accurate fast parallel - scalable -  dist of features - complex w/hyperparameters. LGBM - distributed gradient boost - faster, memory efficient, accurate - large data sets - information gain - drop feat threshold.
+		Binary classifiers to multiclass: LR - linear regression with a logistic function to predict. MLP - neural network - input, hidden, output layers - weights, biases, non-linear activation func to output - hyperparameters, regularization control overfitting. DTC - simpler, single tree model with features - criterion for value splits - control hyperparm for overfit. RF - ensemble of trees - increase accuracy, decease variance. Boost - iteration weights - sequential models built - better classifier. 
 		
 		Multiclass: Multiclass to binary cases techniques.
 	}
@@ -216,11 +238,9 @@
 				\cline{2-5} \rule{0pt}{13pt}
 				 & \multicolumn{2}{c|}{150 GeV} & \multicolumn{2}{c|}{450 GeV} \\
 				\cline{2-5} \rule{0pt}{13pt}
-				 & Score & Score\_train & Score & Score\_train \\
+				 & Accuracy & Accuracy\_train & Accuracy & Accuracy\_train \\
 				\hline \rule{0pt}{13pt}
 				AdaBoost & 0.8519 & 1.0000 & 0.9385 & 1.0000 \\
-				\hline \rule{0pt}{13pt}
-				OvO & 0.7788 & 0.9299 & 0.9088 & 0.9319 \\
 				\hline \rule{0pt}{13pt}
 				MLP & 0.8227 & 0.9492 & 0.9350 & 0.9606 \\
 				\hline \rule{0pt}{13pt}
@@ -236,7 +256,10 @@
 		\end{table}
 	\end{frame}
 	\note{
-		Highest scoring - both signals - validation and training scores. Tendency to overfit - 450 scores closer. XGB and LGBM best - LGBM better and faster - LGBM chosen.
+		Highest scoring - both signals - validation and training scores.
+		AdaBoost - adaptive boost - weights adapt each iteration - majority vote -> better classifier. GradientBoost - tree boost approx Ada - weighted gradient in loss func - HistGradient larger data sets - less time, higher accuracy - bins. XGB - opt hist dist grad boost alg - accurate fast parallel - scalable -  dist of features - complex w/hyperparameters. LGBM - distributed gradient boost - faster, memory efficient, accurate - large data sets - information gain - drop feat threshold.
+		
+		Tendency to overfit - 450 scores closer. XGB and LGBM best - LGBM better and faster - LGBM chosen.
 	}
 
 
@@ -249,7 +272,7 @@
 		\end{figure}
 	\end{frame}
 	\note{
-		LGBM on test data - no tuning - more metrics. Confusion matrices - diagonal between 0.8-1.0 - good predictions. 450 GeV more accurate - 132, 231, 312, 321 better accuracy.
+		LGBM on test data - no tuning - more metrics. Confusion matrices - accuracy of each class (diagonal) - true class versus predicted class - normalized horizontally. Diagonal between 0.8-1.0 - good predictions. 450 GeV more accurate - 132, 231, 312, 321 better accuracy.
 	}
 
 
@@ -259,7 +282,7 @@
 			\centering
 			\begin{tabular}{ |c|c|c|c|c| }
 				\hline \rule{0pt}{13pt}
-				Signal [GeV] & Score & Score\_train & CKS & LogLoss  \\
+				Signal [GeV] & Accuracy & Accuracy\_train & CKS & LogLoss  \\
 				\hline \rule{0pt}{13pt}
 				150 & 0.8793 & 0.9999 & 0.8551 & 0.3335 \\
 				\hline \rule{0pt}{13pt}
@@ -274,7 +297,7 @@
 			\centering
 			\begin{tabular}{ |c|c|c|c| }
 				\hline \rule{0pt}{13pt}
-				\multirow{2}{*}{Signal [GeV]} & \multicolumn{2}{c|}{ROC} & \multicolumn{1}{c|}{Precision-Recall}\\
+				\multirow{2}{*}{Signal [GeV]} & \multicolumn{2}{c|}{ROC Curve} & \multicolumn{1}{c|}{Precision-Recall}\\
 				\cline{2-4} \rule{0pt}{13pt}
 				 & Micro AUC & Macro AUC & Micro AUC  \\
 				\hline \rule{0pt}{13pt}
@@ -283,14 +306,30 @@
 				450 & 1.0 & 1.0 & 0.994  \\
 				\hline
 			\end{tabular}	         
-			\caption{Micro and macro area under the curve (AUC) scores for both ROC and precision-recall curves.}
+			\caption{Micro and macro area under the curve (AUC) scores for both Receiver Operating Characteristic (ROC) and precision-recall curves.}
 			\label{tab:AUC}
 		\end{table}
 	\end{frame}
 	\note{
-		Table 1: Accuracy scores, CKS and log loss (error) of LGBM - validation and test similar accuracy - good for different data - NB: same original data set. 450 GeV still better - high acc - low log loss.
+		Table 1: Accuracy scores, CKS and log loss (error) of LGBM - CKS accounts uncertainties, random model vs LGBM - logloss, error of probabilities of classes.
+		Validation and test similar accuracy - good for different data - NB: same original data set. 450 GeV still better - high acc - low log loss.
 		
 		Table 2: Micro and macro AUC for ROC and precision-recall - show overall performance - AUC over 0.8=good model - both values over 0.9. LGBM shows great promise on predicting the vertices on these test set.
+	}
+
+
+	\begin{frame}[t]{Curves}
+		\begin{figure}[h]
+			\centering
+			\subfloat{\includegraphics[width=0.45\textwidth]{Test_plots/ROC_150.png}}
+			\subfloat{\includegraphics[width=0.45\textwidth]{Test_plots/Precision_recall_150.png}}\\
+			\centering
+			\subfloat{\includegraphics[width=0.45\textwidth]{Test_plots/ROC_450.png}}
+			\subfloat{\includegraphics[width=0.45\textwidth]{Test_plots/Precision_recall_450.png}}
+		\end{figure}
+	\end{frame}
+	\note{
+		Short explanation of what we see.
 	}
 
 
@@ -327,10 +366,11 @@
 
 
 	\begin{frame}[t]{Signal Regions}
+		The signal regions are for the predicted vertices:
 		\begin{itemize}
-			\item SF \& OS
-			\item DF \& OS
-			\item Vertex = [123, 132, 213]
+			\item vtx123 with lepton 1 and 2 having SF/DF + OS
+			\item vtx132 with lepton 1 and 2 having SF/DF + OS
+			\item vtx213 with lepton 1 and 2 having SF/DF + OS
 		\end{itemize}
 	
 		\begin{table}[ht!]
@@ -357,7 +397,7 @@
 	\begin{frame}[t]{Analysis Results}
 		Look at:
 		\begin{itemize}
-			\item Invariant mass of three lepton system, $m_{3l}$, and MET (neutrino).
+			\item Invariant mass of three lepton system, $m_{3l}$, and MET (neutrino) in the mentioned signal regions.
 			\item Event distributions and significance.
 			\item SF versus DF.
 			\item ML versus benchmark.
@@ -365,41 +405,77 @@
 	\end{frame}
 	\note{
 		Invariant mass three lepton system and MET - event distributions and significance - high significance=high sensitivity - where to cut on variable to maximize sensitivity.
-		
+	}
+
+
+	\begin{frame}[t]{Distributions - SF VS DF}
+		\begin{figure}[h]
+			\centering
+			\subfloat[vtx123 + DF + OS, 150 GeV model]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_DF_OS_vtx123_150.pdf}}
+			\subfloat[vtx123 + SF + OS, 150 GeV model]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx123_150.pdf}}
+		\end{figure}
+	\end{frame}
+	\note{
 		Much less events after cuts - more events for SF - difference from Z not decaying into electron-muon events - less events for large MC (DF) like WZ and Z+jets - same number events for signals SF and DF.
 		
 		213 - no significance, no signal - few MC events - little information from 213 distributions here.
 		
-		450 GeV sim signal - easier to differentiate with MC - masses above 400-500 GeV for $m_{3l}$ - somewhat visible for MET at 100-400 GeV - MET does not discriminate well signals and MC, as expected.
-		
-		Significance higher for 450 GeV comp 150 GeV - higher for $m_{3l}$ comp MET. Our model better than the benchmark.
+		450 GeV sim signal - easier to differentiate with MC - masses above 400-500 GeV for $m_{3l}$.
+	}
+
+	\begin{frame}[t]{Distributions - LGBM VS Benchmark}
+		\begin{figure}[h]
+			\centering
+			\subfloat[vtx132 + SF + OS, 150 GeV model]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_m_3l_SR_3LClass_SF_OS_vtx132_150.pdf}}
+			\subfloat[Benchmark]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRBenchmark/hist1d_m_3l_SR_Benchmark_150.pdf}}
+		\end{figure}
+	\end{frame}
+	\note{
+		Significance higher for 450 GeV comp 150 GeV - higher for inv mass vs met. 
+		Benchmark similar to vtx132, SF, OS - significance 450 GeV above 4$\sigma$ - 150 GeV below 1$\sigma$. Differentiate bkgs vs 450 GeV signal similar above 500 GeV - significance and number of events bkgs vs 450 signal shows LGBM model in general better than benchmark for differentiate bkgs and 450 signal. Benchmark not optimized to our model.
+	}
+
+
+	\begin{frame}[t]{Distributions - MET}
+		\begin{figure}[h]
+			\centering
+			\subfloat[vtx132 + SF + OS, 150 GeV model]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRdata18_vs_mc16e/hist1d_met_Et_SR_3LClass_SF_OS_vtx132_150.pdf}}
+			\subfloat[Benchmark]{\includegraphics[width=0.5\textwidth]{Class_cut_plots/SRBenchmark/hist1d_met_Et_SR_Benchmark_150.pdf}}
+		\end{figure}
+	\end{frame}
+	\note{
+		Comparing same signal regions - MET - signals and backgrounds more alike - MET does not discriminate well signals and backgrounds.
 	}
 
 
 	\begin{frame}[t]{Summary and Outlook}
+		We have shown:
 		\begin{itemize}
-			\item We have shown that multiclass classification is well suited for predicting from which vertex a lepton comes from.
-			\item Proper data is a challenge to avoid overfitting and bad predictions. Preprocessing of data and tuning hyperparameters needed.
-			\item Different number of events for SF and DF.
-			\item Trained multiclass model performs better than benchmark model.
+			\item Multiclass classification is well suited for predicting from which vertex a lepton comes from.
+			\item Lepton flavor violation with different number of events for SF and DF.
+			\item 450 GeV signal easier to differentiate against backgrounds.
+			\item Trained multiclass model seems to perform better than benchmark model.
 		\end{itemize}
-	
+
 		Modern ML techniques are rapidly modified and developed in the field of particle physics and high energy physics analysis.
 	\end{frame}
 	\note{
 		Shown - use multiclass classification and ML - predict and classify - sim of subseq decay leptons - from p-p collisions - final state model w/three leptons + neutrino.
 		
-		Training models - proper data - big challenge - overfitting and bad predictions. Preprocessing data - tuning hyperparameters.
-		
 		Lepton Flavor violation - SF more events - lep 1 and 2 - predicted vertices - high significance in some signal regions. 
 		
-		ML models better than benchmark - benchmark not optimized.
+		ML seems models better than benchmark - benchmark not optimized.
 		
 		Future: Modern ML techniques - modified and developed - particle physics and HEP analysis - better suited model to test. Other particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
 	}
 
 	
 %--------------
+	\begin{frame}[t]{Codes}
+		Codes found at the following GitHub-repository:\\
+		https://github.com/krilangs/ComPhys---Master
+	\end{frame}
+
 	\begin{frame}[t]{References}
 		\bibliographystyle{unsrtnat} %plain, unsrt, abbrv
 		\bibliography{Refs}

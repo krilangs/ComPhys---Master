@@ -36,61 +36,76 @@
 	
 	
 	\underline{Feature Distributions:}
-	Here we look at some of the feature distributions.
+	Here we look at some of the feature distributions. Number of events to the left, increasing value of the feature on the bottom, all the backgrounds stacked and the two signals single.
 	
 	
-	\underline{*Machine learning process:}
-	Machine learning algorithms can be trained to identify the particles vertices by using pattern recognition in these particle properties. The data to be trained on are truth simulated data where we know the origins and what particles have been produced. The outcome is to train various machine learning algorithms and use the best performing model to predict similar data of simulated backgrounds and signals that have gone through the full data flow (Analysis). Want to identify lepton vertex permutations in the simulated backgrounds and signals. Since we have three vertices with particles in each event we have six different lepton vertex permutations we could get. We have a multiclass classification case with six classes. Multiclass classification have not been studied much previously in particle physics. 
+	\underline{Machine learning process:}
+	Machine learning algorithms can be trained to identify the particles vertices I mentioned in slide 7 by using pattern recognition in these particle properties. The data to be trained on are the truth simulated neutrino signals where we know the origins. The outcome is to train various machine learning algorithms and use the best performing model to predict similar data of simulated backgrounds and signals that have gone through the full data flow after Analysis in slide 6. Again, we want to identify lepton vertex permutations in the simulated backgrounds and signals. The six lepton permutations give us six outcome classes. We have a multiclass classification case with six classes. Multiclass classification have not been studied much previously in particle physics. 
 	
 	How: Use supervised learning and multiclass classification. Train and tune ML algorithms. Evaluate which model performs best, predicts the vertices the best. Predict lepton vertices for simulated backgrounds and signals.
 	
 	Need good and fast algorithms for classification since we have a lot of data to work with. Need preprocessing of data before classification. Train models on training set. Many hyperparameters to optimize on validation set. Use several evaluation metrics for performance evaluation for both validation and test set. Export best model to predict vertices for backgrounds and signals, skips the need for training the models each time.
 	
-	End goal: Apply cuts to study some chosen particle features in signals regions to look for LFV between lepton 1 and 2. Compare with a more standard analysis by Pascoli et al.
+	End goal: Apply cuts to study some chosen particle features in signals regions to look for LFV between lepton 1 and 2 as distributions. Compare with a more standard analysis by Pascoli et al.
 	
 	
 	\underline{Preprocessing of Data:}
-	Before we start the training of the models, we have to do some preprocessing of the data. First we take a look at the correlations between the features. We do not want any strong correlations/relations between our features, corresponding to a linearly dependence between the features, since they will both have the same effect on the classes. If two features have a strong correlation, dropping one of them should, theoretically, give better results. With the information gain we want higher values between the features and the classes, meaning the features have more information regarding to the classes.
+	Before we start the training of the models, we have to do some preprocessing of the data. First we take a look at the correlations between the features. The feature correlations show the relationship between two features. We do not want any strong correlations/relations between our features, corresponding to a linearly dependence between the features, since they will both have the same effect on the prediction of the classes. If two features have a strong correlation, dropping one of them should, theoretically, give better results. 
+	With the mutual information between the features and the classes, we want higher values between the features and the classes, meaning the features have more information regarding to the classes. It shows a statistical dependence between two variables. Want high mutual information and correlations close to 0.
 	
-	The data sets we have used are imbalanced, meaning we have more events for some of the classes than others. This may lead to some classes being biased, and bad predictions of the minority classes. That is why we use two types of resampling methods to balance out the data sets in number of events for each class.
+	The data sets we have used are imbalanced, meaning we have more events for some of the classes than others. This may lead to some classes being biased, and bad predictions of the minority classes. That is why we use resampling techniques to balance out the data sets in number of events for each class.
 	
-	Then we split the data sets into training, validation and test sets with different purposes. The training set is the training data the models will train on, the validation set is used to test the trained models and tune the hyperparameters of the models. After the models are properly tuned, they are used on the test set that have not been used until now.
+	Then we split the data sets into training, validation and test sets with different purposes. The training set is the training data the models will train on, the validation set is used to test the trained models and tune the hyperparameters of the models. The tuning of the trained models are done with a randomized search combined with cross-validation to find the combinations of the chosen hyperparameters to each model that produce the highest accuracy.
+	After the models are properly tuned, they are used on the test set that have not been used until now.
 	
-	Lastly we scale the features, and not the classes, to avoid any weighted favoring of some features. The scaling technique used is standardization with a 0 mean and a standard deviation of 1.
-	
-	The tuning of the trained models are done with a randomized search combined with cross-validation to find the combinations of the chosen hyperparameters to each model that produce the highest accuracy.
+	Lastly we scale the features by transforming the values with the standardization technique with a 0 mean and a standard deviation of 1. Do not scale the classes to avoid distributions of the categorical classes. Scaling to avoid any weighted favoring of some features.
 	
 	
 	\underline{Bias-Variance Tradeoff:}
-	One of the problems with supervised learning is the balance between variance and bias= the bias-variance tradeoff. We want the best compromise between variance and bias that gives the best model when the model complexity/number of data points increases. Often we get the case where high bias with low variance (underfitting), or low bias and high variance (overfitting). Overfitting with models are more the case today with improved machinery and algorithms=more complex models. The optimal case of model complexity, as seen in the figure, is at the minimum of the test sample where the predicted error difference between the samples are sufficiently small. This measures the quality of a model by how well it does on data not seen during training.
+	One of the problems with supervised learning is the balance between variance and bias= the bias-variance tradeoff. We want the best compromise between variance and bias that gives the best model when the number of data points/training set size increases and for model complexity.
+	Left: E\_out is the out-of-sample error or the error of the test set, E\_in is the in-sample error or the error of the training set and the total error is the error difference between these two errors. As the number of training data increases, the total error decreases, the variance decreases and the bias increases. 
+	Rifght: For low complexity we often get the case with high bias and low variance (underfitting), and low bias and high variance (overfitting) for high model complexity. Overfitting with models are more the case today with improved machinery and algorithms=more complex models. The optimal case of model complexity, as seen in the figure, is at the minimum of the test sample where the predicted error difference between the samples are sufficiently small. This measures the quality of a model by how well it does on data not seen during training. 
 	
 	
-	\underline{Page 8 - Classification Algorithms:}
-	Test different types of classification models for multiclass classification. The first for types are binary classifiers that can be expanded to multiclass classification.
+	\underline{Classification Algorithms:}
+	Test different types of classification models for multiclass classification. The first algorithms are binary classifiers that can be expanded to multiclass classification.
 	
 	Logistic regression as a more simple classification case with linear regression and a logistic function to predict classes.
 	
 	MLP is a neural network model with an input, several hidden and an output layer. The inputs are transformed in the hidden layers with some weights, biases and a non-linear activation function. Lastly transformed to outputs. Normally have a lot of hyperparameters with regularization terms to control overfitting.
 	
-	Trees: A simpler single tree model constructing tree-like models with the features with simpler decisions. Use some criterion to value splits for the features leading to the outcome classes (leaves). Control with hyperparameters to avoid overfitting. A tree ensemble with many trees are also used to improve accuracy and overfitting by decreasing variance.
+	Trees: A simpler single tree model constructing tree-like models with the features with simpler decisions. Learn simple decision rules from the features and use some criterion for value splits for the features leading to the outcome classes (leaves). Control with hyperparameters to avoid overfitting. A tree ensemble with many trees are also used to improve accuracy and overfitting by decreasing variance.
 	
-	Booster: Booster methods uses weights from each iteration and builds base estimators sequentially and are combined into a better estimator model. The simplest we use is the AdaBoost with adaptive boosting of a weaker classifier. For each iteration, the AdaBoost changes the weights of the classifier to adjust for incorrect classification until the number of iterations are reached, and a better model have been made from the majority vote of the previous combinations. Gradient boost is a tree boosting method similar to the AdaBoost, but uses weights for gradients in the loss function giving more optimized fitting. With our large data sets, we use a histogram based gradient boost to decrease computation time and increase accuracy by using bins with integer-valued inputs. The Extreme gradient boosting (XGB) model uses an optimized histogram distributed gradient boosting algorithm for accurate and fast parallel tree boosting. Its scalability makes it much faster than many other classifiers. Uses same framework as GradientBoost, but with distributions of features to make branches. This is a very complex algorithm with many hyperparameters to consider and tune. The Light Gradient Boosting Machine is a distributed gradient boosting framework made to be much faster, better memory efficient and accurate, which is an advantage for large data sets. The LGBM uses information gain to drop features below a threshold to improve accuracy.
+	Booster: Booster methods uses weights from each iteration and builds base estimators sequentially and are combined into a better estimator model. 
 	
-	Multiclass: We also test some multiclassifiers that transforms the multiclass case down to several binary problems with different methods. 
+	Multiclass: We also test two multiclassifiers that transforms the multiclass case down to several binary problems with different methods. 
 	
 	
 	\underline{Classification Results:}
-	Results of the models with the highest accuracy for both signal types of trained models with validation set after finished tuning. Small tendency to overfit with train bigger, less diff with 450 GeV. LGBM and XGB best with LGBM barely better, but also much faster. The reason for choosing LGBM further.
+	Results of the models with the highest accuracy for both signal types of trained models with validation set after finished tuning. Explain more about the best , MLP and boosters:
+	
+	The simplest we use is the AdaBoost with adaptive boosting of a weaker classifier. For each iteration, the AdaBoost changes the weights of the classifier to adjust for incorrect classification until the number of iterations are reached, and a better model have been made from the majority vote of the previous combinations. Gradient boost is a tree boosting method similar to the AdaBoost, but uses weights for gradients in the loss function giving more optimized fitting. With our large data sets, we use a histogram based gradient boost to decrease computation time and increase accuracy by using bins with integer-valued inputs. The Extreme gradient boosting (XGB) model uses an optimized histogram distributed gradient boosting algorithm for accurate and fast parallel tree boosting. Its scalability makes it much faster than many other classifiers. Uses same framework as GradientBoost, but with distributions of features to make branches. This is a very complex algorithm with many hyperparameters to consider and tune. The Light Gradient Boosting Machine is a distributed gradient boosting framework made to be much faster, better memory efficient and accurate, which is an advantage for large data sets. The LGBM uses a gradient one-side sampling and exclusive feature bundling for data filtering and information gain/mutual information to drop features below a threshold to improve accuracy. Features with low occurrence of non-zero values simultaneously will be combined to reduce number of features.
+	
+	 Small tendency to overfit with train bigger, less diff with 450 GeV. LGBM and XGB best with LGBM barely better, but also much faster. The reason for choosing LGBM further.
 	
 	
 	\underline{Light Gradient Boosting Machine:}
-	Further test the LGBM algorithm on the test set without doing anything to the hyperparameters for that model. Test with more evaluation metrics this time to further check the model performance. Look at the confusion matrix for each neutrino signal. Both have the diagonal values between 0.8 and 1.0, which indicates that the model can predict the classes quite good. It is better with the 450 GeV trained model than the 150 GeV. The 132, 231, 312 and 321 seems to be predicted better than the 123 and 213 classes for both models.
+	Further test the LGBM algorithm on the test set without doing anything to the hyperparameters for that model. Test with more evaluation metrics this time to further check the model performance. Look at the confusion matrix for each neutrino signal. The confusion matrix shows what the model predicts, bottom, versus what the predictions really are, left side, normalized horizontally. The diagonal is the accuracy of each individual class.
+	 
+	Both have the diagonal values between 0.8 and 1.0, which indicates that the model can predict the classes quite good. It is better with the 450 GeV trained model than the 150 GeV. The 132, 231, 312 and 321 seems to be predicted better than the 123 and 213 classes for both models.
 	
 	
 	\underline{Scores:}
-	1) Accuracy scores, Cohen Kappa score and log loss for both signals with test set for LGBM. Similar results for validation and test for accuracy, showing the model give similar results for different data (though both are from the same original data set). 450 GeV still better for predicting->higher accuracy and CKS and lower log loss.
+	1) Accuracy scores, Cohen Kappa score and log loss for both signals with test set for LGBM. Accuracy scores as before, CKS accounts for uncertainties in the predictions by comparing a random classifier against the LGBM, in this case. Log loss evaluates the probability outputs of the classes, acting as the error of the probabilities of the classes.
+	Similar results for validation and test for accuracy, showing the model give similar results for different data (though both are from the same original data set). 450 GeV still better for predicting->higher accuracy and CKS and lower log loss.
 	
-	2) Computed both ROC and precision-recall curves to further show the prediction performance of the LGBM model on the test set by looking at the area under the curve scores, see bottom Table. A good classifier would normally have an AUC larger than 0.8, and both signals have micro and macro AUC scores basically at 1.0. For the precision-recall we have both micro AUC above 0.9, showing the LGBM is a good model for predicting the vertex permutations on the test set.
+	2) Computed both Receiver Operating Characteristic called ROC and precision-recall curves to further show the prediction performance of the LGBM model on the test set by looking at the area under the curve scores, see bottom Table. Precision-recall curve shows precision, the fraction of a sample classified correctly as positive of all positive predicted samples, versus recall, the fraction of a sample classified correctly as positive of all positive observations for each class.  ROC shows the recall (true positive rate) versus the fraction of a sample predicted falsely of all negative observations. The micro average is the average of the total true positives, false negatives and false positives. The macro average is the average of the unweighted mean of each class.
+	
+	A good classifier would normally have an AUC larger than 0.8, and both signals have micro and macro AUC scores basically at 1.0. For the precision-recall we have both micro AUC above 0.9, showing the LGBM is a good model for predicting the vertex permutations on the test set.
+	
+	
+	\underline{Curves:}
+	Show the ROC and precision-recall curves, explain short.
 	
 	
 	\underline{Classify Simulated Data:}
@@ -114,19 +129,27 @@
 	\underline{Analysis Results:}
 	Look at the invariant mass of the three lepton system and the MET for both signal models. We look at distributions of the backgrounds and recon signal events and the significance of the signals quantifying the separation between the backgrounds and the signals. A high significance means we have good sensitivity, and is used to show where to cut in the variable to maximize the significance.
 	
-	Comparing the number of events with these cuts applied to earlier, we now have much less events for each combination of cuts used. We also have more events in the cuts with SF between lepton 1 and 2 compared to DF for each vertex cut. The difference for SF vs DF mainly comes from Z+jets with the most number of events of the backgrounds. $Z$ can not decay into electron-muon events and thus reduces the large backgrounds (DF) such as $W$$Z$ and $Z$+jets. For the simulated signals we have almost the same number of events for SF and DF
+	
+	\underline{Distributions - SF vs DF:}
+	Comparing the number of events with these cuts applied to earlier, we now have much less events for each combination of cuts used. We also have more events in the cuts with SF between lepton 1 and 2 compared to DF for each vertex cut for the 150 GeV model in the two figures. The difference for SF vs DF mainly comes from Z+jets with the most number of events of the backgrounds. $Z$ can not decay into electron-muon events and thus reduces the large backgrounds (DF) such as $W$$Z$ and $Z$+jets. For the simulated signals we have almost the same number of events for SF and DF. 
 	
 	For the 213 vertex cuts we do not get any significance since we do not have any signal events predicted with this vertex. There are also very few background events with this cut compared to the other two vertices, 123 and 132. Not much information is gained by looking at the 213 vertex cut distributions for either features.
 	
-	For the 450 GeV sim signals we found it easier to differentiate against the backgrounds for higher masses than 400-500 GeV for invariant three lepton mass for all cuts (excluding 213 vertex), including the benchmark cut. This is also somewhat visible for the MET with DF between 100 and 400 GeV.
+	The DF plot has in total around 7500 background events, while the SF plot has around 87 500 background events. We conclude that the SF signal region with either two electrons or two muons in the first two vertices for the 123 vertex is favored over the DF region. This also applies for the 132 vertex, but the difference in number of events between SF and DF is not that large, about twice as much SF events.
 	
-	The significance was found to be higher with the 450 GeV compared to the 150 GeV signal, and higher in general for the three lepton system invariant mass compared to the MET. The standard analysis gave similar results for signal significance for the SF, OS and 123 vertex cuts. 
+	For the 450 GeV sim signals we found it easier to differentiate against the backgrounds for higher masses than 400-500 GeV for invariant three lepton mass for all cuts (excluding 213 vertex), including the benchmark cut. This is also somewhat visible for the MET with DF between 100 and 400 GeV. Benchmark not optimized.
+	
+	
+	\underline{Distributions - LGBM VS Benchmark:}
+	The significance was found to be higher with the 450 GeV compared to the 150 GeV signal, and higher in general for the three lepton system invariant mass compared to the MET. The standard analysis gave similar results for signal significance for the SF, OS and 132 vertex cuts. The 450 GeV signal rises above 4$\sigma$ while the 150 GeV signal stays below 1$\sigma$. The benchmark have similar results for differentiating backgrounds and the 450 GeV signal for $m_{3l}\leq500$ GeV. Comparing these two distributions for significance and number of events shows that our trained models performs better for differentiating the backgrounds and the 450 GeV signal in general than the simple benchmark analysis.
+	
+	
+	\underline{Distributions - MET:}
+	For the MET, this is not as easy. This is more or less as expected since we expect that the MET does not discriminate well the signals and backgrounds.
 	
 	
 	\underline{Summary and Outlook:}
 	We have shown that we can use multiclass classification and ML to predict and classify from where simulations of subsequent decay leptons come from in the decay process from two protons colliding, yielding a specific final state model with three leptons and a neutrino/MET.
-	
-	Training the models on proper data is a big challenge to not get overfitting and bad predictions. That is why preprocessing of the data is necessary to ensure good datasets, and hyperparameter tuning is important for model performance.
 	
 	There is a difference between the number of events regarding flavor (SF and DF) for lepton 1 and 2 in the vertices we have predicted, yielding high significance in some signal regions. 
 	
@@ -134,5 +157,7 @@
 	
 	Future: Modern ML techniques are rapidly modified and developed in the field of particle physics and high energy physics analysis. Other and maybe better suited ML models for such analysis we have done, may be further tested. Other particle physics aspects are also under consideration of the future regarding other neutrino mass signals, look at same sign versus opposite sign or include the detector data of real collisions at CERN.
 	
-	
+
+	\underline{Codes:}
+	Show link to codes as GitHub.	
 \end{document}
