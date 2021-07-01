@@ -172,9 +172,7 @@
 	\note{
 		Machine learning - train to identify the particles vertices - pattern recognition in particle properties. Truth simulated neutrino signals - know the origins. Train various ML algorithms - use best performing model to predict simulated backgrounds and signals. Six lepton vertex permutations - multiclass classification case with six classes -  not been studied much previously in particle physics. 
 		
-		Supervised learning - multiclass classification - train and tune ML algorithms/models - evaluate the models for predicting classes/vertices - predict lepton vertices sim backgrounds and signals.
-		
-		Need good, fast algorithms for classification - lot of data - preprocessing of data before classification - train models on training set. Validation set for tuning hyperparameters. Evaluation metrics - performance - validation and test set. Export best model, skips training the models each time.
+		Supervised learning - multiclass classification - Need good, fast algorithms for classification - lot of data - preprocessing of data before classification - train and tune ML algorithms/models - evaluate performance of the models for predicting classes/vertices - export best, skip training - predict lepton vertices sim backgrounds and signals.
 		
 		Signal region cuts - study LFV for lepton 1 and 2 - distributions - compare with a more standard analysis by \citet{inverseseesaw}.
 	}
@@ -240,7 +238,9 @@
 		\end{enumerate}
 	\end{frame}
 	\note{
-		Binary classifiers to multiclass: LR - linear regression with a logistic function to predict. MLP - neural network - input, hidden, output layers - weights, biases, non-linear activation func to output - hyperparameters, regularization control overfitting. DTC - simpler, single tree model with features - criterion for value splits - control hyperparm for overfit. RF - ensemble of trees - increase accuracy, decease variance. Boost - iteration weights - sequential models built - better classifier. 
+		Binary classifiers to multiclass: LR - linear regression with a logistic function to predict. MLP - neural network - input, hidden, output layers - weights, biases, non-linear activation func to output - hyperparameters, regularization control overfitting. DTC - simpler, single tree model with features - criterion for value splits - control hyperparm for overfit. RF - ensemble of trees - increase accuracy, decease variance. Boost - iteration weights - sequential models built - better classifier.
+		
+		AdaBoost - adaptive boost - weights adapt each iteration - majority vote -> better classifier. GradientBoost - tree boost approx Ada - weighted gradient in loss func - HistGradient larger data sets - less time, higher accuracy - bins. XGB - opt hist dist grad boost alg - accurate fast parallel - scalable -  dist of features - complex w/hyperparameters. LGBM - distributed gradient boost - faster, memory efficient, accurate - large data sets - information gain - drop feat threshold. 
 		
 		Multiclass: Multiclass to binary cases techniques.
 	}
@@ -275,7 +275,6 @@
 	\end{frame}
 	\note{
 		Highest scoring - both signals - validation and training scores.
-		AdaBoost - adaptive boost - weights adapt each iteration - majority vote -> better classifier. GradientBoost - tree boost approx Ada - weighted gradient in loss func - HistGradient larger data sets - less time, higher accuracy - bins. XGB - opt hist dist grad boost alg - accurate fast parallel - scalable -  dist of features - complex w/hyperparameters. LGBM - distributed gradient boost - faster, memory efficient, accurate - large data sets - information gain - drop feat threshold.
 		
 		Tendency to overfit - 450 scores closer. XGB and LGBM best - LGBM better and faster - LGBM chosen.
 	}
@@ -379,7 +378,7 @@
 	\note{
 		Extra: Check on signal predictions - see table for vertex events - 150 and 450 predicted with respective model - see number of events for each vertex + fractions. Left: original truth data - training ML - Middle: reconstructed signals we classify - Right: classified vertices.
 		
-		Interesting to mention - truth after Generation and recon 150 GeV - similar event fractions - 450 GeV have not as close. Events disappears after reconstruction - between left to middle. Classif - 123 and 132 predicted - one 213 with 450 - predictions does not fit truth recon - Why? - LGBM trained on signals before recon in data flow - not sure if true, a guess - further analysis needed?
+		Interesting to mention - truth after Generation and recon 150 GeV - similar event fractions - 450 GeV have not as close. Events disappears after reconstruction - between left to middle. Classif - 123 and 132 predicted - one 213 with 450 - predictions does not fit truth recon - Why? - LGBM trained on signals before recon in data flow - not sure if true, a guess - resampling leading to misclassification? - further analysis needed?
 	}
 
 
@@ -483,15 +482,15 @@
 		\end{itemize}
 	\end{frame}
 	\note{
-		Implement and construct framework multiclass classification - if excess observed - understand sign and flavor predicted by neutrino models. E.g. excess CMS - 2.8 significance in eejj - not in mmjj - eejj had SS/OS event ratio 1/14 - not consistent w/LRSM theory - use classifier to understand neutrino mass model.
-		
 		Shown - use multiclass classification and ML - predict and classify - sim of subseq decay leptons - from p-p collisions - final state model w/three leptons + neutrino.
 		
-		Lepton Flavor violation - SF more events - lep 1 and 2 - predicted vertices - high significance in some signal regions. 
-
-		No time to study sensitivity - would discover 450 GeV model long time ago - significance above 5$\sigma$ - understand discovery rather than used to discover.
+		Lepton Flavor violation - SF more events - lep 1 and 2 - predicted vertices - high significance in some signal regions.
 		
-		Future: Modern ML techniques - modified and developed - particle physics and HEP analysis. Test other and/or better suited models. Train more models with more parameters. Train on data after reconstruction. Other particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
+		Implement/construct framework multiclass classification - if excess observed - understand sign and flavor predicted by neutrino models. E.g. excess CMS - 2.8 significance in eejj - not in mmjj - eejj had SS/OS event ratio 1/14 - not consistent w/LRSM theory - classifier to understand neutrino models. 
+
+		No time to study sensitivity - would discover 450 model long time ago - significance above 5$\sigma$ - understand discovery rather than used to discover.
+		
+		Future: Test other and/or better suited models. Train more models with more parameters. Train on data after reconstruction. Particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
 	}
 
 	
