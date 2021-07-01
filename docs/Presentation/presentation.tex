@@ -91,7 +91,7 @@
 	\note{
 		MC simulated backgrounds, simulated neutrinos and p-p data at 13 TeV from LHC 2018 - data flow left side - not interesting. MC and signals - right side - ML. 
 		
-		Signal sim - train ML - after Generation - truth. MC - best represent all prod-mech with trilepton+MET. MC + signals - classif after Analysis.
+		Signal sim - train ML - after Generation - truth. MC - best represent all prod-mech with trilepton+MET. MC + signals - classif after Reconstruction.
 	}
 
 
@@ -106,9 +106,27 @@
 			\item $\Delta\phi$, $\Delta R$, $m_{ll}$, $m_{3l}$.
 		\end{itemize}
 		Target features:
-		\begin{itemize}
-			\item $[123, 132, 213, 231, 312, 321]$
-		\end{itemize}
+		\begin{table}[htb!]
+			%\hspace{-0.8cm}
+			\centering
+			\begin{tabular}{ |c|c|c|c| }
+				\hline \rule{0pt}{13pt}
+				Vtx perm & Vtx 1 & Vtx 2 & Vtx 3\\
+				\hline \rule{0pt}{13pt}
+				123 & $p_T^1$ & $p_T^2$ & $p_T^3$ \\
+				\hline \rule{0pt}{13pt}
+				132 & $p_T^1$ & $p_T^3$ & $p_T^2$\\
+				\hline \rule{0pt}{13pt}
+				213 & $p_T^2$ & $p_T^1$ & $p_T^3$ \\
+				\hline \rule{0pt}{13pt}
+				231 & $p_T^2$ & $p_T^3$ & $p_T^1$ \\
+				\hline \rule{0pt}{13pt}
+				312 & $p_T^3$ & $p_T^1$ & $p_T^2$\\
+				\hline \rule{0pt}{13pt}
+				321 & $p_T^3$ & $p_T^2$ & $p_T^1$\\
+				\hline
+			\end{tabular}
+		\end{table}
 	\end{frame}
 	\note{
 		Not always trivial to identify particles. P-P collisions simulated, and measure properties like momentum, transverse momentum and coord-angles. Make new variables dPhi, dR and mll, m3l.
@@ -341,7 +359,7 @@
 		\end{enumerate}
 	
 		\begin{itemize}
-			\item Use classified vertex permutations to define new signal regions with opposite sign and same flavor or opposite flavor for lepton 1 and 2.
+			\item Use classified vertex permutations to define new signal regions with opposite sign and same flavor or different flavor for lepton 1 and 2.
 			\item Compare signal regions with benchmark analysis.
 		\end{itemize}
 	\end{frame}
@@ -369,7 +387,7 @@
 		The signal regions are for the predicted vertices:
 		\begin{itemize}
 			\item vtx123 with lepton 1 and 2 having SF/DF + OS
-			\item vtx132 with lepton 1 and 2 having SF/DF + OS
+			\item vtx132 with lepton 1 and 3 having SF/DF + OS
 			\item vtx213 with lepton 1 and 2 having SF/DF + OS
 		\end{itemize}
 	
@@ -397,7 +415,7 @@
 	\begin{frame}[t]{Analysis Results}
 		Look at:
 		\begin{itemize}
-			\item Invariant mass of three lepton system, $m_{3l}$, and MET (neutrino) in the mentioned signal regions.
+			\item Invariant mass of three lepton system, $m_{3l}$, and MET in the mentioned signal regions.
 			\item Event distributions and significance.
 			\item SF versus DF.
 			\item ML versus benchmark.
@@ -451,22 +469,29 @@
 	\begin{frame}[t]{Summary and Outlook}
 		We have shown:
 		\begin{itemize}
-			\item Multiclass classification is well suited for predicting from which vertex a lepton comes from.
+			\item Multiclass classification is well suited for predicting from which vertex a lepton comes from for two types of neutrino mass models.
 			\item Lepton flavor violation with different number of events for SF and DF.
-			\item 450 GeV signal easier to differentiate against backgrounds.
-			\item Trained multiclass model seems to perform better than benchmark model.
+			\item 450 GeV signal easier to differentiate against backgrounds with significance above 5$\sigma$.
 		\end{itemize}
 
-		Modern ML techniques are rapidly modified and developed in the field of particle physics and high energy physics analysis.
+		Future and improvements:
+		\begin{itemize}
+			\item Test other classifiers.
+			\item Train more models with other parameters.
+			\item Train on data after reconstruction.
+			\item Other neutrino mass models.
+		\end{itemize}
 	\end{frame}
 	\note{
+		Implement and construct framework multiclass classification - if excess observed - understand sign and flavor predicted by neutrino models. E.g. excess CMS - 2.8 significance in eejj - not in mmjj - eejj had SS/OS event ratio 1/14 - not consistent w/LRSM theory - use classifier to understand neutrino mass model.
+		
 		Shown - use multiclass classification and ML - predict and classify - sim of subseq decay leptons - from p-p collisions - final state model w/three leptons + neutrino.
 		
 		Lepton Flavor violation - SF more events - lep 1 and 2 - predicted vertices - high significance in some signal regions. 
+
+		No time to study sensitivity - would discover 450 GeV model long time ago - significance above 5$\sigma$ - understand discovery rather than used to discover.
 		
-		ML seems models better than benchmark - benchmark not optimized.
-		
-		Future: Modern ML techniques - modified and developed - particle physics and HEP analysis - better suited model to test. Other particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
+		Future: Modern ML techniques - modified and developed - particle physics and HEP analysis. Test other and/or better suited models. Train more models with more parameters. Train on data after reconstruction. Other particle aspects future - other neutrino masses - SS vs OS - include detector data from CERN.
 	}
 
 	
